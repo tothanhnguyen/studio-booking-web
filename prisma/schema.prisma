@@ -6,3 +6,278 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum AppRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum BookingType {
+  ROOM_ONLY
+  ASSISTED
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXPIRED
+  COMPLETED
+}
+
+enum PaymentProvider {
+  SEPAY
+  STRIPE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+}
+
+enum RefundStatus {
+  NONE
+  REQUESTED
+  PROCESSING
+  REFUNDED
+  REJECTED
+}
+
+enum NotificationEventType {
+  BOOKING_CREATED
+  PAYMENT_SUCCEEDED
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  LATE_PAYMENT_REVIEW
+}
+
+enum NotificationChannel {
+  EMAIL
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model User {
+  id               String            @id @default(uuid()) @db.Uuid
+  authUserId       String            @unique @db.Uuid
+  email            String            @unique
+  role             AppRole           @default(CUSTOMER)
+  emailVerifiedAt  DateTime?         @db.Timestamptz(3)
+  createdAt        DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime          @updatedAt @db.Timestamptz(3)
+  profile          CustomerProfile?
+  bookings         Booking[]
+  blockedSlots     BlockedSlot[]     @relation("BlockedSlotCreator")
+  notificationLogs NotificationLog[]
+  auditLogs        AuditLog[]        @relation("AuditActor")
+
+  @@index([role])
+}
+
+model CustomerProfile {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @db.Uuid
+  name      String
+  phone     String?
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudioRoom {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String
+  slug         String        @unique
+  description  String?
+  timezone     String        @default("Asia/Ho_Chi_Minh")
+  isActive     Boolean       @default(true)
+  displayOrder Int           @default(0)
+  metadata     Json?
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
+  services     Service[]
+  workingHours WorkingHour[]
+  blockedSlots BlockedSlot[]
+  bookings     Booking[]
+
+  @@index([isActive, displayOrder])
+}
+
+model Service {
+  id              String      @id @default(uuid()) @db.Uuid
+  roomId          String      @db.Uuid
+  name            String
+  slug            String      @unique
+  description     String?
+  bookingType     BookingType
+  durationMinutes Int
+  bufferMinutes   Int         @default(0)
+  priceAmount     Int
+  currency        String      @default("VND")
+  isActive        Boolean     @default(true)
+  displayOrder    Int         @default(0)
+  createdAt       DateTime    @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime    @updatedAt @db.Timestamptz(3)
+  room            StudioRoom  @relation(fields: [roomId], references: [id], onDelete: Restrict)
+  bookings        Booking[]
+
+  @@index([roomId, isActive, displayOrder])
+}
+
+model WorkingHour {
+  id          String     @id @default(uuid()) @db.Uuid
+  roomId      String     @db.Uuid
+  weekday     Int
+  openMinute  Int
+  closeMinute Int
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+  room        StudioRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, weekday, openMinute, closeMinute])
+  @@index([roomId, weekday, isActive])
+}
+
+model BlockedSlot {
+  id          String     @id @default(uuid()) @db.Uuid
+  roomId      String     @db.Uuid
+  startTime   DateTime   @db.Timestamptz(3)
+  endTime     DateTime   @db.Timestamptz(3)
+  reason      String
+  createdById String?    @db.Uuid
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+  room        StudioRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdBy   User?      @relation("BlockedSlotCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([roomId, startTime, endTime])
+}
+
+model Booking {
+  id                   String            @id @default(uuid()) @db.Uuid
+  userId               String?           @db.Uuid
+  roomId               String            @db.Uuid
+  serviceId            String            @db.Uuid
+  roomName             String
+  serviceName          String
+  bookingType          BookingType
+  customerName         String
+  customerEmail        String
+  customerPhone        String?
+  note                 String?
+  startTime            DateTime          @db.Timestamptz(3)
+  endTime              DateTime          @db.Timestamptz(3)
+  bufferEndTime        DateTime          @db.Timestamptz(3)
+  subtotalAmount       Int
+  depositAmount        Int
+  remainingAmount      Int
+  currency             String            @default("VND")
+  holdExpiresAt        DateTime?         @db.Timestamptz(3)
+  cancelledAt          DateTime?         @db.Timestamptz(3)
+  cancellationReason   String?
+  bookingStatus        BookingStatus     @default(PENDING_PAYMENT)
+  paymentStatus        PaymentStatus     @default(PENDING)
+  refundStatus         RefundStatus      @default(NONE)
+  guestAccessTokenHash String?
+  createdAt            DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime          @updatedAt @db.Timestamptz(3)
+  user                 User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  room                 StudioRoom        @relation(fields: [roomId], references: [id], onDelete: Restrict)
+  service              Service           @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  payments             Payment[]
+  paymentEvents        PaymentEvent[]
+  notificationLogs     NotificationLog[]
+
+  @@index([roomId, startTime, bufferEndTime])
+  @@index([bookingStatus, holdExpiresAt])
+  @@index([userId, createdAt])
+  @@index([customerEmail])
+}
+
+model Payment {
+  id                String          @id @default(uuid()) @db.Uuid
+  bookingId         String          @db.Uuid
+  provider          PaymentProvider
+  providerReference String?
+  idempotencyKey    String
+  requestedAmount   Int
+  paidAmount        Int             @default(0)
+  currency          String          @default("VND")
+  status            PaymentStatus   @default(PENDING)
+  rawPayload        Json?
+  paidAt            DateTime?       @db.Timestamptz(3)
+  createdAt         DateTime        @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime        @updatedAt @db.Timestamptz(3)
+  booking           Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  events            PaymentEvent[]
+
+  @@unique([provider, idempotencyKey])
+  @@unique([provider, providerReference])
+  @@index([bookingId, status])
+}
+
+model PaymentEvent {
+  id               String          @id @default(uuid()) @db.Uuid
+  provider         PaymentProvider
+  eventId          String
+  paymentId        String?         @db.Uuid
+  bookingId        String?         @db.Uuid
+  bookingReference String?
+  payloadHash      String
+  occurredAt       DateTime        @db.Timestamptz(3)
+  processedAt      DateTime?       @db.Timestamptz(3)
+  createdAt        DateTime        @default(now()) @db.Timestamptz(3)
+  payment          Payment?        @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  booking          Booking?        @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, eventId])
+  @@index([bookingId, createdAt])
+}
+
+model NotificationLog {
+  id                String                @id @default(uuid()) @db.Uuid
+  bookingId         String                @db.Uuid
+  userId            String?               @db.Uuid
+  eventType         NotificationEventType
+  channel           NotificationChannel   @default(EMAIL)
+  recipientMasked   String
+  recipientHash     String
+  status            NotificationStatus    @default(PENDING)
+  attemptCount      Int                   @default(0)
+  causalEventId     String
+  providerReference String?
+  errorSummary      String?
+  createdAt         DateTime              @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime              @updatedAt @db.Timestamptz(3)
+  booking           Booking               @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  user              User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([bookingId, eventType, causalEventId])
+  @@index([status, createdAt])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  actorUserId String?  @db.Uuid
+  action      String
+  entityType  String
+  entityId    String
+  before      Json?
+  after       Json?
+  metadata    Json?
+  requestId   String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  actor       User?    @relation("AuditActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([requestId])
+}
