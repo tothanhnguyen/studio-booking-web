@@ -16,6 +16,7 @@
 !.env.example
 
 # generated and local tooling
+/src/generated/prisma/
 *.tsbuildinfo
 .DS_Store
 
