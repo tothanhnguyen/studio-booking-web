@@ -1,4 +1,8 @@
-import { serverEnv } from "../src/lib/env/server";
+import "dotenv/config";
+
+import { parseServerEnv } from "../src/lib/env/server-schema";
+
+const serverEnv = parseServerEnv(process.env);
 
 const validatedKeys = Object.keys(serverEnv).sort();
 

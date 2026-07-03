@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check:env": "tsx scripts/check-env.ts",
+    "ci:verify": "pnpm prisma generate && pnpm lint && pnpm typecheck && pnpm test",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -43,6 +45,7 @@
     "jsdom": "29.1.1",
     "prisma": "7.8.0",
     "tailwindcss": "4.3.2",
+    "tsx": "4.22.5",
     "typescript": "5.9.3",
     "vitest": "4.1.9"
   }

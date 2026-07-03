@@ -127,12 +127,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `AppShell({ children }: { children: React.ReactNode }): JSX.Element`
 - Tạo các script: `dev`, `build`, `start`, `lint`, `typecheck`, `test`, `test:integration`, `test:e2e`
 
-- [ ] Viết `app-shell.test.tsx` assert app shell mang brand `MowStudio` và landmark `<main>`.
-- [ ] Chạy `pnpm vitest run src/components/app-shell.test.tsx`; mong đợi FAIL vì test tooling/component chưa tồn tại.
-- [ ] Scaffold Next.js 16 ổn định với TypeScript, App Router, Tailwind, ESLint, `src/`, import alias `@/*`, sau đó thêm Vitest, testing Library, jsdom và các script trên.
-- [ ] Triển khai shell và trang chủ tương thích với server ở mức tối thiểu; không thêm giao diện user booking.
-- [ ] Chạy `pnpm lint && pnpm typecheck && pnpm test && pnpm build`; expect tất cả các lệnh sẽ thoát `0`.
-- [ ] Commit: `chore: bootstrap mowstudio application`.
+- [x] Viết `app-shell.test.tsx` assert app shell mang brand `MowStudio` và landmark `<main>`.
+- [x] Chạy `pnpm vitest run src/components/app-shell.test.tsx`; mong đợi FAIL vì test tooling/component chưa tồn tại.
+- [x] Scaffold Next.js 16 ổn định với TypeScript, App Router, Tailwind, ESLint, `src/`, import alias `@/*`, sau đó thêm Vitest, testing Library, jsdom và các script trên.
+- [x] Triển khai shell và trang chủ tương thích với server ở mức tối thiểu; không thêm giao diện user booking.
+- [x] Chạy `pnpm lint && pnpm typecheck && pnpm test && pnpm build`; expect tất cả các lệnh sẽ thoát `0`.
+- [x] Commit: `chore: bootstrap mowstudio application`.
 
 **Tiêu chí chấp nhận:** Một `pnpm install --frozen-lockfile` mới theo sau là lint, typecheck, unit test và build thành công trên Node 24.
 
@@ -148,13 +148,13 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `serverEnv` được Zod validate; `publicEnv`; singleton `prisma`
 - Phím môi trường: `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `APP_URL`
 
-- [ ] Viết bài unit test env từ chối `DATABASE_URL` bị thiếu và chấp nhận các giá trị bắt buộc hợp lệ về mặt cú pháp.
-- [ ] Viết một smoke test tích hợp thực thi `SELECT 1 AS value` và expect `{ value: 1 }`.
-- [ ] Chạy cả hai test; có thể gặp lỗi vì module env và Prisma không tồn tại.
-- [ ] Thêm cấu hình Prisma 7 PostgreSQL, pooled `DATABASE_URL`, `DIRECT_URL` migration trực tiếp, các module env đã được validate, singleton client và container test PostgreSQL 18 có health check.
-- [ ] Chạy `docker compose -f docker-compose.test.yml up -d --wait`, `pnpm prisma generate`, rồi `pnpm test:integration -- database-smoke`; expect một bài integration test pass.
-- [ ] Chạy `pnpm lint && pnpm typecheck && pnpm test`; expect thoát `0`.
-- [ ] Commit: `chore: add environment and database foundation`.
+- [x] Viết bài unit test env từ chối `DATABASE_URL` bị thiếu và chấp nhận các giá trị bắt buộc hợp lệ về mặt cú pháp.
+- [x] Viết một smoke test tích hợp thực thi `SELECT 1 AS value` và expect `{ value: 1 }`.
+- [x] Chạy cả hai test; có thể gặp lỗi vì module env và Prisma không tồn tại.
+- [x] Thêm cấu hình Prisma 7 PostgreSQL, pooled `DATABASE_URL`, `DIRECT_URL` migration trực tiếp, các module env đã được validate, singleton client và container test PostgreSQL 18 có health check.
+- [x] Chạy `docker compose -f docker-compose.test.yml up -d --wait`, `pnpm prisma generate`, rồi `pnpm test:integration -- database-smoke`; expect một bài integration test pass.
+- [x] Chạy `pnpm lint && pnpm typecheck && pnpm test`; expect thoát `0`.
+- [x] Commit: `chore: add environment and database foundation`.
 
 **Tiêu chí chấp nhận:** Môi trường không hợp lệ không khởi động được với tên khóa nhưng không có secret; integration test sử dụng PostgreSQL thực.
 
@@ -169,11 +169,11 @@ export type AvailableSlot = Readonly<{
 - Tạo CI job: `quality`, `integration`, `build`
 - Sử dụng script từ Task 0,1–0,2
 
-- [ ] Thêm lỗi xác thực workflow tạm thời bằng cách tham chiếu `pnpm ci:verify` trước khi script tồn tại; chạy `pnpm ci:verify` và xác nhận lỗi không tìm thấy lệnh.
-- [ ] Xác định `ci:verify` dưới dạng test lint + typecheck + unit, định cấu hình buffer pnpm, khởi động service PostgreSQL để integration test, tạo Prisma Client và chạy build sau khi chất lượng thành công.
-- [ ] Document chính xác thiết lập local, catalog môi trường, lệnh test và quy tắc rằng secret production không bao giờ được nhập vào `.env.example`.
-- [ ] Chạy các lệnh tương tự local: `pnpm ci:verify`, `pnpm test:integration`, `pnpm build`; expect thoát `0`.
-- [ ] Commit: `ci: add baseline quality gates`.
+- [x] Thêm lỗi xác thực workflow tạm thời bằng cách tham chiếu `pnpm ci:verify` trước khi script tồn tại; chạy `pnpm ci:verify` và xác nhận lỗi không tìm thấy lệnh.
+- [x] Xác định `ci:verify` dưới dạng test lint + typecheck + unit, định cấu hình buffer pnpm, khởi động service PostgreSQL để integration test, tạo Prisma Client và chạy build sau khi chất lượng thành công.
+- [x] Document chính xác thiết lập local, catalog môi trường, lệnh test và quy tắc rằng secret production không bao giờ được nhập vào `.env.example`.
+- [x] Chạy các lệnh tương tự local: `pnpm ci:verify`, `pnpm test:integration`, `pnpm build`; expect thoát `0`.
+- [x] Commit: `ci: add baseline quality gates`.
 
 **Gate Phase 0:** Thiết lập clean clone sẽ được document và có thể tái tạo; Các lệnh local tương đương CI pass; không có hành vi tính năng nào được thực hiện.
 
