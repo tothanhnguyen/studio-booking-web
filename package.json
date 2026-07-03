@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "check:env": "tsx scripts/check-env.ts",
-    "ci:verify": "pnpm prisma generate && pnpm lint && pnpm typecheck && pnpm test",
+    "ci:verify": "prisma generate && eslint . && tsc --noEmit && vitest run",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
