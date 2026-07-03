@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "check:env": "tsx scripts/check-env.ts",
-    "ci:verify": "pnpm prisma generate && pnpm lint && pnpm typecheck && pnpm test",
+    "ci:verify": "prisma generate && eslint . && tsc --noEmit && vitest run",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -22,6 +22,8 @@
   "dependencies": {
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
+    "date-fns": "4.4.0",
+    "date-fns-tz": "3.2.0",
     "dotenv": "17.4.2",
     "next": "16.2.10",
     "pg": "8.22.0",

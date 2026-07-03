@@ -197,12 +197,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `toUtcFromStudioLocal(date: string, time: string): Date`, `toStudioDateKey(date: Date): string`
 - Cung cấp: `canTransitionBooking(from: BookingStatus, to: BookingStatus, context: TransitionContext): boolean`
 
-- [ ] Viết test cho `calculateDeposit(1_000_001)`, chuyển đổi giờ local `2026-07-03 09:15` và mọi booking transition được phép/bị cấm trong design spec.
-- [ ] Chạy ba tập tin test focused; expect lỗi không tìm thấy module.
-- [ ] Triển khai phép tính deposit 30% an toàn với số nguyên, chuyển đổi timezone bằng thư viện timezone-aware, shared enum và transition policy dạng bảng.
-- [ ] Chạy test focused; expect tất cả các trường hợp biên sẽ pass, bao gồm cả bối cảnh ranh giới hủy chính xác trong 24 giờ.
-- [ ] Chạy `pnpm ci:verify`; expect thoát `0`.
-- [ ] Commit: `feat: define booking domain primitives`.
+- [x] Viết test cho `calculateDeposit(1_000_001)`, chuyển đổi giờ local `2026-07-03 09:15` và mọi booking transition được phép/bị cấm trong design spec.
+- [x] Chạy ba tập tin test focused; expect lỗi không tìm thấy module.
+- [x] Triển khai phép tính deposit 30% an toàn với số nguyên, chuyển đổi timezone bằng thư viện timezone-aware, shared enum và transition policy dạng bảng.
+- [x] Chạy test focused; expect tất cả các trường hợp biên sẽ pass, bao gồm cả bối cảnh ranh giới hủy chính xác trong 24 giờ.
+- [x] Chạy `pnpm ci:verify`; expect thoát `0`.
+- [x] Commit: `feat: define booking domain primitives`.
 
 **Tiêu chí chấp nhận:** Domain function thuần, không phụ thuộc timezone của host và từ chối amount VND âm hoặc không phải số nguyên.
 
@@ -217,13 +217,13 @@ export type AvailableSlot = Readonly<{
 - Cung cấp Prisma model: `User`, `CustomerProfile`, `StudioRoom`, `Service`, `WorkingHour`, `BlockedSlot`, `Booking`, `Payment`, `NotificationLog`, `AuditLog`, `PaymentEvent`
 - Tạo index cho overlap query theo room/ngày, provider idempotency, normalized email, slug và status/expiry query.
 
-- [ ] Viết các bài integration test nhằm thử các slug room/service trùng lặp, hồ sơ một-một không hợp lệ, khóa sự kiện của provider trùng lặp và bản ghi kết thúc trước khi bắt đầu; expect sự từ chối database.
-- [ ] Chạy test với schema trống; expect lỗi mô hình/bảng.
-- [ ] Định nghĩa enum/model theo design spec, gồm snapshot field, integer money, UTC timestamp, token hash, audit metadata JSON và check constraint bổ sung bằng migration SQL khi Prisma không biểu đạt được.
-- [ ] Tạo và áp dụng quá trình migration sang database test mới.
-- [ ] Chạy `pnpm test:integration -- schema-constraints`; expect tất cả các test ràng buộc để pass.
-- [ ] Chạy `pnpm prisma validate && pnpm ci:verify`; expect thoát `0`.
-- [ ] Commit: `feat: add initial booking data model`.
+- [x] Viết các bài integration test nhằm thử các slug room/service trùng lặp, hồ sơ một-một không hợp lệ, khóa sự kiện của provider trùng lặp và bản ghi kết thúc trước khi bắt đầu; expect sự từ chối database.
+- [x] Chạy test với schema trống; expect lỗi mô hình/bảng.
+- [x] Định nghĩa enum/model theo design spec, gồm snapshot field, integer money, UTC timestamp, token hash, audit metadata JSON và check constraint bổ sung bằng migration SQL khi Prisma không biểu đạt được.
+- [x] Tạo và áp dụng quá trình migration sang database test mới.
+- [x] Chạy `pnpm test:integration -- schema-constraints`; expect tất cả các test ràng buộc để pass.
+- [x] Chạy `pnpm prisma validate && pnpm ci:verify`; expect thoát `0`.
+- [x] Commit: `feat: add initial booking data model`.
 
 **Tiêu chí chấp nhận:** Database mới migrate được từ zero; range/amount không hợp lệ và idempotency key trùng đều bị PostgreSQL từ chối, không chỉ dựa vào application validation.
 
@@ -241,12 +241,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `ServiceRepository.findActiveById(id)`, `findActiveBySlug(slug)`, `listByRoom(roomId)`
 - Tạo ra slug room xác định: `photo-studio`, `voice-podcast-booth`, `music-studio`
 
-- [ ] Viết các bài integration test để lọc hoạt động, quan hệ room/service, seed kép idempotent và slug ba room chính xác.
-- [ ] Chạy test; expect lỗi repository/seed.
-- [ ] Triển khai các hợp đồng/bộ điều hợp repository hẹp và seed dựa trên upsert với các service `ROOM_ONLY` và `ASSISTED` đại diện cùng với số giờ hàng tuần.
-- [ ] Chạy seed hai lần, sau đó chạy test repository và seed; expect số lượng không thay đổi và các assertion pass.
-- [ ] Chạy `pnpm ci:verify && pnpm test:integration`; expect thoát `0`.
-- [ ] Commit: `feat: add catalog repositories and seed data`.
+- [x] Viết các bài integration test để lọc hoạt động, quan hệ room/service, seed kép idempotent và slug ba room chính xác.
+- [x] Chạy test; expect lỗi repository/seed.
+- [x] Triển khai các hợp đồng/bộ điều hợp repository hẹp và seed dựa trên upsert với các service `ROOM_ONLY` và `ASSISTED` đại diện cùng với số giờ hàng tuần.
+- [x] Chạy seed hai lần, sau đó chạy test repository và seed; expect số lượng không thay đổi và các assertion pass.
+- [x] Chạy `pnpm ci:verify && pnpm test:integration`; expect thoát `0`.
+- [x] Commit: `feat: add catalog repositories and seed data`.
 
 **Gate Phase 1:** Fresh migrate + seed tạo đúng 3 room; domain, schema constraint và repository suite đều pass.
 
