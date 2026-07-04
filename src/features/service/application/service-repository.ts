@@ -19,4 +19,9 @@ export interface ServiceRepository {
   findActiveById(id: string): Promise<ServiceRecord | null>;
   findActiveBySlug(slug: string): Promise<ServiceRecord | null>;
   listByRoom(roomId: string): Promise<ServiceRecord[]>;
+  listAll(): Promise<ServiceRecord[]>;
+  upsert(input: ServiceUpsertData): Promise<ServiceRecord>;
+  setActive(id: string, active: boolean): Promise<ServiceRecord>;
 }
+
+export type ServiceUpsertData = Omit<ServiceRecord, "id"> & Readonly<{ id?: string }>;
