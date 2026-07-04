@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HomePage() {
   return (
     <section aria-labelledby="home-heading" className="space-y-4">
@@ -6,8 +8,14 @@ export default function HomePage() {
         Không gian để ý tưởng thành hình.
       </h1>
       <p className="max-w-2xl text-lg text-stone-300">
-        MowStudio đang được xây dựng. Trải nghiệm đặt lịch sẽ sớm xuất hiện tại đây.
+        Photo studio, podcast booth và phòng thu âm dành cho những buổi sáng tạo cần một không gian tử tế.
       </p>
+      <Link
+        className="mt-4 inline-flex rounded-full bg-amber-300 px-6 py-3 font-semibold text-stone-950 hover:bg-amber-200"
+        href="/studios"
+      >
+        Khám phá studio
+      </Link>
     </section>
   );
 }

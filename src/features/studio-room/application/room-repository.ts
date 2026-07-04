@@ -11,4 +11,9 @@ export type RoomRecord = Readonly<{
 export interface RoomRepository {
   findActiveBySlug(slug: string): Promise<RoomRecord | null>;
   listActive(): Promise<RoomRecord[]>;
+  listAll(): Promise<RoomRecord[]>;
+  upsert(input: RoomUpsertData): Promise<RoomRecord>;
+  setActive(id: string, active: boolean): Promise<RoomRecord>;
 }
+
+export type RoomUpsertData = Omit<RoomRecord, "id"> & Readonly<{ id?: string }>;

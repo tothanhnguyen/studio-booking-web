@@ -2,6 +2,7 @@ import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import type {
   ServiceRecord,
   ServiceRepository,
+  ServiceUpsertData,
 } from "@/features/service/application/service-repository";
 
 const serviceSelect = {
@@ -42,5 +43,27 @@ export class PrismaServiceRepository implements ServiceRepository {
       select: serviceSelect,
       where: { isActive: true, roomId },
     });
+  }
+
+  listAll(): Promise<ServiceRecord[]> {
+    return this.client.service.findMany({
+      orderBy: [{ displayOrder: "asc" }, { name: "asc" }],
+      select: serviceSelect,
+    });
+  }
+
+  upsert(input: ServiceUpsertData): Promise<ServiceRecord> {
+    const { id, ...data } = input;
+    if (!id) return this.client.service.create({ data, select: serviceSelect });
+    return this.client.service.upsert({
+      create: { ...data, id },
+      update: data,
+      where: { id },
+      select: serviceSelect,
+    });
+  }
+
+  setActive(id: string, isActive: boolean): Promise<ServiceRecord> {
+    return this.client.service.update({ where: { id }, data: { isActive }, select: serviceSelect });
   }
 }

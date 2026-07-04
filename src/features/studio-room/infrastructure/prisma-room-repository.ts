@@ -2,6 +2,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import type {
   RoomRecord,
   RoomRepository,
+  RoomUpsertData,
 } from "@/features/studio-room/application/room-repository";
 
 const roomSelect = {
@@ -30,5 +31,27 @@ export class PrismaRoomRepository implements RoomRepository {
       select: roomSelect,
       where: { isActive: true },
     });
+  }
+
+  listAll(): Promise<RoomRecord[]> {
+    return this.client.studioRoom.findMany({
+      orderBy: [{ displayOrder: "asc" }, { name: "asc" }],
+      select: roomSelect,
+    });
+  }
+
+  upsert(input: RoomUpsertData): Promise<RoomRecord> {
+    const { id, ...data } = input;
+    if (!id) return this.client.studioRoom.create({ data, select: roomSelect });
+    return this.client.studioRoom.upsert({
+      create: { ...data, id },
+      update: data,
+      where: { id },
+      select: roomSelect,
+    });
+  }
+
+  setActive(id: string, isActive: boolean): Promise<RoomRecord> {
+    return this.client.studioRoom.update({ where: { id }, data: { isActive }, select: roomSelect });
   }
 }
