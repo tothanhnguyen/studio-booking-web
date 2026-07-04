@@ -272,12 +272,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `getPublicServiceBySlug(slug): Promise<PublicService | null>`
 - Sử dụng giao diện repository từ Task 1.3
 
-- [ ] Viết test service chứng minh không có room/service không hoạt động và E2E test điều hướng nhà → studio → room → service → CTA booking.
-- [ ] Chạy test focused; expect các lỗi về tuyến đường/trường hợp sử dụng.
-- [ ] Triển khai các trang Component Server, thẻ thuộc sở hữu tính năng, metadata, state trống/không tìm thấy tiếng Việt và điều hướng ngữ nghĩa bằng cách sử dụng dữ liệu gốc.
-- [ ] Chạy test unit focused và E2E ở chế độ xem trên máy tính để bàn và thiết bị di động; expect pass.
-- [ ] Chạy `pnpm ci:verify && pnpm build`; expect thoát `0`.
-- [ ] Commit: `feat: add public studio catalog`.
+- [x] Viết test service chứng minh không có room/service không hoạt động và E2E test điều hướng nhà → studio → room → service → CTA booking.
+- [x] Chạy test focused; expect các lỗi về tuyến đường/trường hợp sử dụng.
+- [x] Triển khai các trang Component Server, thẻ thuộc sở hữu tính năng, metadata, state trống/không tìm thấy tiếng Việt và điều hướng ngữ nghĩa bằng cách sử dụng dữ liệu gốc.
+- [x] Chạy test unit focused và E2E ở chế độ xem trên máy tính để bàn và thiết bị di động; expect pass.
+- [x] Chạy `pnpm ci:verify && pnpm build`; expect thoát `0`.
+- [x] Commit: `feat: add public studio catalog`.
 
 **Tiêu chí chấp nhận:** Tất cả ba room và service đang hoạt động đều có thể được khám phá mà không cần tìm nạp dữ liệu phía customer; slug không hợp lệ trả về trang không tìm thấy Next.js.
 
@@ -293,11 +293,11 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `requireRole(role: AppRole): Promise<Actor>` throwing typed `UnauthenticatedError`/`ForbiddenError`
 - Bộ điều hợp test Task 2 tạm thời có thể tiêm các tác nhân; Phase 4 thay thế độ phân giải phiên mà không thay đổi chữ ký
 
-- [ ] Viết bài unit test cho các quyết định của khách/customer/admin và xác nhận E2E rằng khách/customer không thể hiển thị nội dung admin.
-- [ ] Chạy test; expect thất bại bảo vệ mất tích.
-- [ ] Triển khai cổng phân giải tác nhân chỉ dành cho server, lỗi đánh máy, trình bảo vệ bố cục admin và shell quản trị tiếng Việt có thể truy cập được.
-- [ ] Chạy test focused; expect tất cả các nhánh từ chối/cho phép pass.
-- [ ] Commit: `feat: enforce admin route boundary`.
+- [x] Viết bài unit test cho các quyết định của khách/customer/admin và xác nhận E2E rằng khách/customer không thể hiển thị nội dung admin.
+- [x] Chạy test; expect thất bại bảo vệ mất tích.
+- [x] Triển khai cổng phân giải tác nhân chỉ dành cho server, lỗi đánh máy, trình bảo vệ bố cục admin và shell quản trị tiếng Việt có thể truy cập được.
+- [x] Chạy test focused; expect tất cả các nhánh từ chối/cho phép pass.
+- [x] Commit: `feat: enforce admin route boundary`.
 
 **Tiêu chí chấp nhận:** Không thể truy cập trang quản trị bằng cách thay đổi URL; authorization xảy ra trước khi dữ liệu được bảo vệ được tải.
 
@@ -314,12 +314,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `upsertService(actor, input)`, `setServiceActive(actor, serviceId, active)`
 - Đầu vào được phân tích cú pháp Zod; duration/buffer là số phút dương/không âm và giá là số nguyên dương VNĐ
 
-- [ ] Viết các test service không thành công về duration/giá không hợp lệ, ánh xạ slug trùng lặp, tác nhân trái phép và tạo intent test.
-- [ ] Viết E2E test mà admin chỉnh sửa service và khám phá công khai phản ánh sự thay đổi.
-- [ ] Triển khai các biểu mẫu máy khách RHF/Zod tối thiểu gọi các Hành động server được bảo vệ được hỗ trợ bởi các service ứng dụng và repository.
-- [ ] Chạy test unit/E2E; expect các notification xác thực bằng tiếng Việt và những thay đổi liên tục.
-- [ ] Chạy `pnpm ci:verify && pnpm build`; expect thoát `0`.
-- [ ] Commit: `feat: manage studio rooms and services`.
+- [x] Viết các test service không thành công về duration/giá không hợp lệ, ánh xạ slug trùng lặp, tác nhân trái phép và tạo intent test.
+- [x] Viết E2E test mà admin chỉnh sửa service và khám phá công khai phản ánh sự thay đổi.
+- [x] Triển khai các biểu mẫu máy khách RHF/Zod tối thiểu gọi các Hành động server được bảo vệ được hỗ trợ bởi các service ứng dụng và repository.
+- [x] Chạy test unit/E2E; expect các notification xác thực bằng tiếng Việt và những thay đổi liên tục.
+- [x] Chạy `pnpm ci:verify && pnpm build`; expect thoát `0`.
+- [x] Commit: `feat: manage studio rooms and services`.
 
 **Gate Phase 2:** Catalog hành trình công khai và thẻ hành trình CRUD của admin; việc từ chối admin customer/khách được thể hiện là E2E.
 
