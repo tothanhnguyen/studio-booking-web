@@ -457,11 +457,11 @@ export type AvailableSlot = Readonly<{
 - `getCurrentActor()` hiện giải quyết phiên server Supabase và user local.
 - Cung cấp: `syncAuthenticatedUser(identity): Promise<User>` defaulting new users to `CUSTOMER`; never accepts role from client metadata.
 
-- [ ] Viết test cho lần đăng nhập đầu tiên, đăng nhập nhiều lần, thay đổi email đã được xác minh, email chưa được xác minh và metadata role customer độc hại.
-- [ ] Chạy test; mong đợi FAIL vì temporary actor adapter chưa được thay thế.
-- [ ] Triển khai client/làm mới cookie Supabase an toàn SSR, biểu mẫu đăng nhập/đăng ký bằng tiếng Việt, callback Google và đồng bộ hóa local idempotent.
-- [ ] Chạy auth unit/integration/E2E với test identity; mong đợi email/password và Google callback fixture đều pass.
-- [ ] Commit: `feat: integrate supabase authentication`.
+- [x] Viết test cho lần đăng nhập đầu tiên, đăng nhập nhiều lần, thay đổi email đã được xác minh, email chưa được xác minh và metadata role customer độc hại.
+- [x] Chạy test; mong đợi FAIL vì temporary actor adapter chưa được thay thế.
+- [x] Triển khai client/làm mới cookie Supabase an toàn SSR, biểu mẫu đăng nhập/đăng ký bằng tiếng Việt, callback Google và đồng bộ hóa local idempotent.
+- [x] Chạy auth unit/integration/E2E với test identity; mong đợi email/password và Google callback fixture đều pass.
+- [x] Commit: `feat: integrate supabase authentication`.
 
 **Tiêu chí chấp nhận:** User mới luôn là `CUSTOMER`; cookie phiên được bảo mật; role admin không thể tự chỉ định.
 
@@ -477,11 +477,11 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `claimGuestBookings(actor: VerifiedActor): Promise<{ claimedCount: number }>`
 - Repository dùng compare-and-set, chỉ update row `userId IS NULL` khớp normalized verified email.
 
-- [ ] Viết các test đối sánh đã được xác minh, đối sánh theo trường hợp chuẩn hóa, tài khoản chưa được xác minh, đặt chỗ đã sở hữu, yêu cầu cạnh tranh, thử lại idempotent và hàng test.
-- [ ] Chạy test focused; expect những thất bại về claim bị thiếu.
-- [ ] Triển khai hành động xác nhận quyền sở hữu rõ ràng, phương pháp repository so sánh và thiết lập giao dịch, bản sao biểu ngữ/kết quả và metadata test được che giấu.
-- [ ] Chạy claim unit/integration/E2E; chỉ booking chưa có owner và đủ điều kiện mới được gán owner.
-- [ ] Commit: `feat: claim verified guest bookings`.
+- [x] Viết các test đối sánh đã được xác minh, đối sánh theo trường hợp chuẩn hóa, tài khoản chưa được xác minh, đặt chỗ đã sở hữu, yêu cầu cạnh tranh, thử lại idempotent và hàng test.
+- [x] Chạy test focused; expect những thất bại về claim bị thiếu.
+- [x] Triển khai hành động xác nhận quyền sở hữu rõ ràng, phương pháp repository so sánh và thiết lập giao dịch, bản sao biểu ngữ/kết quả và metadata test được che giấu.
+- [x] Chạy claim unit/integration/E2E; chỉ booking chưa có owner và đủ điều kiện mới được gán owner.
+- [x] Commit: `feat: claim verified guest bookings`.
 
 **Tiêu chí chấp nhận:** Claim không thể lấy cắp đặt chỗ đã sở hữu và việc lặp lại không có tác dụng bổ sung.
 
@@ -498,12 +498,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp owner-scoped `listCustomerBookings(actor, filters)` và `getCustomerBooking(actor, id)`.
 - Cung cấp admin-only `listAdminBookings(actor, filters)` và `getAdminCalendar(actor, range)`.
 
-- [ ] Viết các test chứng minh sự cô lập của owner, hành vi của khách/customer/admin, ranh giới bộ lọc và transition hiển thị UTC sang studio.
-- [ ] Chạy test; expect lỗi truy vấn/trang bị thiếu.
-- [ ] Triển khai các service truy vấn server, trang chi tiết/danh sách được phân trang, bộ lọc quản trị và fallback lịch/danh sách 2D có thể truy cập.
-- [ ] Chạy dashboard E2E gồm cross-account direct-ID denial và non-admin admin-query denial.
-- [ ] Chạy `pnpm ci:verify && pnpm test:integration && pnpm build`; expect thoát `0`.
-- [ ] Commit: `feat: add customer and admin booking dashboards`.
+- [x] Viết các test chứng minh sự cô lập của owner, hành vi của khách/customer/admin, ranh giới bộ lọc và transition hiển thị UTC sang studio.
+- [x] Chạy test; expect lỗi truy vấn/trang bị thiếu.
+- [x] Triển khai các service truy vấn server, trang chi tiết/danh sách được phân trang, bộ lọc quản trị và fallback lịch/danh sách 2D có thể truy cập.
+- [x] Chạy dashboard E2E gồm cross-account direct-ID denial và non-admin admin-query denial.
+- [x] Chạy `pnpm ci:verify && pnpm test:integration && pnpm build`; expect thoát `0`.
+- [x] Commit: `feat: add customer and admin booking dashboards`.
 
 **Gate Phase 4:** Auth, ownership, verified claim, customer history, admin view và non-admin denial đều pass E2E.
 
