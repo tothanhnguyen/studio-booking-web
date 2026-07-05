@@ -8,6 +8,8 @@ export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
         <p className="font-semibold text-amber-300">Quản trị MowStudio</p>
         <nav aria-label="Điều hướng quản trị" className="mt-5 flex flex-col gap-3 text-sm">
           <Link href="/admin">Tổng quan</Link>
+          <Link href="/admin/bookings">Booking</Link>
+          <Link href="/admin/bookings/calendar">Lịch booking</Link>
           <Link href="/admin/rooms">Phòng studio</Link>
           <Link href="/admin/services">Dịch vụ</Link>
           <Link href="/admin/schedule">Lịch studio</Link>

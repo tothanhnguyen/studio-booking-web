@@ -19,6 +19,14 @@ export class InvalidBookingSlotError extends Error {
 export class PrismaBookingRepository implements BookingCommandRepository, GuestBookingRepository {
   constructor(private readonly client: PrismaClient) {}
 
+  async claimUnownedByVerifiedEmail(userId: string, normalizedEmail: string): Promise<number> {
+    const result = await this.client.booking.updateMany({
+      where: { userId: null, customerEmail: { equals: normalizedEmail, mode: "insensitive" } },
+      data: { userId },
+    });
+    return result.count;
+  }
+
   async findGuestBooking(id: string) {
     const booking = await this.client.booking.findUnique({ where: { id }, select: {
       id: true, serviceName: true, roomName: true, startTime: true, endTime: true,
