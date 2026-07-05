@@ -10,6 +10,8 @@ export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
           <Link href="/admin">Tổng quan</Link>
           <Link href="/admin/rooms">Phòng studio</Link>
           <Link href="/admin/services">Dịch vụ</Link>
+          <Link href="/admin/schedule">Lịch studio</Link>
+          <Link href="/admin/blocked-slots">Slot bị chặn</Link>
         </nav>
       </aside>
       <div>{children}</div>
