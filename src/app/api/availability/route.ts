@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { getAvailableSlots, ServiceUnavailableError } from "@/features/availability/application/get-available-slots";
 
-const querySchema = z.object({ serviceId: z.uuid(), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) });
+const querySchema = z.object({ serviceId: z.uuid(), date: z.iso.date() });
 const noStore = { "Cache-Control": "no-store" };
 
 export async function GET(request: Request) {

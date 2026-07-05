@@ -33,7 +33,7 @@ describe("availability query", () => {
   });
 
   it("returns a stable 400 JSON shape for invalid route queries", async () => {
-    const response = await GET(new Request("http://localhost/api/availability?serviceId=nope&date=15-01-2027"));
+    const response = await GET(new Request("http://localhost/api/availability?serviceId=00000000-0000-4000-8000-000000000000&date=2027-99-99"));
     expect(response.status).toBe(400);
     await expect(response.json()).resolves.toMatchObject({ error: "INVALID_QUERY", message: expect.any(String), requestId: expect.any(String) });
     expect(response.headers.get("cache-control")).toBe("no-store");
