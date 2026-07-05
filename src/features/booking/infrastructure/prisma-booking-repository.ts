@@ -2,6 +2,7 @@ import { formatInTimeZone } from "date-fns-tz";
 
 import type { PrismaClient } from "@/generated/prisma/client";
 import type { BookingCommandRepository, CreateBookingCommand, PersistedBookingHold } from "@/features/booking/application/booking-command";
+import type { GuestBookingRepository } from "@/features/booking/application/get-guest-booking";
 import { withRoomDateLock } from "@/features/booking/infrastructure/booking-lock";
 import { calculateDeposit } from "@/lib/money/vnd";
 
@@ -15,8 +16,17 @@ export class InvalidBookingSlotError extends Error {
   constructor(message: string) { super(message); this.name = "InvalidBookingSlotError"; }
 }
 
-export class PrismaBookingRepository implements BookingCommandRepository {
+export class PrismaBookingRepository implements BookingCommandRepository, GuestBookingRepository {
   constructor(private readonly client: PrismaClient) {}
+
+  async findGuestBooking(id: string) {
+    const booking = await this.client.booking.findUnique({ where: { id }, select: {
+      id: true, serviceName: true, roomName: true, startTime: true, endTime: true,
+      holdExpiresAt: true, depositAmount: true, remainingAmount: true, currency: true,
+      bookingStatus: true, guestAccessTokenHash: true,
+    } });
+    return booking ? { ...booking, startTime: booking.startTime.toISOString(), endTime: booking.endTime.toISOString(), holdExpiresAt: booking.holdExpiresAt?.toISOString() ?? null } : null;
+  }
 
   async createHold(command: CreateBookingCommand, guestTokenHash: string, now: Date): Promise<PersistedBookingHold> {
     const service = await this.client.service.findFirst({
