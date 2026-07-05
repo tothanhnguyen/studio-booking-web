@@ -36,6 +36,11 @@ export async function signInWithGoogleAction() {
 }
 
 export async function signOutAction() {
+  if (process.env.ALLOW_TEST_ACTOR === "true") {
+    const { cookies } = await import("next/headers");
+    (await cookies()).delete("mowstudio-test-role");
+    redirect("/");
+  }
   await (await createClient()).auth.signOut();
   redirect("/");
 }
