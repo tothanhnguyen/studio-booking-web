@@ -343,12 +343,12 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `generateAvailableSlots(input: GenerateSlotsInput): AvailableSlot[]`
 - `GenerateSlotsInput` chứa ngày được khoanh vùng, working window, duration, buffer, phạm vi bị chặn, phạm vi đăng ký và `now`
 
-- [ ] Viết các test bảng để biết độ kề chính xác, chồng chéo một phút, lưới 15 phút, phân chia working window, duration+tràn buffer, các slot trong quá khứ và các khoản giữ đã hết hạn bị caller loại trừ.
-- [ ] Chạy test focused; expect lỗi module bị thiếu.
-- [ ] Triển khai sự chồng chéo nửa mở và tạo khe xác định dưới dạng các hàm thuần túy.
-- [ ] Chạy test dưới hai giá trị `TZ` của server khác nhau; expect kết quả giống hệt nhau.
-- [ ] Chạy `pnpm ci:verify`; expect thoát `0`.
-- [ ] Commit: `feat: implement availability slot engine`.
+- [x] Viết các test bảng để biết độ kề chính xác, chồng chéo một phút, lưới 15 phút, phân chia working window, duration+tràn buffer, các slot trong quá khứ và các khoản giữ đã hết hạn bị caller loại trừ.
+- [x] Chạy test focused; expect lỗi module bị thiếu.
+- [x] Triển khai sự chồng chéo nửa mở và tạo khe xác định dưới dạng các hàm thuần túy.
+- [x] Chạy test dưới hai giá trị `TZ` của server khác nhau; expect kết quả giống hệt nhau.
+- [x] Chạy `pnpm ci:verify`; expect thoát `0`.
+- [x] Commit: `feat: implement availability slot engine`.
 
 **Tiêu chí chấp nhận:** Tạo slot bao gồm mọi quy tắc trong phần thiết kế 8 và không phụ thuộc vào database/khung.
 
@@ -365,11 +365,11 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `createBlockedSlot(actor, input)`, `deleteBlockedSlot(actor, blockedSlotId)`
 - Repository từ chối các working window chồng chéo và các slot bị chặn kéo dài nhiều ngày local
 
-- [ ] Viết các bài unit test/tích hợp cho các cửa sổ chồng chéo, xác thực bắt đầu/kết thúc, ranh giới ngày local, authorization và test.
-- [ ] Chạy test focused; expect những thất bại trong việc triển khai bị thiếu.
-- [ ] Triển khai các service được bảo vệ, repository Prisma, trình chỉnh sửa lịch trình response và danh sách/biểu mẫu slot bị chặn.
-- [ ] Chạy test unit, tích hợp và lịch trình E2E; expect pass.
-- [ ] Commit: `feat: manage room schedules and blocked slots`.
+- [x] Viết các bài unit test/tích hợp cho các cửa sổ chồng chéo, xác thực bắt đầu/kết thúc, ranh giới ngày local, authorization và test.
+- [x] Chạy test focused; expect những thất bại trong việc triển khai bị thiếu.
+- [x] Triển khai các service được bảo vệ, repository Prisma, trình chỉnh sửa lịch trình response và danh sách/biểu mẫu slot bị chặn.
+- [x] Chạy test unit, tích hợp và lịch trình E2E; expect pass.
+- [x] Commit: `feat: manage room schedules and blocked slots`.
 
 **Tiêu chí chấp nhận:** Những thay đổi của admin ảnh hưởng đến lịch room cố định; các cửa sổ không hợp lệ/chồng chéo và các khối nhiều ngày bị từ chối bằng các notification an toàn.
 
@@ -384,11 +384,11 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `getAvailableSlots({ serviceId, date, now }): Promise<AvailableSlot[]>`
 - Truy vấn HTTP: `serviceId=<uuid>&date=YYYY-MM-DD`; response `{ data: AvailableSlot[], requestId: string }`
 
-- [ ] Viết test về service không hoạt động, ngăn ngừa tình trạng không khớp room, giờ làm việc, hold đang hoạt động, hold hết hạn, booking đang chờ xử lý/xác nhận, chỗ bị chặn và ngày truy vấn không hợp lệ.
-- [ ] Chạy test focused; expect trường hợp sử dụng/tuyến đường bị thiếu.
-- [ ] Triển khai repository query composition, gọi pure availability engine, parse query bằng Zod, route response tắt cache và error mapping ổn định, an toàn.
-- [ ] Chạy test unit/tích hợp và test tuyến đường trực tiếp; expect hình dạng JSON được document và chặn chính xác.
-- [ ] Commit: `feat: expose booking availability`.
+- [x] Viết test về service không hoạt động, ngăn ngừa tình trạng không khớp room, giờ làm việc, hold đang hoạt động, hold hết hạn, booking đang chờ xử lý/xác nhận, chỗ bị chặn và ngày truy vấn không hợp lệ.
+- [x] Chạy test focused; expect trường hợp sử dụng/tuyến đường bị thiếu.
+- [x] Triển khai repository query composition, gọi pure availability engine, parse query bằng Zod, route response tắt cache và error mapping ổn định, an toàn.
+- [x] Chạy test unit/tích hợp và test tuyến đường trực tiếp; expect hình dạng JSON được document và chặn chính xác.
+- [x] Commit: `feat: expose booking availability`.
 
 **Tiêu chí chấp nhận:** Availability được tính hoàn toàn trên server; hold hết hạn không còn block dù row vẫn mang `PENDING_PAYMENT`.
 
@@ -405,20 +405,20 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `withRoomDateLock(tx, roomId, localDate, callback)` bằng `pg_advisory_xact_lock`
 - Cung cấp: `CreatedBookingAccess = { bookingId: string; guestToken: string; holdExpiresAt: string }`
 
-- [ ] Viết một test service chứng minh giá/kết thúc/state của customer bị bỏ qua và test barrier PostgreSQL khởi chạy hai giao dịch cùng một slot.
-- [ ] Viết các test rollback cho lỗi chồng chéo và tạo hàng payment; expect không có bản ghi một phần.
-- [ ] Chạy test focused; expect những thất bại trong việc triển khai bị thiếu.
-- [ ] Triển khai lock key ổn định, parameterized; overlap re-query trong transaction; server snapshot; hold 10 phút; pending payment row; random guest token và chỉ lưu hash.
-- [ ] Chạy test đồng thời nhiều lần (tối thiểu 20 cuộc đua); expect chính xác một thành công và một xung đột xảy ra trong mọi cuộc đua.
-- [ ] Chạy bộ tích hợp rollback/bộ unit đầy đủ; expect thoát `0`.
-- [ ] Commit: `feat: create concurrency-safe booking holds`.
+- [x] Viết một test service chứng minh giá/kết thúc/state của customer bị bỏ qua và test barrier PostgreSQL khởi chạy hai giao dịch cùng một slot.
+- [x] Viết các test rollback cho lỗi chồng chéo và tạo hàng payment; expect không có bản ghi một phần.
+- [x] Chạy test focused; expect những thất bại trong việc triển khai bị thiếu.
+- [x] Triển khai lock key ổn định, parameterized; overlap re-query trong transaction; server snapshot; hold 10 phút; pending payment row; random guest token và chỉ lưu hash.
+- [x] Chạy test đồng thời nhiều lần (tối thiểu 20 cuộc đua); expect chính xác một thành công và một xung đột xảy ra trong mọi cuộc đua.
+- [x] Chạy bộ tích hợp rollback/bộ unit đầy đủ; expect thoát `0`.
+- [x] Commit: `feat: create concurrency-safe booking holds`.
 
 **Tiêu chí chấp nhận:** Không có sự xen kẽ được test nào sẽ tạo ra hai lượt đăng ký chặn chồng chéo; token khách thô không bao giờ xuất hiện trong xác nhận database/log.
 
 ### Task 3.5: Xây dựng quy trình booking gồm 5 bước của khách
 
 **File:**
-- Tạo: `src/app/booking/[serviceId]/page.tsx`, `src/app/booking/[id]/payment/page.tsx`, `src/app/booking/[id]/confirmation/page.tsx`
+- Tạo: `src/app/booking/[id]/page.tsx`, `src/app/booking/[id]/payment/page.tsx`, `src/app/booking/[id]/confirmation/page.tsx` (`id` ở route gốc là service ID; Next.js yêu cầu cùng tên dynamic segment)
 - Tạo: `src/features/booking/presentation/booking-wizard.tsx`, `booking-summary.tsx`, `hold-countdown.tsx`
 - Tạo: `src/features/booking/application/get-guest-booking.ts`, `src/features/booking/application/booking-actions.ts`
 - Kiểm thử: `src/features/booking/application/get-guest-booking.test.ts`, `tests/e2e/guest-booking.spec.ts`, `tests/e2e/guest-access.spec.ts`
@@ -427,12 +427,12 @@ export type AvailableSlot = Readonly<{
 - Hành động server tạo đặt chỗ sử dụng thông tin input liên hệ/bắt đầu đã được Zod xác thực và đặt cookie truy cập của khách trong phạm vi an toàn có chứa token thô.
 - Cung cấp: `getGuestBooking(bookingId, rawToken): Promise<GuestBookingView>`bằng so sánh hash constant-time.
 
-- [ ] Viết E2E test cho tất cả năm bước, rollback slot cũ bảo toàn dữ liệu liên hệ, countdown giữ, từ chối ID trực tiếp mà không cần token và điều hướng bàn phím di động.
-- [ ] Chạy test E2E; expect lỗi tuyến đường/component.
-- [ ] Triển khai wizard RHF/Zod, state tải khả dụng, hành động của server, chiến lược cookie token an toàn, state hướng dẫn payment trước khi tích hợp và chế độ xem state xác nhận.
-- [ ] Chạy đặt chỗ/truy cập khách E2E trên máy tính để bàn/thiết bị di động; expect pass và không có token nhạy cảm trong đánh dấu trang hoặc log.
-- [ ] Chạy `pnpm ci:verify && pnpm test:integration && pnpm build`; expect thoát `0`.
-- [ ] Commit: `feat: add guest booking wizard`.
+- [x] Viết E2E test cho tất cả năm bước, rollback slot cũ bảo toàn dữ liệu liên hệ, countdown giữ, từ chối ID trực tiếp mà không cần token và điều hướng bàn phím di động.
+- [x] Chạy test E2E; expect lỗi tuyến đường/component.
+- [x] Triển khai wizard RHF/Zod, state tải khả dụng, hành động của server, chiến lược cookie token an toàn, state hướng dẫn payment trước khi tích hợp và chế độ xem state xác nhận.
+- [x] Chạy đặt chỗ/truy cập khách E2E trên máy tính để bàn/thiết bị di động; expect pass và không có token nhạy cảm trong đánh dấu trang hoặc log.
+- [x] Chạy `pnpm ci:verify && pnpm test:integration && pnpm build`; expect thoát `0`.
+- [x] Commit: `feat: add guest booking wizard`.
 
 **Gate Phase 3:** Khách có thể lấy và xem riêng thời gian chờ 10 phút; test cuộc đua PostgreSQL thực sự chứng minh một người chiến thắng; wizard rollback slot cũ hoạt động.
 
