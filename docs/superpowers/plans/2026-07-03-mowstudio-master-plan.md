@@ -4,7 +4,7 @@
 
 **Mục tiêu:** Xây dựng web booking creative studio bằng tiếng Việt, sẵn sàng chạy production và đủ chiều sâu cho portfolio intern full-stack; sau đó bổ sung phase triển khai VM để thể hiện năng lực DevOps.
 
-**Tiến độ hiện tại (2026-07-04):** Phase 0, 1 và 2 đã hoàn tất; gate kế tiếp là Phase 3 — availability và atomic booking.
+**Tiến độ hiện tại (2026-07-05):** Phase 0–3 đã hoàn tất; gate kế tiếp là Phase 4 — Supabase Auth, RBAC và dashboard.
 
 **Kiến trúc:** Một Next.js App Router modular monolith, tổ chức theo feature. Application service phía server quản lý use case và state transition; repository quản lý Prisma/PostgreSQL; provider adapter cô lập Supabase, SePay, email và Sentry. Tính đúng đắn dựa trên database transaction và PostgreSQL advisory lock, không dựa vào state phía client hoặc background job.
 
