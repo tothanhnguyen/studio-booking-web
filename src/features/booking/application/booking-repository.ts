@@ -13,4 +13,5 @@ export type BookingRecord = Readonly<{
 
 export interface BookingRepository {
   findById(id: string): Promise<BookingRecord | null>;
+  claimUnownedByVerifiedEmail(userId: string, normalizedEmail: string): Promise<number>;
 }
