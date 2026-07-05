@@ -16,10 +16,13 @@ export async function getCurrentActor(): Promise<Actor | null> {
     const suffix = role === "ADMIN" ? "1" : "2";
     const authUserId = `00000000-0000-4000-8000-00000000000${suffix}`;
     const email = `${role.toLowerCase()}-test@mowstudio.local`;
-    const user = await prisma.user.upsert({
+    await prisma.user.createMany({
+      data: [{ authUserId, email, role, emailVerifiedAt: new Date(0) }],
+      skipDuplicates: true,
+    });
+    const user = await prisma.user.update({
       where: { authUserId },
-      create: { authUserId, email, role, emailVerifiedAt: new Date(0) },
-      update: { email, role, emailVerifiedAt: new Date(0) },
+      data: { email, role, emailVerifiedAt: new Date(0) },
       select: { id: true, role: true, email: true },
     });
     return { ...user, emailVerified: true };
