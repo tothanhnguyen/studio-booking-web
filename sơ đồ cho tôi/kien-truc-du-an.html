@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MowStudio — Sơ đồ Kiến trúc Dự án</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-2: #1a1a26;
+      --border: rgba(255,255,255,0.06);
+      --text: #e8e8ed;
+      --text-dim: #8888a0;
+      --amber: #f5c542;
+      --amber-dim: rgba(245,197,66,0.15);
+      --blue: #5b9cf5;
+      --green: #4ade80;
+      --purple: #a78bfa;
+      --red: #f87171;
+      --cyan: #22d3ee;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 40px;
+      background: linear-gradient(180deg, rgba(245,197,66,0.06) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--amber), #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--text-dim); margin-top: 8px; font-size: 1.05rem; }
+    .hero .badge {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--amber-dim);
+      color: var(--amber);
+      border: 1px solid rgba(245,197,66,0.2);
+    }
+
+    /* ─── Tabs ─── */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      padding: 16px 24px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 10px 10px 0 0;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--surface); }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--amber);
+      border-color: rgba(245,197,66,0.25);
+    }
+
+    /* ─── Panels ─── */
+    .panels {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+    .panel {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 12px 12px 12px;
+      padding: 36px;
+      animation: fadeIn 0.35s ease;
+    }
+    .panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .panel h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .panel .subtitle {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    /* ─── Diagram container ─── */
+    .diagram {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px 24px;
+      overflow-x: auto;
+      margin-bottom: 28px;
+    }
+    .diagram .mermaid { display: flex; justify-content: center; }
+    .diagram .mermaid svg { max-width: 100%; height: auto; }
+
+    /* ─── Info boxes ─── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .info-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .info-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-card h3 .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .info-card p, .info-card ul {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+    .info-card ul { padding-left: 18px; }
+    .info-card li { margin-bottom: 4px; }
+    .info-card code {
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--cyan);
+    }
+
+    /* ─── Tree view ─── */
+    .tree {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 28px;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .tree .folder { color: var(--amber); font-weight: 600; }
+    .tree .file { color: var(--text-dim); }
+    .tree .comment { color: #555570; font-style: italic; }
+    .tree .highlight { color: var(--cyan); }
+
+    /* ─── Legend ─── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    .legend-item .swatch {
+      width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <h1>MowStudio — Kiến trúc Dự án</h1>
+  <p>Hệ thống đặt lịch creative studio • Next.js 16 + Modular Monolith</p>
+  <span class="badge">Modular Monolith · Clean Architecture · Domain-Driven</span>
+</div>
+
+<!-- ═══════════════ TABS ═══════════════ -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-tab="overview">① Tổng quan</button>
+  <button class="tab-btn" data-tab="structure">② Cấu trúc thư mục</button>
+  <button class="tab-btn" data-tab="modular">③ Modular Monolith</button>
+  <button class="tab-btn" data-tab="layers">④ Clean Architecture</button>
+  <button class="tab-btn" data-tab="middleware">⑤ Middleware</button>
+  <button class="tab-btn" data-tab="router">⑥ Router Map</button>
+  <button class="tab-btn" data-tab="database">⑦ Database Schema</button>
+  <button class="tab-btn" data-tab="flow">⑧ Booking Flow</button>
+</div>
+
+<!-- ═══════════════ PANELS ═══════════════ -->
+<div class="panels">
+
+<!-- ──── 1. OVERVIEW ──── -->
+<div class="panel active" id="panel-overview">
+  <h2>Tổng quan Kiến trúc</h2>
+  <p class="subtitle">MowStudio sử dụng kiến trúc <strong>Modular Monolith</strong> kết hợp <strong>Clean Architecture</strong> bên trong Next.js App Router. Mỗi feature module là một vertical slice độc lập với các layer rõ ràng.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+graph TB
+  subgraph CLIENT["🌐 Client Browser"]
+    Browser["React CSR + RSC"]
+  end
+
+  subgraph NEXTJS["⚡ Next.js 16 Runtime"]
+    direction TB
+    MW["🛡️ Middleware<br/>(proxy.ts → updateSession)"]
+    AR["📂 App Router<br/>(src/app/)"]
+    SA["⚙️ Server Actions<br/>(use server)"]
+    API["🔌 API Routes<br/>(src/app/api/)"]
+  end
+
+  subgraph FEATURES["📦 Feature Modules (src/features/)"]
+    direction LR
+    F_AUTH["🔐 auth"]
+    F_BOOK["📅 booking"]
+    F_AVAIL["⏰ availability"]
+    F_SVC["🎬 service"]
+    F_ROOM["🏠 studio-room"]
+    F_DASH["📊 dashboard"]
+  end
+
+  subgraph SHARED["🔧 Shared Libraries (src/lib/)"]
+    direction LR
+    L_DB["db/prisma"]
+    L_SUP["supabase"]
+    L_SEC["security"]
+    L_ENV["env"]
+    L_MON["money"]
+    L_TIME["time"]
+  end
+
+  subgraph INFRA["🗄️ Infrastructure"]
+    direction LR
+    SUPA["Supabase Auth"]
+    PG["PostgreSQL"]
+  end
+
+  Browser -->|"HTTP Request"| MW
+  MW -->|"Session Refresh"| AR
+  AR --> SA
+  AR --> API
+  SA --> FEATURES
+  API --> FEATURES
+  FEATURES --> SHARED
+  L_DB --> PG
+  L_SUP --> SUPA
+
+  style CLIENT fill:#1e293b,stroke:#334155,color:#e2e8f0
+  style NEXTJS fill:#1a1a2e,stroke:#f5c542,color:#e2e8f0
+  style FEATURES fill:#1a2e1a,stroke:#4ade80,color:#e2e8f0
+  style SHARED fill:#2e1a2e,stroke:#a78bfa,color:#e2e8f0
+  style INFRA fill:#2e1a1a,stroke:#f87171,color:#e2e8f0
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--amber)"></span>Tech Stack</h3>
+      <ul>
+        <li><strong>Next.js 16</strong> (App Router, RSC, Server Actions)</li>
+        <li><strong>React 19</strong> với Server Components</li>
+        <li><strong>TypeScript 5.9</strong></li>
+        <li><strong>Prisma 7.8</strong> + PostgreSQL</li>
+        <li><strong>Supabase Auth</strong> (SSR)</li>
+        <li><strong>Zod 4</strong> cho validation</li>
+        <li><strong>TailwindCSS 4</strong> cho styling</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Nguyên tắc thiết kế</h3>
+      <ul>
+        <li><strong>Vertical Slicing</strong> — mỗi feature là một module độc lập</li>
+        <li><strong>Dependency Inversion</strong> — domain không phụ thuộc infrastructure</li>
+        <li><strong>Repository Pattern</strong> — abstract hóa data access</li>
+        <li><strong>Use Case Pattern</strong> — business logic tách riêng</li>
+        <li><strong>Factory Pattern</strong> — DI thông qua factory functions</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--blue)"></span>Testing Strategy</h3>
+      <ul>
+        <li><strong>Vitest</strong> — Unit tests cho domain & application</li>
+        <li><strong>Vitest Integration</strong> — Integration tests</li>
+        <li><strong>Playwright</strong> — E2E tests</li>
+        <li><strong>Testing Library</strong> — Component tests</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ──── 2. STRUCTURE ──── -->
+<div class="panel" id="panel-structure">
+  <h2>Cấu trúc Thư mục Chi tiết</h2>
+  <p class="subtitle">Toàn bộ source code nằm trong <code>src/</code>. Thư mục gốc chứa config files. Feature modules trong <code>src/features/</code> tuân theo cấu trúc Clean Architecture.</p>
+
+  <div class="tree"><span class="folder">MowStudio/</span>
+├── <span class="file">next.config.ts</span>          <span class="comment"># Next.js config (strict mode, dev origins)</span>
+├── <span class="file">package.json</span>             <span class="comment"># Dependencies & scripts</span>
+├── <span class="file">tsconfig.json</span>            <span class="comment"># TypeScript config với path aliases (@/)</span>
+├── <span class="file">vitest.config.ts</span>         <span class="comment"># Unit test config</span>
+├── <span class="file">vitest.integration.config.ts</span> <span class="comment"># Integration test config</span>
+├── <span class="file">playwright.config.ts</span>     <span class="comment"># E2E test config</span>
+├── <span class="file">prisma.config.ts</span>         <span class="comment"># Prisma CLI config</span>
+│
+├── <span class="folder">prisma/</span>                  <span class="comment"># ─── Database Layer ───</span>
+│   ├── <span class="highlight">schema.prisma</span>        <span class="comment"># Data models (12 models, 10 enums)</span>
+│   ├── <span class="file">seed.ts</span>              <span class="comment"># Seed data script</span>
+│   └── <span class="folder">migrations/</span>          <span class="comment"># SQL migrations</span>
+│
+└── <span class="folder">src/</span>                     <span class="comment"># ─── Source Code Root ───</span>
+    ├── <span class="highlight">proxy.ts</span>             <span class="comment"># Next.js middleware entry point</span>
+    │
+    ├── <span class="folder">app/</span>                 <span class="comment"># ─── Next.js App Router (Pages & Routes) ───</span>
+    │   ├── <span class="file">layout.tsx</span>       <span class="comment"># Root layout (AppShell wrapper)</span>
+    │   ├── <span class="file">page.tsx</span>         <span class="comment"># Landing page (/)</span>
+    │   ├── <span class="file">globals.css</span>      <span class="comment"># Global styles (Tailwind imports)</span>
+    │   │
+    │   ├── <span class="folder">login/</span>           <span class="comment"># /login — Auth form</span>
+    │   │   └── <span class="file">page.tsx</span>
+    │   ├── <span class="folder">register/</span>        <span class="comment"># /register — Registration</span>
+    │   │   └── <span class="file">page.tsx</span>
+    │   ├── <span class="folder">auth/callback/</span>   <span class="comment"># /auth/callback — OAuth callback</span>
+    │   │
+    │   ├── <span class="folder">studios/</span>         <span class="comment"># /studios — Public studio listing</span>
+    │   │   ├── <span class="file">page.tsx</span>     <span class="comment"># Studio grid</span>
+    │   │   └── <span class="folder">[slug]/</span>      <span class="comment"># /studios/:slug — Studio detail</span>
+    │   │
+    │   ├── <span class="folder">services/</span>        <span class="comment"># /services/:slug — Service detail</span>
+    │   │   └── <span class="folder">[slug]/</span>
+    │   │
+    │   ├── <span class="folder">booking/</span>         <span class="comment"># Booking pages</span>
+    │   │   ├── <span class="folder">[serviceId]/</span> <span class="comment"># /booking/:serviceId — Booking wizard</span>
+    │   │   └── <span class="folder">[id]/</span>        <span class="comment"># /booking/:id — Booking detail/status</span>
+    │   │
+    │   ├── <span class="folder">admin/</span>           <span class="comment"># ─── Admin Area (protected) ───</span>
+    │   │   ├── <span class="highlight">layout.tsx</span>   <span class="comment"># requireRole("ADMIN") guard</span>
+    │   │   ├── <span class="file">page.tsx</span>     <span class="comment"># Dashboard home (/admin)</span>
+    │   │   ├── <span class="folder">rooms/</span>       <span class="comment"># /admin/rooms — CRUD rooms</span>
+    │   │   ├── <span class="folder">services/</span>    <span class="comment"># /admin/services — CRUD services</span>
+    │   │   ├── <span class="folder">schedule/</span>    <span class="comment"># /admin/schedule — Working hours</span>
+    │   │   └── <span class="folder">blocked-slots/</span> <span class="comment"># /admin/blocked-slots — Block slots</span>
+    │   │
+    │   └── <span class="folder">api/</span>             <span class="comment"># ─── REST API ───</span>
+    │       └── <span class="folder">availability/</span><span class="comment"># GET /api/availability?serviceId=&date=</span>
+    │           └── <span class="highlight">route.ts</span>
+    │
+    ├── <span class="folder">components/</span>          <span class="comment"># ─── Shared UI Components ───</span>
+    │   ├── <span class="file">app-shell.tsx</span>    <span class="comment"># Global navigation shell</span>
+    │   └── <span class="file">app-shell.test.tsx</span>
+    │
+    ├── <span class="folder">features/</span>            <span class="comment"># ─── Feature Modules (Modular Monolith) ───</span>
+    │   │
+    │   ├── <span class="folder">auth/</span>            <span class="comment"># 🔐 Authentication & Authorization</span>
+    │   │   ├── <span class="folder">application/</span> <span class="comment"># Use cases, actions, guards</span>
+    │   │   ├── <span class="folder">infrastructure/</span> <span class="comment"># Prisma user repository</span>
+    │   │   └── <span class="folder">presentation/</span> <span class="comment"># Auth form component</span>
+    │   │
+    │   ├── <span class="folder">booking/</span>         <span class="comment"># 📅 Booking Management</span>
+    │   │   ├── <span class="folder">application/</span> <span class="comment"># Create booking, actions, commands</span>
+    │   │   ├── <span class="folder">domain/</span>      <span class="comment"># Booking policy, types</span>
+    │   │   ├── <span class="folder">infrastructure/</span> <span class="comment"># Prisma booking repo, locking</span>
+    │   │   └── <span class="folder">presentation/</span> <span class="comment"># Wizard, summary, countdown</span>
+    │   │
+    │   ├── <span class="folder">availability/</span>    <span class="comment"># ⏰ Schedule & Slot Generation</span>
+    │   │   ├── <span class="folder">application/</span> <span class="comment"># Get slots, manage schedule</span>
+    │   │   ├── <span class="folder">domain/</span>      <span class="comment"># Slot generation, overlap logic</span>
+    │   │   ├── <span class="folder">infrastructure/</span> <span class="comment"># Prisma availability source</span>
+    │   │   └── <span class="folder">presentation/</span> <span class="comment"># Schedule editor</span>
+    │   │
+    │   ├── <span class="folder">service/</span>         <span class="comment"># 🎬 Service Management</span>
+    │   │   ├── <span class="folder">application/</span> <span class="comment"># CRUD services, public queries</span>
+    │   │   ├── <span class="folder">infrastructure/</span> <span class="comment"># Prisma service repo</span>
+    │   │   └── <span class="folder">presentation/</span> <span class="comment"># Service card, form</span>
+    │   │
+    │   ├── <span class="folder">studio-room/</span>     <span class="comment"># 🏠 Studio Room Management</span>
+    │   │   ├── <span class="folder">application/</span> <span class="comment"># CRUD rooms, public listing</span>
+    │   │   ├── <span class="folder">infrastructure/</span> <span class="comment"># Prisma room repo</span>
+    │   │   └── <span class="folder">presentation/</span> <span class="comment"># Room card, form</span>
+    │   │
+    │   └── <span class="folder">dashboard/</span>       <span class="comment"># 📊 Admin Dashboard</span>
+    │       └── <span class="folder">presentation/</span> <span class="comment"># Admin shell layout</span>
+    │
+    ├── <span class="folder">generated/</span>           <span class="comment"># ─── Auto-generated ───</span>
+    │   └── <span class="folder">prisma/</span>          <span class="comment"># Prisma Client output</span>
+    │
+    └── <span class="folder">lib/</span>                 <span class="comment"># ─── Shared Libraries ───</span>
+        ├── <span class="folder">db/</span>              <span class="comment"># prisma.ts — Singleton PrismaClient</span>
+        ├── <span class="folder">supabase/</span>        <span class="comment"># browser.ts, server.ts, middleware.ts</span>
+        ├── <span class="folder">security/</span>        <span class="comment"># guest-token.ts</span>
+        ├── <span class="folder">env/</span>             <span class="comment"># Environment validation (Zod)</span>
+        ├── <span class="folder">money/</span>           <span class="comment"># VND formatting utilities</span>
+        └── <span class="folder">time/</span>            <span class="comment"># Studio timezone utilities</span></div>
+</div>
+
+<!-- ──── 3. MODULAR MONOLITH ──── -->
+<div class="panel" id="panel-modular">
+  <h2>Modular Monolith — Các Module độc lập</h2>
+  <p class="subtitle">Dự án chia thành <strong>6 feature modules</strong> trong <code>src/features/</code>. Mỗi module là một <em>vertical slice</em> — chứa đầy đủ từ UI đến data access. Các module giao tiếp qua import trực tiếp nhưng chỉ thông qua application layer (interface).</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+graph TB
+  subgraph MODULES["📦 Feature Modules"]
+    direction TB
+
+    subgraph AUTH["🔐 auth"]
+      AUTH_APP["application/<br/>• getCurrentActor()<br/>• requireRole()<br/>• syncUser()<br/>• authActions"]
+      AUTH_INFRA["infrastructure/<br/>• PrismaUserRepository"]
+      AUTH_UI["presentation/<br/>• AuthForm"]
+      AUTH_APP --> AUTH_INFRA
+      AUTH_UI --> AUTH_APP
+    end
+
+    subgraph BOOKING["📅 booking"]
+      BOOK_APP["application/<br/>• createBooking()<br/>• getGuestBooking()<br/>• bookingActions<br/>• BookingCommandRepo"]
+      BOOK_DOM["domain/<br/>• canTransitionBooking()<br/>• BookingPolicy<br/>• BookingTypes"]
+      BOOK_INFRA["infrastructure/<br/>• PrismaBookingRepository<br/>• bookingLock"]
+      BOOK_UI["presentation/<br/>• BookingWizard<br/>• BookingSummary<br/>• HoldCountdown"]
+      BOOK_APP --> BOOK_DOM
+      BOOK_APP --> BOOK_INFRA
+      BOOK_UI --> BOOK_APP
+    end
+
+    subgraph AVAIL["⏰ availability"]
+      AVAIL_APP["application/<br/>• getAvailableSlots()<br/>• manageSchedule()<br/>• AvailabilitySource"]
+      AVAIL_DOM["domain/<br/>• generateSlots()<br/>• overlapCheck()"]
+      AVAIL_INFRA["infrastructure/<br/>• PrismaAvailabilitySource<br/>• PrismaScheduleRepo"]
+      AVAIL_UI["presentation/<br/>• ScheduleEditor"]
+      AVAIL_APP --> AVAIL_DOM
+      AVAIL_APP --> AVAIL_INFRA
+      AVAIL_UI --> AVAIL_APP
+    end
+
+    subgraph SERVICE["🎬 service"]
+      SVC_APP["application/<br/>• getPublicService()<br/>• manageService()<br/>• ServiceRepository"]
+      SVC_INFRA["infrastructure/<br/>• PrismaServiceRepository"]
+      SVC_UI["presentation/<br/>• ServiceCard<br/>• ServiceForm"]
+      SVC_APP --> SVC_INFRA
+      SVC_UI --> SVC_APP
+    end
+
+    subgraph ROOM["🏠 studio-room"]
+      ROOM_APP["application/<br/>• listPublicRooms()<br/>• manageRoom()<br/>• RoomRepository"]
+      ROOM_INFRA["infrastructure/<br/>• PrismaRoomRepository"]
+      ROOM_UI["presentation/<br/>• RoomCard<br/>• RoomForm"]
+      ROOM_APP --> ROOM_INFRA
+      ROOM_UI --> ROOM_APP
+    end
+
+    subgraph DASH["📊 dashboard"]
+      DASH_UI["presentation/<br/>• AdminShell"]
+    end
+  end
+
+  %% Cross-module dependencies
+  BOOK_APP -.->|"uses"| AUTH_APP
+  AVAIL_APP -.->|"reads services"| SVC_APP
+  BOOK_UI -.->|"checks slots"| AVAIL_APP
+
+  style MODULES fill:#0d1117,stroke:#30363d,color:#e6edf3
+  style AUTH fill:#1a1a2e,stroke:#f5c542,color:#e6edf3
+  style BOOKING fill:#1a2e1a,stroke:#4ade80,color:#e6edf3
+  style AVAIL fill:#1a2e2e,stroke:#22d3ee,color:#e6edf3
+  style SERVICE fill:#2e1a2e,stroke:#a78bfa,color:#e6edf3
+  style ROOM fill:#2e2e1a,stroke:#f59e0b,color:#e6edf3
+  style DASH fill:#2e1a1a,stroke:#f87171,color:#e6edf3
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--amber)"></span>Tại sao Modular Monolith?</h3>
+      <p>Thay vì microservices (phức tạp) hay monolith truyền thống (rối), Modular Monolith giữ mọi thứ trong 1 deployable unit nhưng tổ chức code theo module độc lập. Dễ refactor, dễ test, dễ hiểu boundary.</p>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Quy tắc giao tiếp</h3>
+      <ul>
+        <li>Module chỉ import <strong>application layer</strong> của module khác</li>
+        <li>Không import trực tiếp <code>infrastructure/</code> hay <code>domain/</code></li>
+        <li>Cross-module dependency qua <strong>interfaces</strong> (Repository pattern)</li>
+        <li><code>src/lib/</code> là shared kernel — dùng chung cho mọi module</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--purple)"></span>Shared Kernel (src/lib/)</h3>
+      <ul>
+        <li><code>db/prisma</code> — Singleton PrismaClient</li>
+        <li><code>supabase/</code> — Auth client (browser, server, middleware)</li>
+        <li><code>security/</code> — Guest token generation</li>
+        <li><code>env/</code> — Type-safe environment vars (Zod)</li>
+        <li><code>money/</code> — VND currency formatting</li>
+        <li><code>time/</code> — Timezone-aware date utils</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ──── 4. CLEAN ARCHITECTURE ──── -->
+<div class="panel" id="panel-layers">
+  <h2>Clean Architecture — Layers trong mỗi Module</h2>
+  <p class="subtitle">Mỗi feature module tổ chức theo <strong>4 layers</strong> của Clean Architecture. Dependency chỉ đi từ ngoài vào trong: Presentation → Application → Domain ← Infrastructure.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+graph TB
+  subgraph ONION["🎯 Clean Architecture Layers"]
+    direction TB
+
+    subgraph P["🖥️ PRESENTATION LAYER"]
+      P1["React Components<br/>(TSX files)"]
+      P2["Server Actions<br/>('use server')"]
+      P3["API Route Handlers<br/>(route.ts)"]
+    end
+
+    subgraph A["⚙️ APPLICATION LAYER"]
+      A1["Use Cases<br/>(createBooking, getAvailableSlots)"]
+      A2["Repository Interfaces<br/>(BookingCommandRepository)"]
+      A3["Application Services<br/>(getCurrentActor, requireRole)"]
+      A4["Input Schemas<br/>(Zod validation)"]
+    end
+
+    subgraph D["💎 DOMAIN LAYER"]
+      D1["Business Rules<br/>(canTransitionBooking)"]
+      D2["Domain Types<br/>(BookingStatus, BookingType)"]
+      D3["Pure Functions<br/>(generateSlots, overlap)"]
+    end
+
+    subgraph I["🗄️ INFRASTRUCTURE LAYER"]
+      I1["Prisma Repositories<br/>(PrismaBookingRepository)"]
+      I2["External Services<br/>(Supabase Auth)"]
+      I3["Database Adapters<br/>(PrismaPg)"]
+    end
+
+    P1 --> A1
+    P2 --> A1
+    P3 --> A1
+    A1 --> A4
+    A1 --> D1
+    A1 --> D3
+    A1 --> A2
+    I1 -.->|"implements"| A2
+    A1 -.->|"injects"| I1
+  end
+
+  style P fill:#2d1f4e,stroke:#a78bfa,color:#e6edf3
+  style A fill:#1a2e1a,stroke:#4ade80,color:#e6edf3
+  style D fill:#2e2e1a,stroke:#f5c542,color:#e6edf3
+  style I fill:#2e1a1a,stroke:#f87171,color:#e6edf3
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--purple)"></span>Presentation Layer</h3>
+      <ul>
+        <li>React Server Components (RSC) cho rendering</li>
+        <li>Server Actions (<code>'use server'</code>) cho mutations</li>
+        <li>API Routes cho REST endpoints</li>
+        <li><strong>Không chứa</strong> business logic</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Application Layer</h3>
+      <ul>
+        <li>Orchestrate use cases (createBooking, getAvailableSlots)</li>
+        <li>Định nghĩa <strong>Repository interfaces</strong></li>
+        <li>Input validation bằng <strong>Zod schemas</strong></li>
+        <li>Factory functions cho Dependency Injection</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--amber)"></span>Domain Layer</h3>
+      <ul>
+        <li><strong>Pure functions</strong> — không side effects</li>
+        <li>Business rules: <code>canTransitionBooking()</code></li>
+        <li>Slot generation: <code>generateAvailableSlots()</code></li>
+        <li>Domain types & enums</li>
+        <li><strong>Không import</strong> bất kỳ infrastructure nào</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--red)"></span>Infrastructure Layer</h3>
+      <ul>
+        <li><strong>Implements</strong> repository interfaces</li>
+        <li>Prisma queries & mutations</li>
+        <li>Database locking (<code>booking-lock.ts</code>)</li>
+        <li>Chỉ được import bởi application layer</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="diagram" style="margin-top: 24px;">
+    <div class="mermaid">
+graph LR
+  subgraph EXAMPLE["📅 Ví dụ: Booking Module"]
+    direction LR
+
+    subgraph PRES["presentation/"]
+      BW["booking-wizard.tsx"]
+      BS["booking-summary.tsx"]
+      HC["hold-countdown.tsx"]
+    end
+
+    subgraph APP["application/"]
+      BA["booking-actions.ts<br/>(Server Action)"]
+      CB["create-booking.ts<br/>(Use Case)"]
+      BC["booking-command.ts<br/>(Zod Schema)"]
+      BR["booking-repository.ts<br/>(Interface)"]
+      GB["get-guest-booking.ts"]
+    end
+
+    subgraph DOM["domain/"]
+      BP["booking-policy.ts<br/>(State Machine)"]
+      BT["booking-types.ts"]
+    end
+
+    subgraph INF["infrastructure/"]
+      PBR["prisma-booking-repository.ts<br/>(Implements interface)"]
+      BL["booking-lock.ts<br/>(DB locking)"]
+    end
+
+    BW -->|"calls"| BA
+    BA -->|"delegates"| CB
+    CB -->|"validates"| BC
+    CB -->|"uses interface"| BR
+    CB -->|"checks rules"| BP
+    PBR -.->|"implements"| BR
+    PBR -->|"uses"| BL
+  end
+
+  style PRES fill:#2d1f4e,stroke:#a78bfa,color:#e6edf3
+  style APP fill:#1a2e1a,stroke:#4ade80,color:#e6edf3
+  style DOM fill:#2e2e1a,stroke:#f5c542,color:#e6edf3
+  style INF fill:#2e1a1a,stroke:#f87171,color:#e6edf3
+    </div>
+  </div>
+</div>
+
+<!-- ──── 5. MIDDLEWARE ──── -->
+<div class="panel" id="panel-middleware">
+  <h2>Middleware — Request Pipeline</h2>
+  <p class="subtitle">Next.js middleware chạy ở <strong>Edge Runtime</strong> trước mọi request. MowStudio dùng middleware để refresh Supabase session. Auth guard nằm ở <strong>layout level</strong>, không phải middleware.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  participant B as 🌐 Browser
+  participant MW as 🛡️ Middleware<br/>(proxy.ts)
+  participant US as 🔄 updateSession<br/>(supabase/middleware.ts)
+  participant SA as 🔑 Supabase Auth
+  participant AR as 📂 App Router<br/>(Pages/Layouts)
+  participant RR as 🔐 requireRole()<br/>(Layout Guard)
+
+  Note over B,AR: Mỗi HTTP Request đều đi qua middleware
+
+  B->>MW: HTTP Request
+  Note over MW: Matcher: /((?!_next/static|...).*)
+  MW->>US: updateSession(request)
+  US->>US: createServerClient(cookies)
+  US->>SA: supabase.auth.getUser()
+  SA-->>US: User session (or null)
+  US->>US: Refresh cookies nếu cần
+  US-->>MW: NextResponse (with updated cookies)
+  MW-->>AR: Forward to App Router
+
+  alt Request đến /admin/*
+    AR->>RR: layout.tsx calls requireRole("ADMIN")
+    RR->>RR: getCurrentActor()
+    alt Chưa đăng nhập
+      RR-->>B: redirect("/login?next=/admin")
+    else Không phải ADMIN
+      RR-->>B: 404 Not Found
+    else Là ADMIN ✅
+      RR-->>AR: Render AdminShell + page
+    end
+  else Request đến public routes
+    AR-->>B: Render page bình thường
+  end
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--amber)"></span>proxy.ts — Entry Point</h3>
+      <p>File <code>src/proxy.ts</code> là Next.js middleware entry. Nó export function <code>proxy()</code> và config <code>matcher</code>. Mọi request (trừ static files) đều đi qua đây.</p>
+      <ul>
+        <li>Matcher loại trừ: <code>_next/static</code>, <code>_next/image</code>, <code>favicon.ico</code>, images</li>
+        <li>Chỉ làm 1 việc: gọi <code>updateSession()</code></li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--cyan)"></span>updateSession() — Cookie Refresh</h3>
+      <p>Function trong <code>lib/supabase/middleware.ts</code>. Tạo Supabase server client với cookie handler để:</p>
+      <ul>
+        <li>Đọc cookies từ request</li>
+        <li>Gọi <code>supabase.auth.getUser()</code> để refresh token</li>
+        <li>Set lại cookies vào response nếu token được refresh</li>
+        <li>Đảm bảo session không bị expired giữa các requests</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Layout Guards — Auth Protection</h3>
+      <p>Thay vì dùng middleware cho auth, MowStudio dùng <strong>Layout-level guards</strong>:</p>
+      <ul>
+        <li><code>admin/layout.tsx</code> gọi <code>requireRole("ADMIN")</code></li>
+        <li><code>UnauthenticatedError</code> → redirect đến login</li>
+        <li><code>ForbiddenError</code> → trả 404 (ẩn sự tồn tại)</li>
+        <li>Pattern này cho phép RSC rendering với full Node.js runtime</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--purple)"></span>Supabase Auth Flow</h3>
+      <ul>
+        <li><code>browser.ts</code> — Client component dùng Supabase browser client</li>
+        <li><code>server.ts</code> — Server component dùng cookie-based server client</li>
+        <li><code>middleware.ts</code> — Edge Runtime dùng cho session refresh</li>
+        <li>OAuth callback tại <code>/auth/callback</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ──── 6. ROUTER ──── -->
+<div class="panel" id="panel-router">
+  <h2>Router Map — Tất cả Routes</h2>
+  <p class="subtitle">Next.js App Router sử dụng file-system based routing. Mỗi <code>page.tsx</code> tạo 1 route, <code>layout.tsx</code> wrap children, <code>route.ts</code> tạo API endpoint.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+graph TD
+  subgraph PUBLIC["🌐 Public Routes — Không cần đăng nhập"]
+    ROOT["/ <br/>Landing Page"]
+    STUDIOS["/studios<br/>Danh sách Studio"]
+    STUDIO_D["/studios/:slug<br/>Chi tiết Studio"]
+    SVC_D["/services/:slug<br/>Chi tiết Dịch vụ"]
+    BOOK_NEW["/booking/:serviceId<br/>🧙 Booking Wizard"]
+    BOOK_VIEW["/booking/:id<br/>Xem booking (guest token)"]
+    LOGIN["/login<br/>Đăng nhập"]
+    REGISTER["/register<br/>Đăng ký"]
+    CALLBACK["/auth/callback<br/>OAuth Callback"]
+  end
+
+  subgraph ADMIN["🔒 Admin Routes — requireRole(ADMIN)"]
+    ADM_HOME["/admin<br/>Dashboard"]
+    ADM_ROOMS["/admin/rooms<br/>Quản lý Phòng"]
+    ADM_SVC["/admin/services<br/>Quản lý Dịch vụ"]
+    ADM_SCHED["/admin/schedule<br/>Lịch làm việc"]
+    ADM_BLOCK["/admin/blocked-slots<br/>Slot bị khóa"]
+  end
+
+  subgraph API_ROUTES["🔌 API Routes — REST Endpoints"]
+    API_AVAIL["GET /api/availability<br/>?serviceId=&date="]
+  end
+
+  ROOT --> STUDIOS
+  STUDIOS --> STUDIO_D
+  STUDIO_D --> SVC_D
+  SVC_D --> BOOK_NEW
+  BOOK_NEW -->|"Tạo booking"| BOOK_VIEW
+  LOGIN -->|"OAuth"| CALLBACK
+
+  ADM_HOME --> ADM_ROOMS
+  ADM_HOME --> ADM_SVC
+  ADM_HOME --> ADM_SCHED
+  ADM_HOME --> ADM_BLOCK
+
+  BOOK_NEW -.->|"fetch slots"| API_AVAIL
+
+  style PUBLIC fill:#1a2e1a,stroke:#4ade80,color:#e6edf3
+  style ADMIN fill:#2e1a1a,stroke:#f87171,color:#e6edf3
+  style API_ROUTES fill:#1a1a2e,stroke:#5b9cf5,color:#e6edf3
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Public Routes</h3>
+      <ul>
+        <li><code>/</code> — Landing page giới thiệu</li>
+        <li><code>/studios</code> — Grid các studio rooms</li>
+        <li><code>/studios/:slug</code> — Chi tiết + dịch vụ</li>
+        <li><code>/services/:slug</code> — Chi tiết dịch vụ</li>
+        <li><code>/booking/:serviceId</code> — Wizard đặt lịch</li>
+        <li><code>/booking/:id</code> — Xem trạng thái (guest token cookie)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--red)"></span>Admin Routes</h3>
+      <ul>
+        <li>Bảo vệ bởi <code>requireRole("ADMIN")</code> trong layout</li>
+        <li><code>/admin</code> — Dashboard tổng quan</li>
+        <li><code>/admin/rooms</code> — CRUD phòng studio</li>
+        <li><code>/admin/services</code> — CRUD dịch vụ</li>
+        <li><code>/admin/schedule</code> — Cài đặt giờ làm việc</li>
+        <li><code>/admin/blocked-slots</code> — Chặn slot</li>
+        <li>Mỗi page có file <code>actions.ts</code> cho Server Actions</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--blue)"></span>API Routes</h3>
+      <ul>
+        <li><code>GET /api/availability</code> — Endpoint duy nhất</li>
+        <li>Query params: <code>serviceId</code>, <code>date</code></li>
+        <li>Validated bằng Zod</li>
+        <li>Trả JSON với <code>Cache-Control: no-store</code></li>
+        <li>Error handling: 400 (invalid), 404 (unavailable), 500</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--purple)"></span>Layouts (Wrappers)</h3>
+      <ul>
+        <li><code>app/layout.tsx</code> — Root: <code>&lt;AppShell&gt;</code> (nav + header)</li>
+        <li><code>app/admin/layout.tsx</code> — Admin: auth guard + <code>&lt;AdminShell&gt;</code></li>
+        <li>Layouts sử dụng RSC nên có thể <code>async</code></li>
+        <li><code>export const dynamic = "force-dynamic"</code> cho admin</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ──── 7. DATABASE ──── -->
+<div class="panel" id="panel-database">
+  <h2>Database Schema — Entity Relationship</h2>
+  <p class="subtitle">PostgreSQL database với 12 models được quản lý bởi Prisma ORM. Timezone-aware timestamps (<code>Timestamptz</code>), UUID primary keys, và rich indexing strategy.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+erDiagram
+  User ||--o| CustomerProfile : "has profile"
+  User ||--o{ Booking : "makes"
+  User ||--o{ BlockedSlot : "creates"
+  User ||--o{ NotificationLog : "receives"
+  User ||--o{ AuditLog : "actor"
+
+  StudioRoom ||--o{ Service : "offers"
+  StudioRoom ||--o{ WorkingHour : "has schedule"
+  StudioRoom ||--o{ BlockedSlot : "has blocks"
+  StudioRoom ||--o{ Booking : "hosted in"
+
+  Service ||--o{ Booking : "booked for"
+
+  Booking ||--o{ Payment : "has payments"
+  Booking ||--o{ PaymentEvent : "has events"
+  Booking ||--o{ NotificationLog : "triggers"
+
+  Payment ||--o{ PaymentEvent : "has events"
+
+  User {
+    uuid id PK
+    uuid authUserId UK
+    string email UK
+    enum role "CUSTOMER | ADMIN"
+    datetime emailVerifiedAt
+  }
+
+  CustomerProfile {
+    uuid id PK
+    uuid userId FK
+    string name
+    string phone
+  }
+
+  StudioRoom {
+    uuid id PK
+    string name
+    string slug UK
+    string timezone "Asia/Ho_Chi_Minh"
+    boolean isActive
+    int displayOrder
+  }
+
+  Service {
+    uuid id PK
+    uuid roomId FK
+    string name
+    string slug UK
+    enum bookingType "ROOM_ONLY | ASSISTED"
+    int durationMinutes
+    int bufferMinutes
+    int priceAmount
+    string currency "VND"
+  }
+
+  WorkingHour {
+    uuid id PK
+    uuid roomId FK
+    int weekday
+    int openMinute
+    int closeMinute
+    boolean isActive
+  }
+
+  BlockedSlot {
+    uuid id PK
+    uuid roomId FK
+    datetime startTime
+    datetime endTime
+    string reason
+    uuid createdById FK
+  }
+
+  Booking {
+    uuid id PK
+    uuid userId FK
+    uuid roomId FK
+    uuid serviceId FK
+    string customerName
+    string customerEmail
+    datetime startTime
+    datetime endTime
+    int subtotalAmount
+    int depositAmount
+    enum bookingStatus "6 states"
+    enum paymentStatus "4 states"
+    enum refundStatus "5 states"
+    string guestAccessTokenHash
+  }
+
+  Payment {
+    uuid id PK
+    uuid bookingId FK
+    enum provider "SEPAY | STRIPE"
+    string idempotencyKey
+    int requestedAmount
+    int paidAmount
+    enum status "PENDING | PAID | ..."
+  }
+
+  PaymentEvent {
+    uuid id PK
+    enum provider
+    string eventId
+    uuid paymentId FK
+    uuid bookingId FK
+    string payloadHash
+    datetime occurredAt
+  }
+
+  NotificationLog {
+    uuid id PK
+    uuid bookingId FK
+    uuid userId FK
+    enum eventType "5 event types"
+    enum channel "EMAIL"
+    enum status "PENDING | SENT | FAILED"
+    int attemptCount
+  }
+
+  AuditLog {
+    uuid id PK
+    uuid actorUserId FK
+    string action
+    string entityType
+    string entityId
+    json before
+    json after
+  }
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="swatch" style="background:var(--amber)"></span> Primary entities</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--green)"></span> PK = Primary Key (UUID)</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--blue)"></span> FK = Foreign Key</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--purple)"></span> UK = Unique Key</div>
+    <div class="legend-item"><span class="swatch" style="background:var(--red)"></span> Tất cả timestamps dùng Timestamptz(3)</div>
+  </div>
+</div>
+
+<!-- ──── 8. BOOKING FLOW ──── -->
+<div class="panel" id="panel-flow">
+  <h2>Booking Flow — Luồng đặt lịch End-to-End</h2>
+  <p class="subtitle">Từ khi khách chọn dịch vụ đến khi booking được xác nhận. Sử dụng <strong>Hold pattern</strong> với timeout, <strong>guest token</strong> cho truy cập không cần đăng nhập, và <strong>state machine</strong> cho booking lifecycle.</p>
+
+  <div class="diagram">
+    <div class="mermaid">
+sequenceDiagram
+  participant G as 👤 Guest
+  participant BW as 🧙 BookingWizard<br/>(Client Component)
+  participant SA as ⚙️ Server Action<br/>(booking-actions.ts)
+  participant UC as 🎯 createBookingUseCase
+  participant ZOD as ✅ Zod Validation
+  participant TOKEN as 🔑 Guest Token Factory
+  participant REPO as 🗄️ PrismaBookingRepository
+  participant DB as 💾 PostgreSQL
+  participant API as 🔌 /api/availability
+
+  G->>BW: Chọn dịch vụ + ngày
+  BW->>API: GET /api/availability?serviceId=&date=
+  API-->>BW: Available slots[]
+  G->>BW: Chọn slot + điền thông tin
+  BW->>SA: createBookingAction(formData)
+  SA->>UC: createBooking(input)
+  UC->>ZOD: Parse & validate input
+  ZOD-->>UC: CreateBookingCommand
+  UC->>TOKEN: createGuestToken()
+  TOKEN-->>UC: { rawToken, tokenHash }
+  UC->>REPO: createHold(command, tokenHash, now)
+  REPO->>DB: BEGIN TRANSACTION
+  REPO->>DB: Check overlap (advisory lock)
+  REPO->>DB: INSERT booking (PENDING_PAYMENT)
+  REPO->>DB: COMMIT
+  DB-->>REPO: { bookingId, holdExpiresAt }
+  REPO-->>UC: PersistedBookingHold
+  UC-->>SA: CreatedBookingAccess
+  SA->>SA: Set guest cookie (httpOnly)
+  SA-->>BW: { ok: true, bookingId }
+  BW-->>G: Redirect → /booking/:id
+  Note over G: HoldCountdown hiển thị thời gian còn lại
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="mermaid">
+stateDiagram-v2
+  [*] --> PENDING_PAYMENT: Tạo booking mới
+
+  PENDING_PAYMENT --> EXPIRED: Hold hết hạn<br/>(unpaid)
+  PENDING_PAYMENT --> CONFIRMED: Thanh toán OK<br/>(ROOM_ONLY)
+  PENDING_PAYMENT --> PENDING: Thanh toán OK<br/>(ASSISTED)
+  PENDING_PAYMENT --> CANCELLED: Hủy bởi User/Admin
+
+  PENDING --> CONFIRMED: Admin xác nhận<br/>(ASSISTED only)
+  PENDING --> CANCELLED: Hủy bởi User/Admin
+
+  CONFIRMED --> COMPLETED: Admin đánh dấu hoàn thành
+  CONFIRMED --> CANCELLED: Hủy (nếu cancellation allowed)
+
+  EXPIRED --> [*]
+  CANCELLED --> [*]
+  COMPLETED --> [*]
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--amber)"></span>Hold Pattern</h3>
+      <ul>
+        <li>Booking tạo với status <code>PENDING_PAYMENT</code></li>
+        <li><code>holdExpiresAt</code> — thời gian giữ chỗ</li>
+        <li>Nếu không thanh toán trước deadline → <code>EXPIRED</code></li>
+        <li>UI hiển thị countdown (HoldCountdown component)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--cyan)"></span>Guest Access</h3>
+      <ul>
+        <li>Không bắt buộc đăng nhập để đặt lịch</li>
+        <li><code>guestAccessTokenHash</code> lưu trong DB</li>
+        <li>Raw token set vào <strong>httpOnly cookie</strong></li>
+        <li>Cookie path = <code>/booking/:id</code> (scoped)</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--green)"></span>Booking Types</h3>
+      <ul>
+        <li><code>ROOM_ONLY</code> — Thanh toán → Xác nhận ngay</li>
+        <li><code>ASSISTED</code> — Thanh toán → Chờ Admin duyệt</li>
+        <li>State machine trong <code>booking-policy.ts</code> kiểm soát mọi transition</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3><span class="dot" style="background:var(--red)"></span>Concurrency Control</h3>
+      <ul>
+        <li>Advisory lock (<code>booking-lock.ts</code>) ngăn double booking</li>
+        <li>Transaction để đảm bảo atomicity</li>
+        <li>Overlap check trước khi insert</li>
+        <li>Idempotency key cho payments</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /panels -->
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div class="footer">
+  MowStudio Architecture Diagrams • Generated 2026-07-05 • Next.js 16 + Prisma 7.8 + Supabase Auth
+</div>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+  // Mermaid init
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#2d1f4e',
+      primaryTextColor: '#e6edf3',
+      primaryBorderColor: '#a78bfa',
+      lineColor: '#8888a0',
+      secondaryColor: '#1a2e1a',
+      tertiaryColor: '#2e2e1a',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      fontSize: '13px',
+    },
+    flowchart: { curve: 'basis', padding: 16 },
+    sequence: { mirrorActors: false, messageMargin: 40, actorMargin: 60 },
+  });
+
+  // Tab switching
+  const tabBar = document.getElementById('tabBar');
+  tabBar.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+    btn.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  });
+</script>
+</body>
+</html>
