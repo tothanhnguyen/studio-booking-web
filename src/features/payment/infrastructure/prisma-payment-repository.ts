@@ -90,12 +90,12 @@ export class PrismaPaymentRepository implements PaymentRepository {
       });
 
       const cumulativeAmount = payment.paidAmount + event.amount;
+      // Late payment = booking đã bị đánh dấu EXPIRED/CANCELLED trước khi payment đến.
+      // Booking vẫn PENDING_PAYMENT (dù holdExpiresAt đã qua) vẫn nhận payment bình thường
+      // vì chưa có process nào expire nó — hold chỉ ảnh hưởng availability, không chặn payment.
       const isLatePayment =
         booking.bookingStatus === "EXPIRED" ||
-        booking.bookingStatus === "CANCELLED" ||
-        (booking.bookingStatus === "PENDING_PAYMENT" &&
-          booking.holdExpiresAt !== null &&
-          booking.holdExpiresAt.getTime() <= processedAt.getTime());
+        booking.bookingStatus === "CANCELLED";
 
       if (decision === "REJECTED") {
         await tx.paymentEvent.update({
