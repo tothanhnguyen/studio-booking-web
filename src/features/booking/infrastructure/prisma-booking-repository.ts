@@ -86,6 +86,7 @@ export class PrismaBookingRepository implements BookingCommandRepository, GuestB
       } });
       await tx.payment.create({ data: {
         bookingId: booking.id, provider: "SEPAY", idempotencyKey: `booking:${booking.id}`,
+        providerReference: booking.id,
         requestedAmount: depositAmount, currency: service.currency, status: "PENDING",
       } });
       return { bookingId: booking.id, holdExpiresAt: holdExpiresAt.toISOString() };
