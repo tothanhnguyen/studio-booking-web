@@ -22,6 +22,7 @@ export function BookingDetail({ booking, showCustomer = false }: Readonly<{ book
         <div><dt className="text-stone-400">Tiền cọc</dt><dd>{currency.format(booking.depositAmount)}</dd></div>
         <div><dt className="text-stone-400">Còn lại</dt><dd>{currency.format(booking.remainingAmount)}</dd></div>
         <div><dt className="text-stone-400">Trạng thái thanh toán</dt><dd>{booking.paymentStatus}</dd></div>
+        <div><dt className="text-stone-400">Trạng thái hoàn tiền</dt><dd>{booking.refundStatus}</dd></div>
       </dl>
     </section>
     {showCustomer && <section className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">

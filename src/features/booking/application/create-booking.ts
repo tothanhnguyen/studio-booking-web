@@ -1,4 +1,5 @@
 import { createBookingCommandSchema, type BookingCommandRepository, type CreatedBookingAccess } from "@/features/booking/application/booking-command";
+import { sendBookingNotification } from "@/features/notification/application/notification-service";
 import { createGuestToken } from "@/lib/security/guest-token";
 
 type Dependencies = Readonly<{
@@ -20,5 +21,11 @@ export async function createBooking(input: unknown): Promise<CreatedBookingAcces
   const [{ PrismaBookingRepository }, { prisma }] = await Promise.all([
     import("@/features/booking/infrastructure/prisma-booking-repository"), import("@/lib/db/prisma"),
   ]);
-  return createBookingUseCase({ repository: new PrismaBookingRepository(prisma), tokenFactory: createGuestToken, now: () => new Date() })(input);
+  const created = await createBookingUseCase({ repository: new PrismaBookingRepository(prisma), tokenFactory: createGuestToken, now: () => new Date() })(input);
+  await sendBookingNotification({
+    bookingId: created.bookingId,
+    eventType: "BOOKING_CREATED",
+    causalEventId: `create:${created.bookingId}`,
+  });
+  return created;
 }
