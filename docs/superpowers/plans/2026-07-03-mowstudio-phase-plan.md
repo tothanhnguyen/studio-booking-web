@@ -657,11 +657,11 @@ export type AvailableSlot = Readonly<{
 - Cung cấp: `withRequestContext(request, handler)`, `getRequestId()`, `logger.info/error(event, fields)`.
 - Các trường log được phép bao gồm ID yêu cầu, SHA phát hành, module, ID thực thể an toàn; email/điện thoại/token/credential/webhook thô đã được chỉnh sửa lại.
 
-- [ ] Viết các test chứa email, điện thoại, token truy cập, tiêu đề authorization, payload ngân hàng và nguyên nhân lỗi; assert output bị che và ID yêu cầu được giữ lại.
-- [ ] Chạy test focused; expect các module quan sát bị thiếu.
-- [ ] Triển khai bối cảnh yêu cầu AsyncLocalStorage, quy tắc tạo/tiêu đề đáng tin cậy, trình ghi log JSON, danh sách cho phép/xử lý đệ quy, lọc Sentry PII và phát hành gắn thẻ SHA.
-- [ ] Chạy test unit/tích hợp và test log đã document; expect JSON hợp lệ không có secret lịch thi đấu.
-- [ ] Commit: `feat: add production observability`.
+- [x] Viết các test chứa email, điện thoại, token truy cập, tiêu đề authorization, payload ngân hàng và nguyên nhân lỗi; assert output bị che và ID yêu cầu được giữ lại.
+- [x] Chạy test focused; expect các module quan sát bị thiếu.
+- [x] Triển khai bối cảnh yêu cầu AsyncLocalStorage, quy tắc tạo/tiêu đề đáng tin cậy, trình ghi log JSON, danh sách cho phép/xử lý đệ quy, lọc Sentry PII và phát hành gắn thẻ SHA.
+- [x] Chạy test unit/tích hợp và test log đã document; expect JSON hợp lệ không có secret lịch thi đấu.
+- [x] Commit: `feat: add production observability`.
 
 **Tiêu chí chấp nhận:** Yêu cầu payment có thể được thực hiện trên toàn tuyến, service, test, log notification và Sentry bằng một ID yêu cầu mà không làm lộ PII.
 
@@ -676,11 +676,11 @@ export type AvailableSlot = Readonly<{
 - `/api/health` trả về state hoạt động của quy trình và release SHA mà không cần lệnh gọi phụ thuộc.
 - `/api/ready` chạy `SELECT 1` bị giới hạn, trả về `503` khi bị lỗi và không bao giờ tiết lộ chi tiết kết nối.
 
-- [ ] Viết các test route về state healthy, thời gian chờ DB, ngoại lệ DB, bản fallback SHA bị thiếu và tiêu đề bộ nhớ đệm response.
-- [ ] Chạy test focused; expect sự thất bại của tuyến đường bị thiếu.
-- [ ] Triển khai các tuyến đường và script khói để health check, mức độ sẵn sàng, nhà riêng, trường quay và tuyến đường công cộng/seed đã biết có thời gian chờ.
-- [ ] Chạy test route và `node scripts/smoke-production.mjs http://localhost:3000` dựa trên build production local; expect tất cả các test đều pass.
-- [ ] Commit: `feat: add health and readiness probes`.
+- [x] Viết các test route về state healthy, thời gian chờ DB, ngoại lệ DB, bản fallback SHA bị thiếu và tiêu đề bộ nhớ đệm response.
+- [x] Chạy test focused; expect sự thất bại của tuyến đường bị thiếu.
+- [x] Triển khai các tuyến đường và script khói để health check, mức độ sẵn sàng, nhà riêng, trường quay và tuyến đường công cộng/seed đã biết có thời gian chờ.
+- [x] Chạy test route và `node scripts/smoke-production.mjs http://localhost:3000` dựa trên build production local; expect tất cả các test đều pass.
+- [x] Commit: `feat: add health and readiness probes`.
 
 **Tiêu chí chấp nhận:** Khả năng hoạt động vẫn ổn định trong thời gian ngừng hoạt động DB mô phỏng trong khi mức độ sẵn sàng nhanh chóng trả về `503`.
 
@@ -696,11 +696,11 @@ export type AvailableSlot = Readonly<{
 - Công việc CI: `quality`, `integration`, `e2e-critical`, `build`.
 - Lệnh phát hành production: xác thực env → `prisma migrate deploy` với `DIRECT_URL` → triển khai SHA invariant → khói → đánh dấu phát hành.
 
-- [ ] Tạo database mới và chạy lệnh migration production trước khi triển khai; xác nhận script vắng mặt không thành công.
-- [ ] Triển khai script migration được bảo vệ từ chối xác nhận phi production hoặc thiếu URL trực tiếp, mở rộng CI với bộ nhớ đệm/tạo phẩm của trình duyệt Playwright và các quy tắc database production/xem trước tài liệu cũng như các quyết định rollback.
-- [ ] Chạy migration hai lần trên database mới; expect lần đầu tiên áp dụng và lần thứ hai không hoạt động.
-- [ ] Chạy ma trận CI local đầy đủ; expect tất cả các lệnh tương đương của job sẽ pass.
-- [ ] Commit: `ci: complete release quality gates`.
+- [x] Tạo database mới và chạy lệnh migration production trước khi triển khai; xác nhận script vắng mặt không thành công.
+- [x] Triển khai script migration được bảo vệ từ chối xác nhận phi production hoặc thiếu URL trực tiếp, mở rộng CI với bộ nhớ đệm/tạo phẩm của trình duyệt Playwright và các quy tắc database production/xem trước tài liệu cũng như các quyết định rollback.
+- [x] Chạy migration hai lần trên database mới; expect lần đầu tiên áp dụng và lần thứ hai không hoạt động.
+- [x] Chạy ma trận CI local đầy đủ; expect tất cả các lệnh tương đương của job sẽ pass.
+- [x] Commit: `ci: complete release quality gates`.
 
 **Tiêu chí chấp nhận:** Khối CI hợp nhất trên bất kỳ bộ quan trọng nào; quá trình migration có thể lặp lại và tách biệt khỏi quá trình khởi động ứng dụng.
 
@@ -721,6 +721,8 @@ export type AvailableSlot = Readonly<{
 - [ ] Chạy khói production cộng với một vòng đời payment có giá trị thấp/chế độ test được kiểm soát; xác nhận mối tương quan yêu cầu và không có PII trong đo từ xa.
 - [ ] Định cấu hình test thời gian hoạt động cho `/api/health` và trang chủ; document bằng chứng và thủ tục rollback.
 - [ ] Commit: `docs: record mvp production release`.
+
+> **Trạng thái:** Checklist phát hành (`docs/releases/mvp-release-checklist.md`) đã sẵn sàng và mọi script/hợp đồng env Phase 6 đã có. Các bước deploy còn lại là **thủ công** vì cần credential và quyền truy cập account Vercel/Supabase/Sentry production.
 
 **Gate Phase 6:** MowStudio hiện có trên Vercel; thẻ CI đầy đủ; migration, sức khỏe/sự sẵn sàng, Sentry, log, thời gian hoạt động, phát hành SHA và các hành trình quan trọng đã được document bằng chứng.
 
