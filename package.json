@@ -17,7 +17,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts --passWithNoTests",
-    "test:e2e": "playwright test --pass-with-no-tests"
+    "test:e2e": "playwright test --pass-with-no-tests",
+    "test:e2e:critical": "playwright test --project=chromium guest-booking room-only-payment public-catalog admin-denial",
+    "migrate:production": "node scripts/migrate-production.mjs",
+    "smoke:production": "node scripts/smoke-production.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
