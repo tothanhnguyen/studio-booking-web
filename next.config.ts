@@ -6,11 +6,18 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
 
-export default withSentryConfig(nextConfig, {
-  // Stay silent locally; upload source maps only when an auth token is present.
-  silent: !process.env.CI,
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-  widenClientFileUpload: true,
-});
+// Chỉ bật Sentry build plugin khi có DSN (production/preview). Ở local dev không
+// có DSN, `withSentryConfig` làm Turbopack dev server thoát ngay sau khi Ready,
+// nên trả về config Next.js thuần.
+const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN;
+
+export default sentryDsn
+  ? withSentryConfig(nextConfig, {
+      // Stay silent locally; upload source maps only when an auth token is present.
+      silent: !process.env.CI,
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      widenClientFileUpload: true,
+    })
+  : nextConfig;
