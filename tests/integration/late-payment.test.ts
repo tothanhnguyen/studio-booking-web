@@ -4,6 +4,7 @@ import { POST } from "@/app/api/payments/sepay/webhook/route";
 import { PrismaBookingRepository } from "@/features/booking/infrastructure/prisma-booking-repository";
 import { prisma } from "@/lib/db/prisma";
 import { seedCatalog } from "../../prisma/seed";
+import { signedWebhookHeaders } from "../fixtures/sepay-signature";
 
 describe("late payment handling", () => {
   const bookingRepository = new PrismaBookingRepository(prisma);
@@ -61,17 +62,18 @@ describe("late payment handling", () => {
       },
     });
 
+    const rawBody = JSON.stringify({
+      id: "evt-late-payment-1",
+      amount: 240000,
+      currency: "VND",
+      content: `Thanh toan coc BOOKING:${bookingId}`,
+      occurred_at: "2026-07-06T01:05:00.000Z",
+    });
     const response = await POST(
       new Request("http://localhost/api/payments/sepay/webhook", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          id: "evt-late-payment-1",
-          amount: 240000,
-          currency: "VND",
-          content: `Thanh toan coc BOOKING:${bookingId}`,
-          occurred_at: "2026-07-06T01:05:00.000Z",
-        }),
+        headers: signedWebhookHeaders(rawBody),
+        body: rawBody,
       }),
     );
     expect(response.status).toBe(200);

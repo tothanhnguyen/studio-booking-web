@@ -5,7 +5,9 @@ export function verifySepaySignature(input: {
   signatureHeader: string | null;
   webhookSecret?: string;
 }) {
-  if (!input.webhookSecret) {
+  const webhookSecret = input.webhookSecret?.trim();
+  if (!webhookSecret) {
+    if (process.env["VERCEL_ENV"] === "production") return false;
     return true;
   }
 
@@ -13,7 +15,7 @@ export function verifySepaySignature(input: {
     return false;
   }
 
-  const expected = createHmac("sha256", input.webhookSecret)
+  const expected = createHmac("sha256", webhookSecret)
     .update(input.rawBody, "utf8")
     .digest("hex");
   const actualBuffer = Buffer.from(input.signatureHeader, "hex");

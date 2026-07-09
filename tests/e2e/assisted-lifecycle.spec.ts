@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { signedWebhookHeaders } from "../fixtures/sepay-signature";
+
 test.describe("assisted booking lifecycle", () => {
   test("ASSISTED booking transitions: PENDING_PAYMENT → PENDING (paid) → CONFIRMED (admin)", async ({
     context,
@@ -23,14 +25,16 @@ test.describe("assisted booking lifecycle", () => {
     const bookingId = new URL(page.url()).pathname.split("/")[2]!;
 
     // Step 2: Simulate SePay payment webhook (deposit = 30% of 1,200,000 = 360,000 VND)
+    const webhookPayload = JSON.stringify({
+      id: `evt-e2e-assisted-${testInfo.project.name}`,
+      amount: 360000,
+      currency: "VND",
+      content: `Thanh toan coc BOOKING:${bookingId}`,
+      occurred_at: "2026-07-06T03:00:00.000Z",
+    });
     const webhookResponse = await page.request.post("/api/payments/sepay/webhook", {
-      data: {
-        id: `evt-e2e-assisted-${testInfo.project.name}`,
-        amount: 360000,
-        currency: "VND",
-        content: `Thanh toan coc BOOKING:${bookingId}`,
-        occurred_at: "2026-07-06T03:00:00.000Z",
-      },
+      headers: signedWebhookHeaders(webhookPayload),
+      data: webhookPayload,
     });
     expect(webhookResponse.ok()).toBeTruthy();
     const webhookBody = await webhookResponse.json();
@@ -78,14 +82,16 @@ test.describe("assisted booking lifecycle", () => {
     const bookingId = new URL(page.url()).pathname.split("/")[2]!;
 
     // Pay deposit
+    const webhookPayload = JSON.stringify({
+      id: `evt-e2e-reject-${testInfo.project.name}`,
+      amount: 360000,
+      currency: "VND",
+      content: `Thanh toan coc BOOKING:${bookingId}`,
+      occurred_at: "2026-07-06T04:00:00.000Z",
+    });
     const webhookResponse = await page.request.post("/api/payments/sepay/webhook", {
-      data: {
-        id: `evt-e2e-reject-${testInfo.project.name}`,
-        amount: 360000,
-        currency: "VND",
-        content: `Thanh toan coc BOOKING:${bookingId}`,
-        occurred_at: "2026-07-06T04:00:00.000Z",
-      },
+      headers: signedWebhookHeaders(webhookPayload),
+      data: webhookPayload,
     });
     expect(webhookResponse.ok()).toBeTruthy();
 

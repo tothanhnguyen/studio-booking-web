@@ -14,10 +14,13 @@ const serverEnvSchema = z.object({
   SEPAY_WEBHOOK_SECRET: z.string().trim().optional(),
   RESEND_API_KEY: z.string().trim().optional(),
   NOTIFICATION_FROM_EMAIL: z.email().default("no-reply@mowstudio.local"),
+  SENTRY_DSN: z.string().trim().optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().trim().optional(),
+  SENTRY_ENVIRONMENT: z.string().trim().optional(),
 });
 
 export function parseServerEnv(environment: NodeJS.ProcessEnv) {
-  return serverEnvSchema.parse({
+  const parsed = serverEnvSchema.parse({
     DATABASE_URL: environment.DATABASE_URL,
     DIRECT_URL: environment.DIRECT_URL,
     NEXT_PUBLIC_SUPABASE_URL: environment.NEXT_PUBLIC_SUPABASE_URL,
@@ -31,5 +34,15 @@ export function parseServerEnv(environment: NodeJS.ProcessEnv) {
     SEPAY_WEBHOOK_SECRET: environment.SEPAY_WEBHOOK_SECRET,
     RESEND_API_KEY: environment.RESEND_API_KEY,
     NOTIFICATION_FROM_EMAIL: environment.NOTIFICATION_FROM_EMAIL,
+    SENTRY_DSN: environment.SENTRY_DSN,
+    NEXT_PUBLIC_SENTRY_DSN: environment.NEXT_PUBLIC_SENTRY_DSN,
+    SENTRY_ENVIRONMENT: environment.SENTRY_ENVIRONMENT,
   });
+
+  const isProductionTarget = environment["VERCEL_ENV"] === "production";
+  if (isProductionTarget && !parsed.SEPAY_WEBHOOK_SECRET?.trim()) {
+    throw new Error("SEPAY_WEBHOOK_SECRET is required in production.");
+  }
+
+  return parsed;
 }

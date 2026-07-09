@@ -4,6 +4,7 @@ import { POST } from "@/app/api/payments/sepay/webhook/route";
 import { PrismaBookingRepository } from "@/features/booking/infrastructure/prisma-booking-repository";
 import { prisma } from "@/lib/db/prisma";
 import { seedCatalog } from "../../prisma/seed";
+import { signedWebhookHeaders } from "../fixtures/sepay-signature";
 
 describe("payment webhook processing", () => {
   const bookingRepository = new PrismaBookingRepository(prisma);
@@ -61,11 +62,12 @@ describe("payment webhook processing", () => {
       occurred_at: "2026-07-06T01:00:00.000Z",
     };
 
+    const rawBody = JSON.stringify(eventBody);
     const first = await POST(
       new Request("http://localhost/api/payments/sepay/webhook", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(eventBody),
+        headers: signedWebhookHeaders(rawBody),
+        body: rawBody,
       }),
     );
     expect(first.status).toBe(200);
@@ -76,8 +78,8 @@ describe("payment webhook processing", () => {
     const duplicate = await POST(
       new Request("http://localhost/api/payments/sepay/webhook", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(eventBody),
+        headers: signedWebhookHeaders(rawBody),
+        body: rawBody,
       }),
     );
     expect(duplicate.status).toBe(200);

@@ -7,9 +7,10 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --no-server-fast-refresh",
     "build": "next build",
     "check:env": "tsx scripts/check-env.ts",
+    "seed:admin": "tsx scripts/seed-admin.ts",
     "ci:verify": "prisma generate && eslint . && tsc --noEmit && vitest run",
     "start": "next start",
     "lint": "eslint .",
@@ -17,12 +18,16 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.ts --passWithNoTests",
-    "test:e2e": "playwright test --pass-with-no-tests"
+    "test:e2e": "playwright test --pass-with-no-tests",
+    "test:e2e:critical": "playwright test --project=chromium guest-booking room-only-payment public-catalog admin-denial",
+    "migrate:production": "node scripts/migrate-production.mjs",
+    "smoke:production": "node scripts/smoke-production.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
     "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
+    "@sentry/nextjs": "^10.64.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",
     "date-fns": "4.4.0",

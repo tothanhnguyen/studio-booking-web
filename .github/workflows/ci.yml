@@ -15,6 +15,7 @@ env:
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key
   SUPABASE_SERVICE_ROLE_KEY: ci-service-role-key
   APP_URL: http://localhost:3000
+  SEPAY_WEBHOOK_SECRET: ci-webhook-secret
 
 jobs:
   quality:
@@ -63,9 +64,50 @@ jobs:
       - run: pnpm prisma migrate deploy
       - run: pnpm test:integration
 
+  e2e-critical:
+    name: Critical E2E
+    runs-on: ubuntu-latest
+    env:
+      ALLOW_TEST_ACTOR: "true"
+      PLAYWRIGHT_REUSE_SERVER: "false"
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_DB: mowstudio_test
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d mowstudio_test"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma generate
+      - run: pnpm prisma migrate deploy
+      - run: pnpm prisma db seed
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e:critical
+
   build:
     name: Production build
-    needs: [quality, integration]
+    needs: [quality, integration, e2e-critical]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

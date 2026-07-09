@@ -42,4 +42,14 @@ describe("server environment", () => {
     expect(serverEnv.DATABASE_URL).toBe(validEnvironment.DATABASE_URL);
     expect(serverEnv.APP_URL).toBe("http://localhost:3000");
   });
+
+  it("requires a SePay webhook secret in production", async () => {
+    for (const [key, value] of Object.entries(validEnvironment)) {
+      vi.stubEnv(key, value);
+    }
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("SEPAY_WEBHOOK_SECRET", "");
+
+    await expect(import("./server")).rejects.toThrow(/SEPAY_WEBHOOK_SECRET/);
+  });
 });

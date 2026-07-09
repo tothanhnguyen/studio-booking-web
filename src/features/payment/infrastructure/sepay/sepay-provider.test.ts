@@ -1,5 +1,5 @@
 import { createHmac } from "node:crypto";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { SepayProvider, SepayProviderError } from "@/features/payment/infrastructure/sepay/sepay-provider";
 
@@ -9,6 +9,10 @@ describe("sepay-provider", () => {
     bankAccountNumber: "0123456789",
     bankAccountName: "Mow Studio",
     webhookSecret: "test-secret",
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("builds provider-neutral payment instructions", async () => {
@@ -62,5 +66,25 @@ describe("sepay-provider", () => {
     });
 
     await expect(provider.verifyAndNormalizeWebhook(request)).rejects.toBeInstanceOf(SepayProviderError);
+  });
+
+  it("rejects unsigned production webhooks when the secret is missing", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    const unsignedProvider = new SepayProvider({
+      bankBin: "970422",
+      bankAccountNumber: "0123456789",
+      bankAccountName: "Mow Studio",
+    });
+    const request = new Request("http://localhost/api/payments/sepay/webhook", {
+      method: "POST",
+      body: JSON.stringify({
+        id: "evt-1",
+        amount: 240000,
+        currency: "VND",
+        content: "BOOKING:11111111-1111-4111-8111-111111111111",
+      }),
+    });
+
+    await expect(unsignedProvider.verifyAndNormalizeWebhook(request)).rejects.toBeInstanceOf(SepayProviderError);
   });
 });

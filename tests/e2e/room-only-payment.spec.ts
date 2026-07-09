@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { signedWebhookHeaders } from "../fixtures/sepay-signature";
+
 test("room-only booking is auto-confirmed after successful payment webhook", async ({ page }, testInfo) => {
   const date = testInfo.project.name === "mobile-chrome" ? "2027-04-08" : "2027-04-07";
 
@@ -17,14 +19,16 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
   await expect(page).toHaveURL(/\/booking\/[0-9a-f-]+\/payment$/);
   const bookingId = new URL(page.url()).pathname.split("/")[2]!;
 
+  const webhookBody = JSON.stringify({
+    id: `evt-e2e-room-only-${testInfo.project.name}`,
+    amount: 240000,
+    currency: "VND",
+    content: `Thanh toan coc BOOKING:${bookingId}`,
+    occurred_at: "2026-07-06T02:00:00.000Z",
+  });
   const webhookResponse = await page.request.post("/api/payments/sepay/webhook", {
-    data: {
-      id: `evt-e2e-room-only-${testInfo.project.name}`,
-      amount: 240000,
-      currency: "VND",
-      content: `Thanh toan coc BOOKING:${bookingId}`,
-      occurred_at: "2026-07-06T02:00:00.000Z",
-    },
+    headers: signedWebhookHeaders(webhookBody),
+    data: webhookBody,
   });
   expect(webhookResponse.ok()).toBeTruthy();
 
