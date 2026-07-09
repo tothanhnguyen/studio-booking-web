@@ -7,9 +7,10 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --no-server-fast-refresh",
     "build": "next build",
     "check:env": "tsx scripts/check-env.ts",
+    "seed:admin": "tsx scripts/seed-admin.ts",
     "ci:verify": "prisma generate && eslint . && tsc --noEmit && vitest run",
     "start": "next start",
     "lint": "eslint .",
