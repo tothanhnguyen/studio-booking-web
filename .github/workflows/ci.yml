@@ -15,6 +15,7 @@ env:
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key
   SUPABASE_SERVICE_ROLE_KEY: ci-service-role-key
   APP_URL: http://localhost:3000
+  SEPAY_WEBHOOK_SECRET: ci-webhook-secret
 
 jobs:
   quality:

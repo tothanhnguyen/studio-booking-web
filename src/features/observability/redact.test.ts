@@ -66,6 +66,30 @@ describe("redact", () => {
     expect(result.cause).toContain("[redacted]");
   });
 
+  it("masks credentials found in free-text error strings", () => {
+    const input = {
+      cause:
+        "connect failed password=secret postgres://admin:raw-pass@db.example:5432/mowstudio token=abc123",
+    };
+
+    const result = redact(input) as { cause: string };
+    expect(result.cause).not.toContain("password=secret");
+    expect(result.cause).not.toContain("raw-pass");
+    expect(result.cause).not.toContain("token=abc123");
+    expect(result.cause).toContain("[redacted]");
+  });
+
+  it("masks database host details found in free-text error strings", () => {
+    const input = {
+      cause: "connect ETIMEDOUT 10.0.0.1:5432",
+    };
+
+    const result = redact(input) as { cause: string };
+    expect(result.cause).not.toContain("10.0.0.1");
+    expect(result.cause).not.toContain("5432");
+    expect(result.cause).toContain("[redacted]");
+  });
+
   it("returns primitives unchanged", () => {
     expect(redact(42)).toBe(42);
     expect(redact("safe text")).toBe("safe text");

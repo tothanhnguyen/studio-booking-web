@@ -8,6 +8,7 @@ export type RequestContext = Readonly<{
 const storage = new AsyncLocalStorage<RequestContext>();
 
 const TRUSTED_REQUEST_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
+const sentryDsn = process.env["NEXT_PUBLIC_SENTRY_DSN"] || process.env["SENTRY_DSN"];
 
 /**
  * Runs `callback` with a request-scoped context so downstream services and the
@@ -45,6 +46,11 @@ export function withRequestContextHandler(
 ): (request: Request) => Promise<Response> {
   return async (request: Request) => {
     const requestId = resolveRequestId(request.headers.get("x-request-id"));
+    if (sentryDsn) {
+      const Sentry = await import("@sentry/nextjs");
+      Sentry.setTag("request_id", requestId);
+      Sentry.setContext("request", { id: requestId });
+    }
     const response = await withRequestContext({ requestId }, () => handler(request));
     response.headers.set("x-request-id", requestId);
     return response;

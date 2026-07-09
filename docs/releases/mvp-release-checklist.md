@@ -14,7 +14,7 @@ Bằng chứng phát hành MVP lên Vercel. Điền các ô và giá trị khi t
 
 - [ ] **Vercel project** đã link với repo; branch production = `main`.
 - [ ] **Supabase production project** tạo xong; lấy `DATABASE_URL` (pooler) và `DIRECT_URL` (direct).
-- [ ] **Sentry project** tạo xong; lấy `SENTRY_DSN`, set `SENTRY_ENVIRONMENT=production`.
+- [ ] **Sentry project** tạo xong; lấy `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, set `SENTRY_ENVIRONMENT=production`.
 - [ ] Nhập đủ env production vào Vercel (Production scope) theo bảng trong runbook. KHÔNG commit secret.
 - [ ] Xác minh Supabase **redirect URLs** trỏ về domain production (login/register/callback).
 - [ ] Xác minh **Google OAuth** callback URL khớp domain production.

@@ -8,7 +8,7 @@ import { redact } from "./redact";
  * the release with the deployed commit SHA.
  */
 export function buildSentryOptions() {
-  const dsn = process.env.SENTRY_DSN ?? process.env.NEXT_PUBLIC_SENTRY_DSN;
+  const dsn = process.env["NEXT_PUBLIC_SENTRY_DSN"] || process.env["SENTRY_DSN"];
   const release = process.env.NEXT_PUBLIC_RELEASE_SHA ?? process.env.VERCEL_GIT_COMMIT_SHA;
 
   return {

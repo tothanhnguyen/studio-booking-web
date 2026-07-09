@@ -15,7 +15,7 @@ Ba scope Vercel: **Development**, **Preview**, **Production**. Mỗi scope cần
 | `APP_URL` | Origin chính thức của scope. |
 | `SEPAY_*` | Cấu hình VietQR/webhook; `SEPAY_WEBHOOK_SECRET` bắt buộc ở production. |
 | `RESEND_API_KEY`, `NOTIFICATION_FROM_EMAIL` | Email provider. |
-| `SENTRY_DSN`, `SENTRY_ENVIRONMENT` | Observability; để trống nếu tắt Sentry. |
+| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `SENTRY_ENVIRONMENT` | Observability; public DSN dùng cho browser, để trống nếu tắt Sentry. |
 | `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN` | Chỉ build-time, upload source map. |
 | `NEXT_PUBLIC_RELEASE_SHA` | Vercel tự set qua `VERCEL_GIT_COMMIT_SHA`; dùng cho release correlation. |
 

@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
 // nên trả về config Next.js thuần.
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN;
 
-export default sentryDsn
+const config = sentryDsn
   ? withSentryConfig(nextConfig, {
       // Stay silent locally; upload source maps only when an auth token is present.
       silent: !process.env.CI,
@@ -21,3 +21,5 @@ export default sentryDsn
       widenClientFileUpload: true,
     })
   : nextConfig;
+
+export default config;
