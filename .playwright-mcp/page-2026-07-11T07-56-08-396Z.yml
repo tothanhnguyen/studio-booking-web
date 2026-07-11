@@ -1,0 +1,68 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "MOW STUDIO — Trang chủ" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e6]: MOW
+          - generic [ref=e7]: STUDIO
+        - navigation "Điều hướng studio" [ref=e8]:
+          - link "Đăng nhập" [ref=e14] [cursor=pointer]:
+            - /url: /login
+          - link "Đăng ký" [ref=e15] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e16]:
+      - region [ref=e17]:
+        - generic [ref=e20]:
+          - generic [ref=e27]:
+            - paragraph [ref=e28]: Creative studio / Sài Gòn
+            - heading "Không gian để ý tưởng thành hình." [level=1] [ref=e29]
+            - paragraph [ref=e30]: photo studio, podcast booth, music studio — book nhanh, lịch rõ, thanh toán cọc.
+            - generic [ref=e31]:
+              - link "Đặt lịch" [ref=e32] [cursor=pointer]:
+                - /url: /studios
+                - text: Đặt lịch
+                - generic [ref=e33]: →
+              - link "Xem không gian" [ref=e34] [cursor=pointer]:
+                - /url: /studios
+            - list "Không gian nổi bật" [ref=e35]:
+              - listitem [ref=e36]: Photo
+              - listitem [ref=e41]: Podcast
+              - listitem [ref=e46]: Music
+            - list "Điểm nổi bật" [ref=e52]:
+              - listitem [ref=e53]: 3 không gian
+              - listitem [ref=e55]: lịch realtime
+              - listitem [ref=e57]: VietQR deposit
+          - img "Ba không gian Photo, Podcast và Music của MowStudio" [ref=e23]
+          - generic [ref=e60]:
+            - paragraph [ref=e61]: 03 / Chọn phòng
+            - heading "Bạn cần không gian nào?" [level=2] [ref=e62]
+            - paragraph [ref=e63]: Chọn một phòng để xem thiết bị, lịch trống và giá thuê.
+            - list [ref=e64]:
+              - listitem [ref=e65]:
+                - link "Photo — Chụp sản phẩm, lookbook, portrait" [ref=e66] [cursor=pointer]:
+                  - /url: /studios/photo-studio
+                  - generic [ref=e67]: "01"
+                  - generic [ref=e68]:
+                    - strong [ref=e69]: Photo
+                    - generic [ref=e70]: Chụp sản phẩm, lookbook, portrait
+                  - generic [ref=e71]: →
+              - listitem [ref=e72]:
+                - link "Podcast — Thu âm, quay talkshow, phỏng vấn" [ref=e73] [cursor=pointer]:
+                  - /url: /studios/voice-podcast-booth
+                  - generic [ref=e74]: "02"
+                  - generic [ref=e75]:
+                    - strong [ref=e76]: Podcast
+                    - generic [ref=e77]: Thu âm, quay talkshow, phỏng vấn
+                  - generic [ref=e78]: →
+              - listitem [ref=e79]:
+                - link "Music — Sản xuất, thu vocal, rehearsal" [ref=e80] [cursor=pointer]:
+                  - /url: /studios/music-studio
+                  - generic [ref=e81]: "03"
+                  - generic [ref=e82]:
+                    - strong [ref=e83]: Music
+                    - generic [ref=e84]: Sản xuất, thu vocal, rehearsal
+                  - generic [ref=e85]: →
+            - link "Xem lịch trống" [ref=e86] [cursor=pointer]:
+              - /url: /studios
+  - alert [ref=e25]

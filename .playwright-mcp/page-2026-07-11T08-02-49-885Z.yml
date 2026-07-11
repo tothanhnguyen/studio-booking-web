@@ -1,0 +1,38 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "MOW STUDIO — Trang chủ" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e6]: MOW
+          - generic [ref=e8]: STUDIO
+        - navigation "Điều hướng studio" [ref=e9]:
+          - generic [ref=e10]:
+            - link "Photo" [ref=e11] [cursor=pointer]:
+              - /url: /studios/photo-studio
+              - generic [ref=e12]: "01"
+              - text: Photo
+            - link "Podcast" [ref=e13] [cursor=pointer]:
+              - /url: /studios/voice-podcast-booth
+              - generic [ref=e14]: "02"
+              - text: Podcast
+            - link "Music" [ref=e15] [cursor=pointer]:
+              - /url: /studios/music-studio
+              - generic [ref=e16]: "03"
+              - text: Music
+          - link "Đăng nhập" [ref=e18] [cursor=pointer]:
+            - /url: /login
+          - link "Đăng ký" [ref=e19] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e20]:
+      - region "Không gian để ý tưởng thành hình." [ref=e21]:
+        - generic [ref=e24]:
+          - generic:
+            - generic:
+              - paragraph: Creative space / Sài Gòn
+              - heading "MOW STUDIO" [level=2]:
+                - generic: MOW
+                - generic: STUDIO
+            - paragraph: Scroll để khám phá
+          - img "Ba không gian Photo, Podcast và Music của MowStudio" [ref=e27]
+  - alert [ref=e29]

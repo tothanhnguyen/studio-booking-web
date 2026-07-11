@@ -1,0 +1,38 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "MowStudio" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - navigation "Điều hướng chính" [ref=e6]:
+          - link "Studio" [ref=e7] [cursor=pointer]:
+            - /url: /studios
+          - link "Đăng nhập" [ref=e8] [cursor=pointer]:
+            - /url: /login
+          - link "Đăng ký" [ref=e9] [cursor=pointer]:
+            - /url: /register
+    - main [ref=e10]:
+      - region [ref=e11]:
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - paragraph [ref=e16]: Creative studio / Sài Gòn
+            - heading "Không gian để ý tưởng thành hình." [level=1] [ref=e17]
+            - paragraph [ref=e18]: photo studio, podcast booth, music studio — book nhanh, lịch rõ, thanh toán cọc.
+            - generic [ref=e19]:
+              - link "Đặt lịch" [ref=e20] [cursor=pointer]:
+                - /url: /studios
+                - text: Đặt lịch
+                - generic [ref=e21]: →
+              - link "Xem không gian" [ref=e22] [cursor=pointer]:
+                - /url: /studios
+            - list "Không gian nổi bật" [ref=e23]:
+              - listitem [ref=e24]: Photo
+              - listitem [ref=e29]: Podcast
+              - listitem [ref=e34]: Music
+            - list "Điểm nổi bật" [ref=e40]:
+              - listitem [ref=e41]: 3 không gian
+              - listitem [ref=e43]: lịch realtime
+              - listitem [ref=e45]: VietQR deposit
+          - img "Ba không gian Photo, Podcast và Music của MowStudio" [ref=e49]
+          - paragraph [ref=e51]: Scroll để khám phá
+  - alert [ref=e52]
