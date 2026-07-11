@@ -10,7 +10,7 @@ test("home hero renders HTML content and opens the studio catalog", async ({ pag
     await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 0.75)));
   }
   await expect(
-    page.getByRole("heading", { name: "Không gian để ý tưởng thành hình." }),
+    page.getByRole("heading", { name: "Nơi ý tưởng bước ra khỏi bản nháp." }),
   ).toBeVisible();
   await expect(page.getByRole("img", { name: POSTER_NAME })).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
@@ -39,7 +39,7 @@ test("desktop maps scroll progress to canvas frames", async ({ page }) => {
 
   await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 1.75)));
   await expect(page.locator("[data-scroll-canvas-section]")).toHaveAttribute("data-active-hero-state", "rooms");
-  await expect(page.getByRole("heading", { name: "Bạn cần không gian nào?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Mỗi ý tưởng cần một không gian vừa vặn" })).toBeVisible();
 });
 
 test("mobile uses poster only and never requests the desktop sequence", async ({ page }) => {
