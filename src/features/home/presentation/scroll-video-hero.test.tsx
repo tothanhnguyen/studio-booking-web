@@ -26,25 +26,25 @@ describe("ScrollVideoHero", () => {
     expect(
       screen.getByRole("heading", { name: "Nơi ý tưởng bước ra khỏi bản nháp." }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Mỗi ý tưởng cần một căn phòng vừa vặn." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Mỗi ý tưởng cần một không gian vừa vặn" })).toBeInTheDocument();
     expect(
-      screen.getByText(/Ba không gian chuyên biệt cho hình ảnh, âm thanh/),
+      screen.getByText(/Chọn một không gian để xem thiết bị/),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Chọn không gian" })).toHaveAttribute("href", "/studios");
-    expect(screen.getByRole("link", { name: "Khám phá studio" })).toHaveAttribute("href", "/studios");
-    expect(screen.getByRole("link", { name: /Photo — Ánh sáng linh hoạt/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Đặt lịch" })).toHaveAttribute("href", "/studios");
+    expect(screen.getByRole("link", { name: "Xem không gian" })).toHaveAttribute("href", "/studios");
+    expect(screen.getByRole("link", { name: /Photo — Chụp sản phẩm/ })).toHaveAttribute(
       "href",
       "/studios/photo-studio",
     );
-    expect(screen.getByRole("link", { name: /Podcast — Âm thanh rõ/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Podcast — Thu âm/ })).toHaveAttribute(
       "href",
       "/studios/voice-podcast-booth",
     );
-    expect(screen.getByRole("link", { name: /Music — Không gian tập trung/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /Music — Sản xuất/ })).toHaveAttribute(
       "href",
       "/studios/music-studio",
     );
-    expect(screen.getByRole("link", { name: "Kiểm tra lịch trống" })).toHaveAttribute("href", "/studios");
+    expect(screen.getByRole("link", { name: "Xem lịch trống" })).toHaveAttribute("href", "/studios");
   });
 
   it("uses exactly three viewport lengths on desktop", () => {
