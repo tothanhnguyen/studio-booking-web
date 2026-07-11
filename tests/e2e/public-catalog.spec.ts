@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test("guest discovers a service from home through the studio catalog", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("link", { name: "Khám phá studio" }).click();
+  await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 0.75)));
+  await page.getByRole("link", { name: "Xem không gian" }).click();
   await expect(page).toHaveURL(/\/studios$/);
   await expect(page.getByRole("heading", { name: "Photo Studio" })).toBeVisible();
 
