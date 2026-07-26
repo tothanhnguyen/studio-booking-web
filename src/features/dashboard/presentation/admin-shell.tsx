@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { FolioLabel } from "@/components/ui/folio-label";
+
 type NavLink = Readonly<{ href: string; label: string }>;
 type NavGroup = Readonly<{ eyebrow: string; links: NavLink[] }>;
 
@@ -45,7 +47,7 @@ function resolveActiveHref(pathname: string) {
 }
 
 function navLinkClassName(href: string, activeHref: string | undefined) {
-  return `admin-nav-link${href === activeHref ? " admin-nav-link--active" : ""}`;
+  return `console-nav-link${href === activeHref ? " console-nav-link--active" : ""}`;
 }
 
 export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
@@ -54,47 +56,54 @@ export function AdminShell({ children }: Readonly<{ children: ReactNode }>) {
   const activeHref = resolveActiveHref(pathname ?? "/admin");
 
   return (
-    <div className="admin-shell">
-      <nav aria-label="Điều hướng quản trị" className="admin-nav">
-        <div className="admin-nav-rail">
-          <p className="admin-nav-brand">Quản trị MowStudio</p>
-          <Link className={navLinkClassName(OVERVIEW_LINK.href, activeHref)} href={OVERVIEW_LINK.href}>
-            {OVERVIEW_LINK.label}
-          </Link>
-          {NAV_GROUPS.map((group) => (
-            <div className="admin-nav-group" key={group.eyebrow}>
-              <p className="admin-nav-eyebrow">{group.eyebrow}</p>
-              {group.links.map((link) => (
-                <Link className={navLinkClassName(link.href, activeHref)} href={link.href} key={link.href}>
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </div>
+    <div className="console-shell">
+      <div className="console-topbar">
+        <p className="console-topbar__mark">MOW</p>
+        <FolioLabel text="MOW · CONSOLE" />
+      </div>
 
-        <div className="admin-nav-mobile">
-          <p className="admin-nav-mobile-brand">Quản trị MowStudio</p>
-          <select
-            aria-label="Điều hướng quản trị"
-            className="admin-nav-mobile-select"
-            onChange={(event) => router.push(event.target.value)}
-            value={activeHref ?? OVERVIEW_LINK.href}
-          >
-            <option value={OVERVIEW_LINK.href}>{OVERVIEW_LINK.label}</option>
+      <div className="console-body">
+        <nav aria-label="Điều hướng quản trị" className="console-nav">
+          <div className="console-nav-rail">
+            <p className="console-nav-brand">Quản trị MowStudio</p>
+            <Link className={navLinkClassName(OVERVIEW_LINK.href, activeHref)} href={OVERVIEW_LINK.href}>
+              {OVERVIEW_LINK.label}
+            </Link>
             {NAV_GROUPS.map((group) => (
-              <optgroup key={group.eyebrow} label={group.eyebrow}>
+              <div className="console-nav-group" key={group.eyebrow}>
+                <p className="console-nav-eyebrow">{group.eyebrow}</p>
                 {group.links.map((link) => (
-                  <option key={link.href} value={link.href}>
+                  <Link className={navLinkClassName(link.href, activeHref)} href={link.href} key={link.href}>
                     {link.label}
-                  </option>
+                  </Link>
                 ))}
-              </optgroup>
+              </div>
             ))}
-          </select>
-        </div>
-      </nav>
-      <div className="admin-shell-content">{children}</div>
+          </div>
+
+          <div className="console-nav-mobile">
+            <p className="console-nav-mobile-brand">Quản trị MowStudio</p>
+            <select
+              aria-label="Điều hướng quản trị"
+              className="console-nav-mobile-select"
+              onChange={(event) => router.push(event.target.value)}
+              value={activeHref ?? OVERVIEW_LINK.href}
+            >
+              <option value={OVERVIEW_LINK.href}>{OVERVIEW_LINK.label}</option>
+              {NAV_GROUPS.map((group) => (
+                <optgroup key={group.eyebrow} label={group.eyebrow}>
+                  {group.links.map((link) => (
+                    <option key={link.href} value={link.href}>
+                      {link.label}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+        </nav>
+        <div className="console-body__content">{children}</div>
+      </div>
     </div>
   );
 }
