@@ -28,7 +28,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
       <section aria-labelledby="admin-booking-detail-heading" className="admin-section">
         <SectionMarker index={1} label="Lịch & thanh toán" />
         <h2 className="sr-only" id="admin-booking-detail-heading">Lịch & thanh toán</h2>
-        <BookingDetail booking={booking} showCustomer />
+        <BookingDetail booking={booking} showCustomer variant="admin" />
       </section>
 
       <section aria-labelledby="admin-booking-lifecycle-heading" className="admin-section">

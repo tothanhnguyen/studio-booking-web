@@ -670,8 +670,8 @@
 /* /account/bookings/[id]: booking detail sectioned restyle — mono booking code
    + status + primary action in the header, numbered sections (01/02/03) with
    hairline dividers below, cancellation pinned as a muted danger zone at the
-   end. Composes `.ui-surface`/`.ui-field`/`.ui-action` rather than duplicating
-   card chrome or form control declarations. */
+   end. Composes .ui-field/.ui-action; sections use hairline dividers instead
+   of .ui-surface card chrome. */
 
 .account-detail {
   display: grid;
@@ -741,6 +741,13 @@
   gap: 1.25rem;
   border-block-start: 1px solid var(--color-warm-line);
   padding-block-start: clamp(1.5rem, 4vw, 2rem);
+}
+
+/* Flat variant for embedding within an admin page's own numbered section:
+   same field rhythm, no hairline (the admin section already draws one). */
+.account-detail-section-flat {
+  display: grid;
+  gap: 1.25rem;
 }
 
 .account-detail-schedule-head {
@@ -833,4 +840,4 @@
   cursor: pointer;
 }
 
-.account-detail-danger-action:hover { color: var(--color-danger); }
+.account-detail-danger-action:hover { text-decoration-thickness: 2px; }
