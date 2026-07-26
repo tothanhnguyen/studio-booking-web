@@ -28,7 +28,13 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
   await expect(page.getByText("PENDING", { exact: true })).toBeVisible();
 
   const webhookBody = JSON.stringify({
-    id: `evt-e2e-room-only-${testInfo.project.name}`,
+    // Event id must be unique per booking (not just per browser project): the
+    // SePay webhook handler is idempotent on (provider, eventId), and this
+    // suite runs repeatedly against a persistent, non-reset database. A
+    // fixed id collides with leftover PaymentEvent rows from earlier runs,
+    // so the webhook is silently treated as a duplicate and the booking
+    // never transitions to PAID/CONFIRMED.
+    id: `evt-e2e-room-only-${bookingId}`,
     amount: 240000,
     currency: "VND",
     content: `Thanh toan coc BOOKING:${bookingId}`,
