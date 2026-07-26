@@ -89,7 +89,7 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
 
       <section
         aria-busy={loading}
-        className="booking-window booking-ticket"
+        className="booking-window booking-ticket ui-surface"
         data-direction={direction}
         key={step}
       >

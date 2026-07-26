@@ -309,6 +309,9 @@
 .confirmation-page__header h1 {
   margin: 0;
   color: var(--color-bone);
+}
+
+.payment-page__header h1 {
   font-size: clamp(2.25rem, 6vw, 4.5rem);
   letter-spacing: -0.045em;
   line-height: 1.05;
@@ -335,22 +338,6 @@
   font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
 }
-
-.confirmation-layout {
-  display: grid;
-  gap: clamp(1rem, 3vw, 2rem);
-  margin-top: clamp(2rem, 5vw, 4rem);
-}
-
-.confirmation-layout > * { min-width: 0; }
-
-.confirmation-layout__rail {
-  display: grid;
-  align-self: start;
-  gap: 1rem;
-}
-
-.confirmation-layout__rail > .ui-action { width: 100%; }
 
 .payment-qr h2,
 .booking-summary h2,
@@ -511,13 +498,6 @@
 }
 
 @media (min-width: 901px) {
-  .confirmation-layout {
-    grid-template-columns: minmax(0, 7fr) minmax(18rem, 5fr);
-    align-items: start;
-  }
-
-  .confirmation-layout__rail { position: sticky; top: 7rem; }
-
   .booking-composition {
     grid-template-areas: "window context";
     grid-template-columns: minmax(0, 8fr) minmax(17rem, 4fr);
