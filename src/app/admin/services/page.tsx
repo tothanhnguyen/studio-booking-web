@@ -1,11 +1,68 @@
 import { setServiceActiveAction } from "@/app/admin/services/actions";
+import { actionClassName } from "@/components/ui/action";
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { ServiceForm } from "@/features/service/presentation/service-form";
 import { PrismaServiceRepository } from "@/features/service/infrastructure/prisma-service-repository";
 import { PrismaRoomRepository } from "@/features/studio-room/infrastructure/prisma-room-repository";
 import { prisma } from "@/lib/db/prisma";
 
 export default async function AdminServicesPage() {
-  const [rooms, services] = await Promise.all([new PrismaRoomRepository(prisma).listAll(), new PrismaServiceRepository(prisma).listAll()]);
+  const [rooms, services] = await Promise.all([
+    new PrismaRoomRepository(prisma).listAll(),
+    new PrismaServiceRepository(prisma).listAll(),
+  ]);
   const roomOptions = rooms.map(({ id, name }) => ({ id, name }));
-  return <section><h1 className="text-3xl font-semibold">Dịch vụ</h1><h2 className="mt-7 text-xl font-semibold">Thêm dịch vụ</h2><div className="mt-3"><ServiceForm rooms={roomOptions} /></div><h2 className="mt-10 text-xl font-semibold">Danh sách dịch vụ</h2><div className="mt-4 grid gap-5">{services.map((service) => <div key={service.id}><ServiceForm rooms={roomOptions} initialValue={{ ...service, currency: "VND" }} /><form action={setServiceActiveAction.bind(null, service.id, !service.isActive)} className="mt-2"><button className="text-sm font-semibold text-[var(--color-accent)] hover:text-[var(--color-action)]">{service.isActive ? "Tạm ẩn dịch vụ" : "Mở lại dịch vụ"}</button></form></div>)}</div></section>;
+
+  return (
+    <div className="admin-view">
+      <PageHeading description="Tạo dịch vụ mới hoặc cập nhật dịch vụ hiện có." eyebrow="Vận hành" title="Dịch vụ" />
+
+      <section aria-labelledby="admin-services-new-heading" className="admin-section">
+        <SectionMarker index={1} label="Thêm dịch vụ" />
+        <h2 className="sr-only" id="admin-services-new-heading">
+          Thêm dịch vụ
+        </h2>
+        <div className="ui-surface">
+          <ServiceForm rooms={roomOptions} />
+        </div>
+      </section>
+
+      <section aria-labelledby="admin-services-list-heading" className="admin-section">
+        <SectionMarker index={2} label="Danh sách dịch vụ" />
+        <h2 className="sr-only" id="admin-services-list-heading">
+          Danh sách dịch vụ
+        </h2>
+
+        {services.length === 0 ? (
+          <p className="admin-empty-state">Chưa có dịch vụ nào.</p>
+        ) : (
+          <ul className="admin-row-list">
+            {services.map((service) => (
+              <li className="admin-row" key={service.id}>
+                <details open>
+                  <summary className="admin-catalog-summary">
+                    <span className="admin-row-primary">{service.name}</span>
+                    <span className="type-mono admin-row-secondary">{service.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
+                  </summary>
+                  <div className="admin-catalog-edit">
+                    <div className="admin-actions-group">
+                      <ServiceForm initialValue={{ ...service, currency: "VND" }} rooms={roomOptions} />
+                    </div>
+                    <div className="admin-actions-group">
+                      <form action={setServiceActiveAction.bind(null, service.id, !service.isActive)}>
+                        <button className={actionClassName("secondary")} type="submit">
+                          {service.isActive ? "Tạm ẩn dịch vụ" : "Mở lại dịch vụ"}
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </details>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
 }

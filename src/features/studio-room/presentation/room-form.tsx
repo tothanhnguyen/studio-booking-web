@@ -4,6 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { actionClassName } from "@/components/ui/action";
+import { FormField } from "@/components/ui/form-field";
 import { saveRoomAction, type AdminActionResult } from "@/app/admin/rooms/actions";
 import { roomInputSchema, type RoomInput } from "@/features/studio-room/application/room-input";
 
@@ -11,22 +13,78 @@ const emptyRoom: RoomInput = { name: "", slug: "", description: "", timezone: "A
 
 export function RoomForm({ initialValue = emptyRoom }: Readonly<{ initialValue?: RoomInput }>) {
   const [result, setResult] = useState<AdminActionResult | null>(null);
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RoomInput>({
-    resolver: zodResolver(roomInputSchema), defaultValues: initialValue,
-  });
+  const fieldId = initialValue.id ?? "new";
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RoomInput>({ resolver: zodResolver(roomInputSchema), defaultValues: initialValue });
 
   return (
-    <form className="grid gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" onSubmit={handleSubmit(async (value) => setResult(await saveRoomAction(value)))}>
-      <input type="hidden" defaultValue={initialValue.id} {...register("id")} />
-      <label className="grid gap-1 text-sm">Tên phòng<input defaultValue={initialValue.name} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("name")} /></label>
-      <label className="grid gap-1 text-sm">Slug<input defaultValue={initialValue.slug} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("slug")} /></label>
-      <label className="grid gap-1 text-sm">Mô tả<textarea defaultValue={initialValue.description ?? ""} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("description")} /></label>
-      <label className="grid gap-1 text-sm">Thứ tự<input type="number" defaultValue={initialValue.displayOrder} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("displayOrder", { valueAsNumber: true })} /></label>
-      <label className="flex gap-2 text-sm"><input type="checkbox" defaultChecked={initialValue.isActive} {...register("isActive")} /> Đang hoạt động</label>
+    <form
+      className="admin-catalog-form"
+      onSubmit={handleSubmit(async (value) => setResult(await saveRoomAction(value)))}
+    >
+      <input defaultValue={initialValue.id} type="hidden" {...register("id")} />
+
+      <FormField error={errors.name?.message} htmlFor={`room-name-${fieldId}`} label="Tên phòng">
+        <input
+          aria-invalid={Boolean(errors.name)}
+          defaultValue={initialValue.name}
+          id={`room-name-${fieldId}`}
+          {...register("name")}
+        />
+      </FormField>
+
+      <FormField error={errors.slug?.message} htmlFor={`room-slug-${fieldId}`} label="Slug">
+        <input
+          aria-invalid={Boolean(errors.slug)}
+          defaultValue={initialValue.slug}
+          id={`room-slug-${fieldId}`}
+          {...register("slug")}
+        />
+      </FormField>
+
+      <FormField error={errors.description?.message} htmlFor={`room-description-${fieldId}`} label="Mô tả">
+        <textarea
+          aria-invalid={Boolean(errors.description)}
+          defaultValue={initialValue.description ?? ""}
+          id={`room-description-${fieldId}`}
+          {...register("description")}
+        />
+      </FormField>
+
+      <FormField error={errors.displayOrder?.message} htmlFor={`room-order-${fieldId}`} label="Thứ tự">
+        <input
+          aria-invalid={Boolean(errors.displayOrder)}
+          defaultValue={initialValue.displayOrder}
+          id={`room-order-${fieldId}`}
+          type="number"
+          {...register("displayOrder", { valueAsNumber: true })}
+        />
+      </FormField>
+
+      <label className="admin-catalog-checkbox" htmlFor={`room-active-${fieldId}`}>
+        <input
+          defaultChecked={initialValue.isActive}
+          id={`room-active-${fieldId}`}
+          type="checkbox"
+          {...register("isActive")}
+        />
+        Đang hoạt động
+      </label>
+
       <input type="hidden" value="Asia/Ho_Chi_Minh" {...register("timezone")} />
-      {Object.values(errors)[0]?.message && <p role="alert" className="text-sm text-[var(--color-danger)]">{String(Object.values(errors)[0]?.message)}</p>}
-      {result && <p role="status" className={result.ok ? "text-sm text-[var(--color-success)]" : "text-sm text-[var(--color-danger)]"}>{result.message}</p>}
-      <button disabled={isSubmitting} className="rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)] disabled:opacity-50">{isSubmitting ? "Đang lưu…" : "Lưu phòng"}</button>
+
+      {result && (
+        <p className={result.ok ? "ui-field__hint" : "ui-field__error"} role="status">
+          {result.message}
+        </p>
+      )}
+
+      <button className={actionClassName("primary")} disabled={isSubmitting} type="submit">
+        {isSubmitting ? "Đang lưu…" : "Lưu phòng"}
+      </button>
     </form>
   );
 }
