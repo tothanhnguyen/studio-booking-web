@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { actionClassName } from "@/components/ui/action";
+import { FolioLabel } from "@/components/ui/folio-label";
+import { LedStatus } from "@/components/ui/led-status";
 import { SectionMarker } from "@/components/ui/section-marker";
 import { getPublicServiceBySlug } from "@/features/service/application/get-public-service";
 import { listPublicRooms } from "@/features/studio-room/application/list-public-rooms";
@@ -34,56 +36,61 @@ export default async function ServicePage({ params }: ServicePageProps) {
     : "Dịch vụ này thuộc hình thức chỉ thuê phòng.";
 
   return (
-    <section aria-labelledby="service-heading" className="service-sheet page-grain">
-      <div className="service-sheet-heading">
+    <section aria-labelledby="service-heading" className="proof-service-page page-grain">
+      <FolioLabel text="MOW · PROOF 03/03 — SERVICE" />
+      <div className="proof-service-heading">
         <SectionMarker index={1} label="Dịch vụ" />
         <h1 className="display-lg" id="service-heading">
           {service.name}
         </h1>
       </div>
 
-      <aside aria-labelledby="rate-heading" className="service-sheet-rate-card ui-surface">
-        <p className="page-eyebrow">Đặt lịch</p>
+      <aside aria-labelledby="rate-heading" className="proof-service-rate-card ui-surface">
+        <p className="proof-annotation">
+          <span>THÔNG SỐ KỸ THUẬT</span>
+          <span>SPEC</span>
+        </p>
         <h2 id="rate-heading">Chi tiết buổi làm việc</h2>
-        <dl>
-          <div>
+        <dl className="proof-service-rate-card__list">
+          <div className="proof-service-rate-card__row">
             <dt>Giá trọn gói</dt>
-            <dd className="type-mono service-sheet-price">
+            <dd className="type-mono proof-service-rate-card__price">
               {vndFormatter.format(service.priceAmount)}
             </dd>
           </div>
-          <div>
+          <div className="proof-service-rate-card__row">
             <dt>Thời lượng</dt>
             <dd className="type-mono">{service.durationMinutes} phút</dd>
           </div>
-          <div>
+          <div className="proof-service-rate-card__row">
             <dt>Thời gian đệm</dt>
             <dd className="type-mono">{service.bufferMinutes} phút</dd>
           </div>
         </dl>
-        <p className="service-sheet-deposit">Cọc 30% khi giữ lịch</p>
+        <p className="proof-service-rate-card__deposit">Cọc 30% khi giữ lịch</p>
         <Link className={actionClassName("primary")} href={`/booking/${service.id}`}>
-          Đặt lịch dịch vụ này
+          <LedStatus label="Đặt lịch dịch vụ này" tone="record" />
         </Link>
       </aside>
 
-      <div className="service-sheet-body">
+      <div className="proof-service-body">
         <p className="page-description">
-          {service.description ?? "Dịch vụ studio được chuẩn bị cho buổi sáng tạo tập trung và hiệu quả."}
+          {service.description ??
+            "Dịch vụ studio được chuẩn bị cho buổi sáng tạo tập trung và hiệu quả."}
         </p>
         {room ? (
-          <Link className="service-sheet-room-link" href={`/studios/${room.slug}`}>
+          <Link className="proof-service-room-link" href={`/studios/${room.slug}`}>
             Xem không gian {room.name}
           </Link>
         ) : null}
 
-        <div className="service-sheet-explainer">
+        <div className="proof-service-explainer">
           <SectionMarker index={2} label="Hình thức" />
           <h2>{bookingTypeLabel}</h2>
           <p>{bookingTypeDescription}</p>
         </div>
 
-        <div className="service-sheet-explainer">
+        <div className="proof-service-explainer">
           <SectionMarker index={3} label="Thời gian đệm" />
           <h2>Chuẩn bị giữa các buổi</h2>
           <p>
