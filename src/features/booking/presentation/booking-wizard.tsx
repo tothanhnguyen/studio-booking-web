@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { actionClassName } from "@/components/ui/action";
+import { CropFrame } from "@/components/ui/crop-frame";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FormField } from "@/components/ui/form-field";
 import { createBookingAction } from "@/features/booking/application/booking-actions";
@@ -89,14 +90,11 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
 
       <section
         aria-busy={loading}
-        className="booking-window booking-ticket ui-surface"
+        className="booking-window log-frame ui-surface"
         data-direction={direction}
         key={step}
       >
-        <p className="booking-ticket__meta type-mono">
-          {serviceName}
-          {date ? ` · ${date}` : ""}
-        </p>
+        <CropFrame annotation={date ? `${serviceName} · ${date}` : serviceName}>
         {step === 0 && <form className="booking-form" onSubmit={handleSubmit(() => goToStep(1))}>
           <h2 className="booking-step-title">Thông tin liên hệ</h2>
           <FormField label="Họ tên" htmlFor="customer-name" error={errors.customerName?.message}>
@@ -161,6 +159,7 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
 
         {step === 4 && <div className="booking-step"><h2 className="booking-step-title">Đang tạo giữ chỗ</h2><p className="booking-loading">Vui lòng chờ trong giây lát…</p></div>}
         {message && <p role="alert" className="booking-message">{message}</p>}
+        </CropFrame>
       </section>
     </div>
   </div>;

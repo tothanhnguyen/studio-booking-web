@@ -634,3 +634,40 @@
 
   .proof-service-body { grid-column: 1 / span 7; order: 3; }
 }
+
+/* Booking session */
+
+/* Session log rail: list-marker reset only — dot/row states, coloring, and
+   the active-record treatment are inherited from the shared .log-rail /
+   .log-row primitives declared above. */
+.booking-session-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Wizard step frame: directional slide-in per remounted step, framed with
+   the shared CropFrame crop marks (rendered inside by BookingWizard). */
+.log-frame {
+  --log-frame-offset: 0.875rem;
+
+  position: relative;
+  animation: log-frame-enter var(--motion-base) ease-out both;
+}
+
+.log-frame[data-direction="back"] { --log-frame-offset: -0.875rem; }
+
+@keyframes log-frame-enter {
+  from { opacity: 0; transform: translateX(var(--log-frame-offset)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-frame { animation: none; }
+}
+
+/* Selected time slot: thin record-red ring layered on top of the existing
+   Action-filled selected state (grid + fill colors owned by forms.css). */
+.booking-slot[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px var(--color-record);
+}
