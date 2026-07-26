@@ -32,28 +32,27 @@ export default async function PaymentPage({ params }: Readonly<{ params: Promise
           </div>
         ) : null}
       </header>
-      <div className="payment-layout">
+      <div className="payment-receipt">
         <VietQrPayment
           amount={booking.instructions.amount}
+          remainingAmount={booking.remainingAmount}
           accountName={booking.instructions.accountName}
           accountNumber={booking.instructions.accountNumber}
           bankBin={booking.instructions.bankBin}
           transferContent={booking.instructions.transferContent}
           qrImageUrl={booking.instructions.qrImageUrl}
         />
-        <aside className="payment-layout__rail" aria-label="Tóm tắt thanh toán">
-          <BookingSummary booking={booking} />
-          <PaymentStatus
-            bookingStatus={booking.bookingStatus}
-            paymentStatus={booking.paymentStatus}
-          />
-          <Link
-            className={actionClassName("primary")}
-            href={`/booking/${id}/confirmation`}
-          >
-            Xem xác nhận
-          </Link>
-        </aside>
+        <PaymentStatus
+          bookingStatus={booking.bookingStatus}
+          paymentStatus={booking.paymentStatus}
+        />
+        <BookingSummary booking={booking} />
+        <Link
+          className={actionClassName("primary")}
+          href={`/booking/${id}/confirmation`}
+        >
+          Xem xác nhận
+        </Link>
       </div>
     </section>
   );

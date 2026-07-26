@@ -250,3 +250,75 @@
     padding-inline-start: clamp(1.25rem, 3vw, 2rem);
   }
 }
+
+/* Payment page: transfer receipt restyle — single-column itemized stack. */
+
+.payment-receipt {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.payment-qr__cards {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  margin-top: 1.5rem;
+}
+
+.payment-qr-card { display: grid; justify-items: center; }
+
+.payment-transfer-card > .copy-payment-value:first-child { border-block-start: 0; }
+
+.payment-amounts { margin: 0; display: grid; }
+
+.payment-amounts__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.payment-amounts__row:first-child { border-block-start: 0; padding-block-start: 0; }
+
+.payment-amounts dt { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; }
+.payment-amounts dd { margin: 0; color: var(--color-text); }
+
+.payment-amounts__row--remaining {
+  margin-top: 0.25rem;
+  border-block-start: 1px dashed var(--color-border);
+}
+
+.payment-amounts__row--remaining dt { color: var(--color-text); font-weight: 600; }
+
+.payment-amounts__remaining {
+  color: var(--color-accent);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.payment-status__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.payment-status__badge {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.payment-status[data-payment-state="paid"] .payment-status__badge { color: var(--color-success); }
+.payment-status[data-payment-state="failed"] .payment-status__badge,
+.payment-status[data-payment-state="expired"] .payment-status__badge { color: var(--color-danger); }

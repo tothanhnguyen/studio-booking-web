@@ -336,24 +336,20 @@
   font-variant-numeric: tabular-nums;
 }
 
-.payment-layout,
 .confirmation-layout {
   display: grid;
   gap: clamp(1rem, 3vw, 2rem);
   margin-top: clamp(2rem, 5vw, 4rem);
 }
 
-.payment-layout > *,
 .confirmation-layout > * { min-width: 0; }
 
-.payment-layout__rail,
 .confirmation-layout__rail {
   display: grid;
   align-self: start;
   gap: 1rem;
 }
 
-.payment-layout__rail > .ui-action,
 .confirmation-layout__rail > .ui-action { width: 100%; }
 
 .payment-qr h2,
@@ -373,20 +369,12 @@
   line-height: 1.7;
 }
 
-.payment-qr__body {
-  display: grid;
-  gap: clamp(1.25rem, 4vw, 2rem);
-  margin-top: 1.5rem;
-}
-
 .payment-qr__image-frame {
   display: grid;
   width: min(100%, 19rem);
   aspect-ratio: 1;
   place-items: center;
   justify-self: center;
-  border-radius: var(--radius-md);
-  background: var(--color-surface-raised);
   padding: clamp(0.75rem, 3vw, 1.25rem);
 }
 
@@ -397,12 +385,9 @@
   object-fit: contain;
 }
 
-.payment-transfer,
-.payment-transfer__meta,
 .booking-summary dl,
 .payment-status dl { margin: 0; }
 
-.payment-transfer__meta > div,
 .booking-summary dl > div,
 .payment-status dl > div {
   display: grid;
@@ -411,7 +396,6 @@
   padding-block: 0.875rem;
 }
 
-.payment-transfer dt,
 .booking-summary dt,
 .payment-status dt,
 .copy-payment-value__label {
@@ -419,7 +403,6 @@
   font-size: 0.875rem;
 }
 
-.payment-transfer dd,
 .booking-summary dd,
 .payment-status dd {
   min-width: 0;
@@ -428,13 +411,10 @@
   color: var(--color-bone);
 }
 
-.payment-transfer__amount,
 .booking-summary__deposit {
   color: var(--color-champagne) !important;
   font-weight: 700;
 }
-
-.payment-transfer__copies { border-block-end: 1px solid var(--color-warm-line); }
 
 .copy-payment-value {
   display: grid;
@@ -512,19 +492,12 @@
 }
 
 @media (min-width: 768px) {
-  .payment-qr__body {
-    grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
-    align-items: start;
-  }
-
-  .payment-transfer__meta > div,
   .booking-summary dl > div,
   .payment-status dl > div {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     align-items: baseline;
   }
 
-  .payment-transfer dd,
   .booking-summary dd,
   .payment-status dd { text-align: end; }
 
@@ -538,13 +511,11 @@
 }
 
 @media (min-width: 901px) {
-  .payment-layout,
   .confirmation-layout {
     grid-template-columns: minmax(0, 7fr) minmax(18rem, 5fr);
     align-items: start;
   }
 
-  .payment-layout__rail,
   .confirmation-layout__rail { position: sticky; top: 7rem; }
 
   .booking-composition {
