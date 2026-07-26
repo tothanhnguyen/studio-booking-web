@@ -13,7 +13,7 @@
 - Spec: `docs/superpowers/specs/2026-07-27-mow-proof-sheet-ui-design.md`. Mockups in `./mockups/` are authoritative for visual treatment.
 - Untouched: `src/features/home/**`, `src/styles/hero.css`, `src/app/page.tsx`, `src/app/login/**`, `src/app/register/**`, `src/features/auth/presentation/**`, `.auth-split-*` CSS blocks, `public/media/**`.
 - `--color-record: #B8371F` only for live/active/selected indicators; never large fills; dot never the sole status signal.
-- Fraunces titles only; Plex Mono for all annotational text; Jakarta body paragraphs.
+- Display font: **Bricolage Grotesque** (replaces Fraunces globally via `--font-display`; register in layout.tsx with `subsets: ["latin", "vietnamese"]`, weight axis up to 800). Titles only, weight ~750, enlarged scale per spec §2. Plex Mono weight 500 for annotational text; Jakarta body 17px desktop base. Verify Vietnamese diacritics don't clip at display-xl.
 - Remove page usage of Marquee/ParallaxFrame (components + their tests stay).
 - All prior hard constraints: no logic/API/route changes; e2e names updated in-commit; AA contrast; 44px targets; 375px no overflow; reduced-motion.
 - Agents: no `pnpm build`/playwright during parallel waves (controller runs gates); unit+typecheck+lint per task; stage only owned files; retry on index.lock.

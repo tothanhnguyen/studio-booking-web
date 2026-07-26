@@ -17,7 +17,7 @@ The product presents itself as a photographer's proof sheet and studio control d
 ## 2. Design language (see mockups for exact treatment)
 
 - **Palette:** existing warm tokens unchanged (Canvas `#E7E1D8`, Surface `#F7F5EF`, Raised `#FFFDF8`, Text `#1A1B18`, muted `#57534E`, Action `#254238`). NEW token `--color-record: #B8371F` — used ONLY for live/active/selected indicators (REC dot, active step, selected slot ring); never for text blocks or large fills; max 1–2 instances visible per view.
-- **Type roles:** Fraunces = page titles only (tight, large). IBM Plex Mono = all annotational text: labels, numbers, meta, buttons, nav, table data. Plus Jakarta Sans = body paragraphs only.
+- **Type roles (updated 2026-07-27 per user feedback "to và đậm hơn, font bớt AI-default"):** display font = **Bricolage Grotesque** (Vietnamese subset, weights 700–800, large optical size) replacing Fraunces globally under the same `--font-display` variable — page titles only, tight tracking, sizes one step larger than the editorial pass (`--text-display-xl: clamp(3.25rem, 9vw, 8.5rem)`, `-lg: clamp(2.5rem, 6vw, 5rem)`, `-md: clamp(2rem, 4vw, 3.25rem)`, weight 750±). IBM Plex Mono = all annotational text: labels, numbers, meta, buttons, nav, table data (weight 500 baseline instead of 400). Plus Jakarta Sans = body paragraphs only (17px base on desktop). Auth pages keep their layout untouched but inherit the new display font via the token.
 - **Signature devices:**
   1. Visible column grid — 1px hairlines (`--color-border`) running between layout columns on ≥1024px.
   2. Crop marks — L-shaped corner marks hugging every image frame.
