@@ -1,0 +1,92 @@
+/* Editorial page layer: room-story cover story restyle for /studios/[slug]. */
+
+.room-story {
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.room-story-hero {
+  position: relative;
+}
+
+.room-story-hero-frame { will-change: transform; }
+
+.room-story-hero-visual {
+  aspect-ratio: auto;
+  min-block-size: clamp(24rem, 65vh, 44rem);
+}
+
+.room-story-title {
+  position: relative;
+  z-index: 1;
+  max-width: 60rem;
+  margin: clamp(-3.5rem, -7vw, -2rem) 0 0;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  color: var(--color-text);
+}
+
+.room-story-description {
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0 0;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.room-story-facts {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.room-story-facts strong {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.room-story-services {
+  margin-top: clamp(4rem, 9vw, 8rem);
+}
+
+.room-story-services > h2 {
+  max-width: 48rem;
+  margin: 0 0 clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-text);
+}
+
+.room-story-service-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 7vw, 6rem);
+}
+
+.room-story-service {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.room-story-service-visual { width: 100%; }
+
+@media (min-width: 768px) {
+  .room-story-service {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .room-story-service-visual { grid-column: span 7; }
+  .room-story-service .service-row { grid-column: span 5; }
+
+  .room-story-service[data-align="right"] .room-story-service-visual { order: 2; }
+  .room-story-service[data-align="right"] .service-row { order: 1; }
+}
+
+.room-story-cta {
+  display: grid;
+  justify-items: start;
+  gap: 1.5rem;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-block-start: clamp(2rem, 5vw, 3rem);
+  border-block-start: 1px solid var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-story-hero-frame { transform: none !important; }
+}

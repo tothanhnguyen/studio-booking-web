@@ -188,48 +188,6 @@
   padding-block: clamp(1rem, 3vw, 2.5rem);
 }
 
-.room-portal {
-  padding-block: clamp(1rem, 3vw, 2.5rem);
-}
-
-.room-portal__opening {
-  display: grid;
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: center;
-}
-
-.room-portal__visual { width: 100%; }
-
-.room-portal__facts {
-  margin-top: clamp(2rem, 5vw, 4rem);
-}
-
-.room-portal__facts > div {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.room-portal__facts strong {
-  color: var(--color-bone);
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.room-portal__services {
-  margin-top: clamp(3.5rem, 8vw, 7rem);
-}
-
-.room-portal__services > h2 {
-  max-width: 48rem;
-  margin: 0 0 1.5rem;
-  color: var(--color-bone);
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  letter-spacing: -0.035em;
-  line-height: 1.12;
-}
-
-.service-list { border-block-start: 1px solid var(--color-warm-line); }
-
 .service-row {
   display: grid;
   gap: 1.5rem;
@@ -706,13 +664,6 @@
 
   .payment-layout__rail,
   .confirmation-layout__rail { position: sticky; top: 7rem; }
-
-  .room-portal__opening {
-    min-height: 65vh;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  }
-
-  .room-portal__visual { height: min(65vh, 46rem); aspect-ratio: auto; }
 
   .service-sheet {
     grid-template-columns: minmax(0, 7fr) minmax(20rem, 5fr);

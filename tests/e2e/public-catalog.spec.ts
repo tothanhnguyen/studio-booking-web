@@ -26,7 +26,7 @@ test("guest discovers a service from home through the studio catalog", async ({ 
     .click();
 
   await expect(page).toHaveURL(/\/studios\/photo-studio$/);
-  await expect(page.getByTestId("room-visual")).toBeVisible();
+  await expect(page.getByTestId("room-visual").first()).toBeVisible();
   await page
     .getByRole("article")
     .filter({ has: page.getByRole("heading", { name: "Thuê phòng chụp ảnh" }) })
