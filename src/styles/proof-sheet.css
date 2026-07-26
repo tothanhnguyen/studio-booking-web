@@ -671,3 +671,43 @@
 .booking-slot[aria-pressed="true"] {
   box-shadow: inset 0 0 0 1px var(--color-record);
 }
+
+/* VietQR payment: QR crop-framed on a raised surface, transfer rows and
+   amount ledger sharing the ticket-stub row treatment. */
+.payment-qr__image-frame .crop-frame,
+.payment-qr__image-frame .crop-frame__body {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.payment-qr__group {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  margin-top: 1.5rem;
+}
+
+.payment-ledger > .copy-payment-value:first-child { border-block-start: 0; }
+.payment-ledger > .ticket-stub__row:first-child { border-block-start: 0; }
+
+.payment-ledger__remaining dt,
+.payment-ledger__remaining dd {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Payment status: LED badge row (replaces the old bordered pill badge). */
+.payment-status__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* Booking receipt: page-level itemized stack for the payment route. */
+.booking-receipt {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}

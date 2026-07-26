@@ -1,3 +1,5 @@
+import { LedStatus, type LedStatusProps } from "@/components/ui/led-status";
+
 export function getPaymentStatusDescription(
   bookingStatus: string,
   paymentStatus: string,
@@ -25,12 +27,20 @@ const paymentStatusBadgeLabel: Record<string, string> = {
   EXPIRED: "Hết hạn",
 };
 
+const paymentStatusTone: Record<string, LedStatusProps["tone"]> = {
+  PAID: "success",
+  PENDING: "warning",
+  FAILED: "danger",
+  EXPIRED: "neutral",
+};
+
 export function PaymentStatus({
   bookingStatus,
   paymentStatus,
 }: Readonly<{ bookingStatus: string; paymentStatus: string }>) {
   const description = getPaymentStatusDescription(bookingStatus, paymentStatus);
   const badgeLabel = paymentStatusBadgeLabel[paymentStatus] ?? paymentStatus;
+  const badgeTone = paymentStatusTone[paymentStatus] ?? "neutral";
 
   return (
     <section
@@ -39,9 +49,9 @@ export function PaymentStatus({
       aria-labelledby="payment-status-heading"
     >
       <p className="page-eyebrow">Theo dõi giao dịch</p>
-      <div className="payment-status__head">
+      <div className="payment-status__row">
         <h2 id="payment-status-heading">Trạng thái hiện tại</h2>
-        <span className="payment-status__badge">{badgeLabel}</span>
+        <LedStatus label={badgeLabel} tone={badgeTone} />
       </div>
       <dl>
         <div>
