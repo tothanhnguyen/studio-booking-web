@@ -666,3 +666,171 @@
 .account-ticket-service:hover { color: var(--color-champagne); }
 
 .account-ticket-room { margin: 0; color: var(--color-smoke); font-size: 0.875rem; }
+
+/* /account/bookings/[id]: booking detail sectioned restyle — mono booking code
+   + status + primary action in the header, numbered sections (01/02/03) with
+   hairline dividers below, cancellation pinned as a muted danger zone at the
+   end. Composes `.ui-surface`/`.ui-field`/`.ui-action` rather than duplicating
+   card chrome or form control declarations. */
+
+.account-detail {
+  display: grid;
+  max-width: var(--content-transaction);
+  margin-inline: auto;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.account-detail-heading .page-heading h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: var(--text-display-md);
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.account-detail-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border-block: 1px solid var(--color-warm-line);
+  padding-block: 1.25rem;
+}
+
+.account-detail-header-identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.account-detail-code {
+  margin: 0;
+  color: var(--color-bone);
+  font-size: clamp(1.375rem, 3.5vw, 2rem);
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .account-detail-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* Sections: content column carries the schedule task; meta column stacks
+   payment + policy as auxiliary reading. Mobile keeps the same DOM order
+   (01 → 02 → 03), which is the task-priority order. */
+
+.account-detail-sections {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+.account-detail-content,
+.account-detail-meta {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+  min-width: 0;
+}
+
+.account-detail-section {
+  display: grid;
+  gap: 1.25rem;
+  border-block-start: 1px solid var(--color-warm-line);
+  padding-block-start: clamp(1.5rem, 4vw, 2rem);
+}
+
+.account-detail-schedule-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.account-detail-fields {
+  display: grid;
+  gap: 0.875rem;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.account-detail-fields dt { margin: 0; color: var(--color-smoke); font-size: 0.8125rem; }
+.account-detail-fields dd { margin: 0.125rem 0 0; color: var(--color-bone); }
+
+.account-detail-subheading {
+  margin: 0;
+  color: var(--color-bone);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.account-detail-customer,
+.account-detail-note {
+  margin: 0;
+  color: var(--color-smoke);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.account-detail-policy {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-smoke);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 901px) {
+  .account-detail-sections {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 3rem);
+  }
+
+  .account-detail-content { grid-column: 1 / span 8; }
+  .account-detail-meta { grid-column: 9 / span 4; }
+}
+
+/* Danger zone: cancellation is a muted clay text action, dashed off from the
+   numbered sections above and kept keyboard-focusable via the shared global
+   focus-visible ring (see base.css). */
+
+.account-detail-danger {
+  display: grid;
+  gap: 0.875rem;
+  margin-top: clamp(1rem, 3vw, 1.5rem);
+  border-block-start: 1px dashed var(--color-warm-line);
+  padding-block-start: clamp(1.5rem, 4vw, 2rem);
+}
+
+.account-detail-danger-label {
+  margin: 0;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.account-detail-danger-field { max-width: 28rem; }
+
+.account-detail-danger-action {
+  justify-self: start;
+  border: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  color: var(--color-clay);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  cursor: pointer;
+}
+
+.account-detail-danger-action:hover { color: var(--color-danger); }
