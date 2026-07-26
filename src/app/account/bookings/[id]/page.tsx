@@ -15,7 +15,7 @@ export default async function AccountBookingDetailPage({ params }: Readonly<{ pa
   if (!booking) notFound();
   return (
     <section className="mx-auto max-w-4xl">
-      <p className="text-sm uppercase tracking-[0.2em] text-amber-300">
+      <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">
         Booking #{booking.id.slice(0, 8)}
       </p>
       <h1 className="mt-3 text-3xl font-semibold">Chi tiết booking</h1>
@@ -23,20 +23,20 @@ export default async function AccountBookingDetailPage({ params }: Readonly<{ pa
 
       {booking.bookingStatus !== "CANCELLED" && (
         <form
-          className="mt-6 grid gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+          className="mt-6 grid gap-2 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
           action={async (formData) => {
             "use server";
             await cancelOwnBookingAction(booking.id, String(formData.get("reason") ?? ""));
           }}
         >
           <h2 className="font-semibold">Hủy booking</h2>
-          <label className="text-sm text-stone-300" htmlFor="cancel-reason">
+          <label className="text-sm text-[var(--color-text-muted)]" htmlFor="cancel-reason">
             Lý do hủy
           </label>
-          <input id="cancel-reason" name="reason" required className="rounded-lg bg-stone-900 p-3" />
+          <input id="cancel-reason" name="reason" required className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]" />
           <button
             type="submit"
-            className="w-fit rounded-full bg-rose-400 px-4 py-2 font-semibold text-stone-950"
+            className="w-fit rounded-full bg-[var(--color-danger)] px-4 py-2 font-semibold text-[var(--color-on-action)]"
           >
             Xác nhận hủy
           </button>

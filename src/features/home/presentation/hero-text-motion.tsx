@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { getHeroState, HERO_SNAP_POINTS } from "./hero-scroll-state";
+import { getHeroSnapProgress, getHeroState } from "./hero-scroll-state";
 import { useHeroMediaPreferences } from "./use-hero-media-preferences";
 
 export function HeroTextMotion({ sectionId }: Readonly<{ sectionId: string }>) {
@@ -17,6 +17,8 @@ export function HeroTextMotion({ sectionId }: Readonly<{ sectionId: string }>) {
     if (!section) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    let disposed = false;
+    let readinessFrame: number | null = null;
     const context = gsap.context(() => {
       const brand = section.querySelector("[data-hero-state='brand']");
       const main = section.querySelector("[data-hero-state='main']");
@@ -44,6 +46,7 @@ export function HeroTextMotion({ sectionId }: Readonly<{ sectionId: string }>) {
         .to(visual, { scale: 1.035, duration: 0.2 }, 0.7)
         .to({}, { duration: 0.12 });
 
+      section.dataset.activeHeroState = "brand";
       ScrollTrigger.create({
         animation: timeline,
         trigger: section,
@@ -51,7 +54,7 @@ export function HeroTextMotion({ sectionId }: Readonly<{ sectionId: string }>) {
         end: "bottom bottom",
         scrub: 0.45,
         snap: {
-          snapTo: (value) => gsap.utils.snap([...HERO_SNAP_POINTS], value),
+          snapTo: getHeroSnapProgress,
           delay: 0.12,
           duration: { min: 0.2, max: 0.5 },
           ease: "power2.out",
@@ -62,10 +65,24 @@ export function HeroTextMotion({ sectionId }: Readonly<{ sectionId: string }>) {
           section.dataset.activeHeroState = getHeroState(progress);
         },
       });
-      section.dataset.activeHeroState = "brand";
     }, section);
 
-    return () => context.revert();
+    void document.fonts.ready.then(() => {
+      if (disposed) return;
+      readinessFrame = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        section.dataset.heroSnapReady = "true";
+      });
+    });
+
+    return () => {
+      disposed = true;
+      if (readinessFrame !== null) {
+        window.cancelAnimationFrame(readinessFrame);
+      }
+      delete section.dataset.heroSnapReady;
+      context.revert();
+    };
   }, [preferences.isDesktop, preferences.isReady, preferences.prefersReducedMotion, sectionId]);
 
   return null;

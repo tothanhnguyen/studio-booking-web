@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { actionClassName } from "@/components/ui/action";
 import type { ServiceRecord } from "@/features/service/application/service-repository";
 
 const vndFormatter = new Intl.NumberFormat("vi-VN", {
@@ -10,21 +11,23 @@ const vndFormatter = new Intl.NumberFormat("vi-VN", {
 
 export function ServiceCard({ service }: Readonly<{ service: ServiceRecord }>) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-      <p className="text-xs font-medium uppercase tracking-[0.18em] text-amber-300">
-        {service.bookingType === "ASSISTED" ? "Có hỗ trợ" : "Chỉ thuê phòng"}
-      </p>
-      <h3 className="mt-2 text-xl font-semibold">{service.name}</h3>
-      <p className="mt-3 flex-1 text-sm leading-6 text-stone-300">
+    <article className="service-row">
+      <header className="service-row__identity">
+        <p className="page-eyebrow">
+          {service.bookingType === "ASSISTED" ? "Có hỗ trợ" : "Chỉ thuê phòng"}
+        </p>
+        <h3>{service.name}</h3>
+      </header>
+      <p className="service-row__description">
         {service.description ?? `${service.durationMinutes} phút sử dụng studio.`}
       </p>
-      <div className="mt-5 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-sm text-stone-400">{service.durationMinutes} phút</p>
-          <p className="font-semibold text-stone-100">{vndFormatter.format(service.priceAmount)}</p>
-        </div>
+      <div className="service-row__details">
+        <p className="type-mono service-row__duration">{service.durationMinutes} phút</p>
+        <p className="type-mono service-row__price">
+          {vndFormatter.format(service.priceAmount)}
+        </p>
         <Link
-          className="rounded-full border border-amber-300/60 px-4 py-2 text-sm font-medium text-amber-200 hover:bg-amber-300 hover:text-stone-950"
+          className={actionClassName("secondary", true)}
           href={`/services/${service.slug}`}
         >
           Xem dịch vụ

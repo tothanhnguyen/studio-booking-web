@@ -16,9 +16,9 @@ export default async function AccountBookingsPage({ searchParams }: Readonly<{ s
   const result = await listCustomerBookings(actor, { status, page: parsePage(params.page), pageSize: 10 });
 
   return <section className="mx-auto max-w-4xl" aria-labelledby="bookings-heading">
-    <p className="text-sm uppercase tracking-[0.2em] text-amber-300">Tài khoản</p>
+    <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Tài khoản</p>
     <h1 id="bookings-heading" className="mt-3 text-3xl font-semibold">Booking của tôi</h1>
-    <p className="mt-3 text-stone-300">Theo dõi các lịch đã đặt bằng tài khoản này.</p>
+    <p className="mt-3 text-[var(--color-text-muted)]">Theo dõi các lịch đã đặt bằng tài khoản này.</p>
     <div className="mt-6"><ClaimBookingsBanner /></div>
     <div className="mt-6"><BookingFilters action="/account/bookings" status={status} /></div>
     <div className="mt-6"><BookingList result={result} detailBasePath="/account/bookings" /></div>

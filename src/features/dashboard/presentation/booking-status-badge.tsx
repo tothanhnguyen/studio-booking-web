@@ -10,12 +10,12 @@ const statusLabels: Record<BookingStatus, string> = {
 };
 
 const statusStyles: Record<BookingStatus, string> = {
-  PENDING_PAYMENT: "border-amber-300/30 bg-amber-300/10 text-amber-200",
-  PENDING: "border-sky-300/30 bg-sky-300/10 text-sky-200",
-  CONFIRMED: "border-emerald-300/30 bg-emerald-300/10 text-emerald-200",
-  CANCELLED: "border-rose-300/30 bg-rose-300/10 text-rose-200",
-  EXPIRED: "border-stone-400/30 bg-stone-400/10 text-stone-300",
-  COMPLETED: "border-violet-300/30 bg-violet-300/10 text-violet-200",
+  PENDING_PAYMENT: "border-[#c7a85c] bg-[#f0e0b8] text-[#6e4f16]",
+  PENDING: "border-[#9ab7bd] bg-[#d7e4e7] text-[#315a66]",
+  CONFIRMED: "border-[#9aba9f] bg-[#d8e5db] text-[#2f5d46]",
+  CANCELLED: "border-[#c9938b] bg-[#efd8d4] text-[#8b3e35]",
+  EXPIRED: "border-[#c9c0b6] bg-[#e3ded6] text-[#57534e]",
+  COMPLETED: "border-[#b6a3bd] bg-[#e1d9e6] text-[#594461]",
 };
 
 export function BookingStatusBadge({ status }: Readonly<{ status: BookingStatus }>) {

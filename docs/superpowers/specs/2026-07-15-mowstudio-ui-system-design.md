@@ -1,5 +1,7 @@
 # MowStudio Cozy Dark UI System — Design Specification
 
+> **Direction changed 2026-07-19:** The user-approved warm-light theme supersedes this document's dark-only palette constraints for all non-home routes. Preserve existing layouts, component architecture, accessibility requirements, business behavior, and media strategy; source colors from `src/styles/tokens.css` (Canvas `#E7E1D8`, Surface `#F7F5EF`, Raised `#FFFDF8`, Text `#1A1B18`, Action `#254238`). Legacy Void/Ink/Espresso names are compatibility aliases, not dark-color requirements. Images are intentionally unchanged in this pass.
+
 **Status:** Ready for user review
 
 **Date:** 2026-07-15

@@ -6,11 +6,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { actionClassName } from "@/components/ui/action";
+import { FormField } from "@/components/ui/form-field";
 import { createBookingAction } from "@/features/booking/application/booking-actions";
 import type { AvailableSlot } from "@/features/availability/application/availability-types";
 
+import { BookingProgress } from "./booking-progress";
+
 const steps = ["Liên hệ", "Ngày", "Khung giờ", "Xác nhận", "Giữ chỗ"];
 const time = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Ho_Chi_Minh" });
+const price = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+  maximumFractionDigits: 0,
+});
 const contactSchema = z.object({
   customerName: z.string().trim().min(2, "Vui lòng nhập họ tên."),
   customerEmail: z.email("Email không hợp lệ."),
@@ -19,7 +28,14 @@ const contactSchema = z.object({
 });
 type ContactInput = z.infer<typeof contactSchema>;
 
-export function BookingWizard({ serviceId, serviceName }: Readonly<{ serviceId: string; serviceName: string }>) {
+type BookingWizardProps = Readonly<{
+  serviceId: string;
+  serviceName: string;
+  durationMinutes: number;
+  priceAmount: number;
+}>;
+
+export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAmount }: BookingWizardProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const { register, handleSubmit, getValues, formState: { errors } } = useForm<ContactInput>({
@@ -49,20 +65,70 @@ export function BookingWizard({ serviceId, serviceName }: Readonly<{ serviceId: 
     router.push(`/booking/${result.data.bookingId}/payment`);
   }
 
-  return <div className="mt-8">
-    <ol aria-label="Các bước đặt lịch" className="grid grid-cols-5 gap-2 text-center text-xs sm:text-sm">{steps.map((label, index) => <li key={label} aria-current={index === step ? "step" : undefined} className={index === step ? "rounded-full bg-amber-300 px-2 py-2 text-stone-950" : "rounded-full bg-white/5 px-2 py-2 text-stone-400"}>{index + 1}. {label}</li>)}</ol>
-    <div className="mt-8 rounded-3xl border border-white/10 p-6">
-      {step === 0 && <form className="grid gap-4" onSubmit={handleSubmit(() => setStep(1))}><h2 className="text-2xl font-semibold">Thông tin liên hệ</h2>
-        <label className="grid gap-1">Họ tên<input className="rounded-lg bg-stone-900 p-3" {...register("customerName")} /></label>{errors.customerName && <p role="alert" className="text-red-300">{errors.customerName.message}</p>}
-        <label className="grid gap-1">Email<input type="email" className="rounded-lg bg-stone-900 p-3" {...register("customerEmail")} /></label>{errors.customerEmail && <p role="alert" className="text-red-300">{errors.customerEmail.message}</p>}
-        <label className="grid gap-1">Số điện thoại<input className="rounded-lg bg-stone-900 p-3" {...register("customerPhone")} /></label>{errors.customerPhone && <p role="alert" className="text-red-300">{errors.customerPhone.message}</p>}
-        <label className="grid gap-1">Ghi chú<textarea className="rounded-lg bg-stone-900 p-3" {...register("note")} /></label>
-        <button type="submit" className="rounded-full bg-amber-300 px-5 py-3 font-semibold text-stone-950">Tiếp tục</button></form>}
-      {step === 1 && <div className="grid gap-4"><h2 className="text-2xl font-semibold">Chọn ngày</h2><input aria-label="Ngày đặt studio" type="date" value={date} onChange={(e) => setDate(e.target.value)} className="rounded-lg bg-stone-900 p-3" /><div className="flex gap-3"><button onClick={() => setStep(0)}>Quay lại</button><button disabled={!date || loading} onClick={loadSlots} className="rounded-full bg-amber-300 px-5 py-3 font-semibold text-stone-950 disabled:opacity-50">Xem giờ trống</button></div></div>}
-      {step === 2 && <div><h2 className="text-2xl font-semibold">Chọn khung giờ</h2><div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">{slots.map((slot) => <button key={slot.startTime} aria-pressed={startTime === slot.startTime} onClick={() => setStartTime(slot.startTime)} className={startTime === slot.startTime ? "rounded-xl bg-amber-300 p-3 text-stone-950" : "rounded-xl border border-white/10 p-3"}>{time.format(new Date(slot.startTime))}</button>)}</div>{slots.length === 0 && <p className="mt-4 text-stone-300">Ngày này chưa có giờ phù hợp.</p>}<div className="mt-5 flex gap-3"><button onClick={() => setStep(1)}>Quay lại</button><button disabled={!startTime} onClick={() => setStep(3)} className="rounded-full bg-amber-300 px-5 py-3 font-semibold text-stone-950 disabled:opacity-50">Tiếp tục</button></div></div>}
-      {step === 3 && <div className="grid gap-4"><h2 className="text-2xl font-semibold">Xác nhận giữ chỗ</h2><p><strong>{serviceName}</strong></p><p>{getValues("customerName")} · {getValues("customerEmail")}</p><p>{date} · {time.format(new Date(startTime))}</p><div className="flex gap-3"><button onClick={() => setStep(2)}>Quay lại</button><button disabled={loading} onClick={submit} className="rounded-full bg-amber-300 px-5 py-3 font-semibold text-stone-950">Giữ chỗ 10 phút</button></div></div>}
-      {step === 4 && <div><h2 className="text-2xl font-semibold">Đang tạo giữ chỗ</h2><p className="mt-3 text-stone-300">Vui lòng chờ trong giây lát…</p></div>}
-      {message && <p role="alert" className="mt-4 text-red-300">{message}</p>}
+  return <div className="booking-wizard">
+    <BookingProgress currentStep={step} steps={steps} />
+    <div className="booking-composition">
+      <aside className="booking-context ui-surface" aria-label="Thông tin dịch vụ">
+        <p className="page-eyebrow">Đang đặt</p>
+        <h2>{serviceName}</h2>
+        <dl>
+          <div><dt>Thời lượng</dt><dd className="type-mono">{durationMinutes} phút</dd></div>
+          <div><dt>Giá dịch vụ</dt><dd className="type-mono">{price.format(priceAmount)}</dd></div>
+        </dl>
+        <p className="booking-context__deposit">Cọc 30% ở bước thanh toán</p>
+      </aside>
+
+      <section className="booking-window ui-surface" aria-busy={loading} key={step}>
+        {step === 0 && <form className="booking-form" onSubmit={handleSubmit(() => setStep(1))}>
+          <h2 className="booking-step-title">Thông tin liên hệ</h2>
+          <FormField label="Họ tên" htmlFor="customer-name" error={errors.customerName?.message}>
+            <input id="customer-name" aria-invalid={Boolean(errors.customerName)} {...register("customerName")} />
+          </FormField>
+          <FormField label="Email" htmlFor="customer-email" error={errors.customerEmail?.message}>
+            <input id="customer-email" type="email" aria-invalid={Boolean(errors.customerEmail)} {...register("customerEmail")} />
+          </FormField>
+          <FormField label="Số điện thoại" htmlFor="customer-phone" error={errors.customerPhone?.message}>
+            <input id="customer-phone" aria-invalid={Boolean(errors.customerPhone)} {...register("customerPhone")} />
+          </FormField>
+          <FormField label="Ghi chú" htmlFor="booking-note" error={errors.note?.message}>
+            <textarea id="booking-note" aria-invalid={Boolean(errors.note)} {...register("note")} />
+          </FormField>
+          <button type="submit" className={actionClassName("primary")}>Tiếp tục</button>
+        </form>}
+
+        {step === 1 && <div className="booking-step">
+          <h2 className="booking-step-title">Chọn ngày</h2>
+          <FormField label="Ngày đặt studio" htmlFor="booking-date">
+            <input id="booking-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
+          </FormField>
+          <div className="booking-actions">
+            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(0)}>Quay lại</button>
+            <button type="button" disabled={!date || loading} onClick={loadSlots} className={actionClassName("primary")}>Xem giờ trống</button>
+          </div>
+        </div>}
+
+        {step === 2 && <div className="booking-step">
+          <h2 className="booking-step-title">Chọn khung giờ</h2>
+          <div className="booking-slots">{slots.map((slot) => <button type="button" key={slot.startTime} aria-pressed={startTime === slot.startTime} onClick={() => setStartTime(slot.startTime)} className="booking-slot type-mono">{time.format(new Date(slot.startTime))}</button>)}</div>
+          {slots.length === 0 && <p className="booking-empty">Ngày này chưa có giờ phù hợp.</p>}
+          <div className="booking-actions">
+            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(1)}>Quay lại</button>
+            <button type="button" disabled={!startTime} onClick={() => setStep(3)} className={actionClassName("primary")}>Tiếp tục</button>
+          </div>
+        </div>}
+
+        {step === 3 && <div className="booking-step">
+          <h2 className="booking-step-title">Xác nhận giữ chỗ</h2>
+          <div className="booking-confirmation"><p><strong>{serviceName}</strong></p><p>{getValues("customerName")} · {getValues("customerEmail")}</p><p className="type-mono">{date} · {time.format(new Date(startTime))}</p></div>
+          <div className="booking-actions">
+            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(2)}>Quay lại</button>
+            <button type="button" disabled={loading} onClick={submit} className={actionClassName("primary")}>Giữ chỗ 10 phút</button>
+          </div>
+        </div>}
+
+        {step === 4 && <div className="booking-step"><h2 className="booking-step-title">Đang tạo giữ chỗ</h2><p className="booking-loading">Vui lòng chờ trong giây lát…</p></div>}
+        {message && <p role="alert" className="booking-message">{message}</p>}
+      </section>
     </div>
   </div>;
 }

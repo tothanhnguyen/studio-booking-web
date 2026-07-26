@@ -16,23 +16,23 @@ export function ServiceForm({ rooms, initialValue }: Readonly<{ rooms: RoomOptio
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ServiceInput>({ resolver: zodResolver(serviceInputSchema), defaultValues: defaults });
 
   return (
-    <form data-service-slug={initialValue?.slug} className="grid gap-3 rounded-2xl border border-white/10 p-5" onSubmit={handleSubmit(async (value) => setResult(await saveServiceAction(value)))}>
+    <form data-service-slug={initialValue?.slug} className="grid gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" onSubmit={handleSubmit(async (value) => setResult(await saveServiceAction(value)))}>
       <input type="hidden" defaultValue={initialValue?.id} {...register("id")} /><input type="hidden" value="VND" {...register("currency")} />
-      <label className="grid gap-1 text-sm">Phòng<select defaultValue={defaults.roomId} className="rounded-lg bg-stone-900 p-2" {...register("roomId")}>{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
-      <label className="grid gap-1 text-sm">Tên dịch vụ<input defaultValue={defaults.name} className="rounded-lg bg-stone-900 p-2" {...register("name")} /></label>
-      <label className="grid gap-1 text-sm">Slug<input defaultValue={defaults.slug} className="rounded-lg bg-stone-900 p-2" {...register("slug")} /></label>
-      <label className="grid gap-1 text-sm">Mô tả<textarea defaultValue={defaults.description ?? ""} className="rounded-lg bg-stone-900 p-2" {...register("description")} /></label>
-      <label className="grid gap-1 text-sm">Loại booking<select defaultValue={defaults.bookingType} className="rounded-lg bg-stone-900 p-2" {...register("bookingType")}><option value="ROOM_ONLY">Chỉ thuê phòng</option><option value="ASSISTED">Có hỗ trợ</option></select></label>
+      <label className="grid gap-1 text-sm">Phòng<select defaultValue={defaults.roomId} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("roomId")}>{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
+      <label className="grid gap-1 text-sm">Tên dịch vụ<input defaultValue={defaults.name} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("name")} /></label>
+      <label className="grid gap-1 text-sm">Slug<input defaultValue={defaults.slug} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("slug")} /></label>
+      <label className="grid gap-1 text-sm">Mô tả<textarea defaultValue={defaults.description ?? ""} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("description")} /></label>
+      <label className="grid gap-1 text-sm">Loại booking<select defaultValue={defaults.bookingType} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("bookingType")}><option value="ROOM_ONLY">Chỉ thuê phòng</option><option value="ASSISTED">Có hỗ trợ</option></select></label>
       <div className="grid grid-cols-2 gap-3">
-        <label className="grid gap-1 text-sm">Thời lượng (phút)<input type="number" defaultValue={defaults.durationMinutes} className="rounded-lg bg-stone-900 p-2" {...register("durationMinutes", { valueAsNumber: true })} /></label>
-        <label className="grid gap-1 text-sm">Đệm (phút)<input type="number" defaultValue={defaults.bufferMinutes} className="rounded-lg bg-stone-900 p-2" {...register("bufferMinutes", { valueAsNumber: true })} /></label>
-        <label className="grid gap-1 text-sm">Giá (VND)<input type="number" defaultValue={defaults.priceAmount} className="rounded-lg bg-stone-900 p-2" {...register("priceAmount", { valueAsNumber: true })} /></label>
-        <label className="grid gap-1 text-sm">Thứ tự<input type="number" defaultValue={defaults.displayOrder} className="rounded-lg bg-stone-900 p-2" {...register("displayOrder", { valueAsNumber: true })} /></label>
+        <label className="grid gap-1 text-sm">Thời lượng (phút)<input type="number" defaultValue={defaults.durationMinutes} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("durationMinutes", { valueAsNumber: true })} /></label>
+        <label className="grid gap-1 text-sm">Đệm (phút)<input type="number" defaultValue={defaults.bufferMinutes} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("bufferMinutes", { valueAsNumber: true })} /></label>
+        <label className="grid gap-1 text-sm">Giá (VND)<input type="number" defaultValue={defaults.priceAmount} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("priceAmount", { valueAsNumber: true })} /></label>
+        <label className="grid gap-1 text-sm">Thứ tự<input type="number" defaultValue={defaults.displayOrder} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" {...register("displayOrder", { valueAsNumber: true })} /></label>
       </div>
       <label className="flex gap-2 text-sm"><input type="checkbox" defaultChecked={defaults.isActive} {...register("isActive")} /> Đang hoạt động</label>
-      {Object.values(errors)[0]?.message && <p role="alert" className="text-sm text-red-300">{String(Object.values(errors)[0]?.message)}</p>}
-      {result && <p role="status" className={result.ok ? "text-sm text-emerald-300" : "text-sm text-red-300"}>{result.message}</p>}
-      <button disabled={isSubmitting || rooms.length === 0} className="rounded-full bg-amber-300 px-4 py-2 font-semibold text-stone-950 disabled:opacity-50">{isSubmitting ? "Đang lưu…" : "Lưu dịch vụ"}</button>
+      {Object.values(errors)[0]?.message && <p role="alert" className="text-sm text-[var(--color-danger)]">{String(Object.values(errors)[0]?.message)}</p>}
+      {result && <p role="status" className={result.ok ? "text-sm text-[var(--color-success)]" : "text-sm text-[var(--color-danger)]"}>{result.message}</p>}
+      <button disabled={isSubmitting || rooms.length === 0} className="rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)] disabled:opacity-50">{isSubmitting ? "Đang lưu…" : "Lưu dịch vụ"}</button>
     </form>
   );
 }

@@ -1,0 +1,38 @@
+:root {
+  color-scheme: light;
+  --color-canvas: #e7e1d8;
+  --color-surface: #f7f5ef;
+  --color-surface-raised: #fffdf8;
+  --color-text: #1a1b18;
+  --color-text-muted: #57534e;
+  --color-text-subtle: #756f67;
+  --color-border: #c9c0b6;
+  --color-control-border: #83796e;
+  --color-accent: #4f3714;
+  --color-action: #254238;
+  --color-action-hover: #1d352d;
+  --color-on-action: #f7f5ef;
+  --color-success: #2f5d46;
+  --color-warning: #6e4f16;
+  --color-danger: #8b3e35;
+  --color-info: #315a66;
+  --color-focus: #254238;
+  --shadow-surface: 0 0.75rem 2.25rem rgb(59 45 31 / 10%);
+  --color-void: var(--color-canvas);
+  --color-ink: var(--color-surface);
+  --color-espresso: var(--color-surface-raised);
+  --color-warm-line: var(--color-border);
+  --color-bone: var(--color-text);
+  --color-brass: var(--color-accent);
+  --color-champagne: var(--color-action);
+  --color-sage: var(--color-success);
+  --color-clay: var(--color-danger);
+  --color-smoke: var(--color-text-muted);
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 2rem;
+  --motion-fast: 160ms;
+  --motion-base: 220ms;
+  --content-public: 92rem;
+  --content-transaction: 72rem;
+}

@@ -1,0 +1,108 @@
+.ui-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ui-field label {
+  color: var(--color-bone);
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.ui-field :where(input, select, textarea) {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 0.75rem 0.875rem;
+  color: var(--color-bone);
+  font: inherit;
+  transition:
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) ease,
+    background-color var(--motion-fast) ease;
+}
+
+.ui-field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.ui-field :where(input, textarea)::placeholder {
+  color: var(--color-smoke);
+  opacity: 0.78;
+}
+
+.ui-field :where(input, select, textarea):focus {
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px rgb(37 66 56 / 18%);
+}
+
+.ui-field :where(input, select, textarea)[aria-invalid="true"] {
+  border-color: var(--color-clay);
+}
+
+.ui-field :where(input, select, textarea):disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.ui-field__hint,
+.ui-field__error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.ui-field__hint { color: var(--color-smoke); }
+.ui-field__error { color: var(--color-clay); }
+
+.booking-form,
+.booking-step {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.booking-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.booking-actions .ui-action { flex: 1 1 10rem; }
+
+.booking-slots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.booking-slot {
+  min-height: 3rem;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 0.75rem;
+  color: var(--color-bone);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease;
+}
+
+.booking-slot[aria-pressed="true"] {
+  border-color: var(--color-action);
+  background: color-mix(in srgb, var(--color-action) 14%, var(--color-surface-raised));
+  color: var(--color-bone);
+}
+
+@media (hover: hover) {
+  .booking-slot:hover { border-color: var(--color-brass); }
+}
+
+@media (min-width: 640px) {
+  .booking-slots { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

@@ -50,7 +50,10 @@ describe("ScrollVideoHero", () => {
   it("uses exactly three viewport lengths on desktop", () => {
     const { container } = render(<ScrollVideoHero />);
 
-    expect(container.querySelector("[data-scroll-canvas-section]")).toHaveClass("md:min-h-[300vh]");
+    expect(container.querySelector("[data-scroll-canvas-section]")).toHaveClass(
+      "home-hero",
+      "md:min-h-[300vh]",
+    );
     expect(container.querySelectorAll("[data-hero-state]")).toHaveLength(3);
   });
 

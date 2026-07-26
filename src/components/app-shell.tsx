@@ -3,24 +3,30 @@ import Link from "next/link";
 
 import type { Actor } from "@/features/auth/application/current-actor";
 
+import { SiteFooter } from "./site-footer";
+import { StudioNavigationLinks } from "./studio-navigation";
+
 type AppShellProps = Readonly<{
   actor: Actor | null;
   children: ReactNode;
-  onSignOut?: () => Promise<void>;
+  onSignOut: () => Promise<void>;
 }>;
 
-const studioLinks = [
-  { href: "/studios/photo-studio", label: "Photo" },
-  { href: "/studios/voice-podcast-booth", label: "Podcast" },
-  { href: "/studios/music-studio", label: "Music" },
-] as const;
+type NavigationAccountActionsProps = Readonly<{
+  actor: Actor | null;
+  onSignOut: () => Promise<void>;
+}>;
 
-function AccountActions({ actor, onSignOut }: Pick<AppShellProps, "actor" | "onSignOut">) {
+function NavigationAccountActions({ actor, onSignOut }: NavigationAccountActionsProps) {
   if (!actor) {
     return (
       <>
-        <Link className="site-nav-auth-link" href="/login">Đăng nhập</Link>
-        <Link className="site-nav-cta" href="/register">Đăng ký</Link>
+        <Link className="site-nav-auth-link" href="/login">
+          Đăng nhập
+        </Link>
+        <Link className="site-nav-cta" href="/register">
+          Đăng ký
+        </Link>
       </>
     );
   }
@@ -29,8 +35,14 @@ function AccountActions({ actor, onSignOut }: Pick<AppShellProps, "actor" | "onS
   const accountLabel = actor.role === "ADMIN" ? "Quản trị" : "Booking của tôi";
   return (
     <>
-      <Link className="site-nav-auth-link" href={accountHref}>{accountLabel}</Link>
-      {actor.email ? <span className="site-nav-email" title={actor.email}>{actor.email}</span> : null}
+      <Link className="site-nav-auth-link" href={accountHref}>
+        {accountLabel}
+      </Link>
+      {actor.email ? (
+        <span className="site-nav-email" title={actor.email}>
+          {actor.email}
+        </span>
+      ) : null}
       <form action={onSignOut}>
         <button className="site-nav-logout">Đăng xuất</button>
       </form>
@@ -40,7 +52,7 @@ function AccountActions({ actor, onSignOut }: Pick<AppShellProps, "actor" | "onS
 
 export function AppShell({ actor, children, onSignOut }: AppShellProps) {
   return (
-    <div className="app-shell min-h-screen bg-[#070807] text-stone-100">
+    <div className="app-shell min-h-screen">
       <header className="site-header">
         <div className="site-header-inner">
           <Link aria-label="MOW STUDIO — Trang chủ" className="site-wordmark" href="/">
@@ -48,18 +60,25 @@ export function AppShell({ actor, children, onSignOut }: AppShellProps) {
             <span className="site-wordmark-divider" aria-hidden="true" />
             <span className="site-wordmark-secondary">STUDIO</span>
           </Link>
+          {/* Both navigation variants stay mounted so CSS can switch layouts without viewport state. */}
           <nav aria-label="Điều hướng studio" className="site-nav">
             <div className="site-room-links">
-              {studioLinks.map((link) => (
-                <Link href={link.href} key={link.href}>{link.label}</Link>
-              ))}
+              <StudioNavigationLinks />
             </div>
             <span className="site-nav-divider" aria-hidden="true" />
-            <AccountActions actor={actor} onSignOut={onSignOut} />
+            <NavigationAccountActions actor={actor} onSignOut={onSignOut} />
           </nav>
+          <details className="site-mobile-menu">
+            <summary>Menu</summary>
+            <nav aria-label="Điều hướng mobile">
+              <StudioNavigationLinks />
+              <NavigationAccountActions actor={actor} onSignOut={onSignOut} />
+            </nav>
+          </details>
         </div>
       </header>
       <main className="app-main mx-auto w-full max-w-6xl px-6 py-12">{children}</main>
+      <SiteFooter />
     </div>
   );
 }

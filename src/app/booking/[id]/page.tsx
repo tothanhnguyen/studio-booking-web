@@ -9,5 +9,17 @@ export const dynamic = "force-dynamic";
 export default async function BookingPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const service = await new PrismaServiceRepository(prisma).findActiveById((await params).id);
   if (!service) notFound();
-  return <section aria-labelledby="booking-heading" className="mx-auto max-w-4xl"><p className="text-sm uppercase tracking-[0.2em] text-amber-300">Đặt lịch</p><h1 id="booking-heading" className="mt-2 text-4xl font-semibold">{service.name}</h1><BookingWizard serviceId={service.id} serviceName={service.name} /></section>;
+
+  return (
+    <section aria-labelledby="booking-heading" className="booking-page">
+      <p className="page-eyebrow">Đặt lịch</p>
+      <h1 id="booking-heading">{service.name}</h1>
+      <BookingWizard
+        durationMinutes={service.durationMinutes}
+        priceAmount={service.priceAmount}
+        serviceId={service.id}
+        serviceName={service.name}
+      />
+    </section>
+  );
 }

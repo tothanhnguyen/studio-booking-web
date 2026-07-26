@@ -23,23 +23,54 @@ test("home hero renders HTML content and opens the studio catalog", async ({ pag
   await expect(page).toHaveURL(/\/studios$/);
 });
 
-test("desktop maps scroll progress to canvas frames", async ({ page }) => {
+test("desktop maps the three scroll stops to selected canvas frames", async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 0) < 768, "Desktop canvas only");
   await page.goto("/");
 
   const canvas = page.locator("canvas[data-hero-canvas]");
+  const section = page.locator("[data-scroll-canvas-section]");
   await expect(canvas).toBeVisible();
   await expect(canvas).toHaveAttribute("data-frame-index", "0");
+  await expect(section).toHaveAttribute("data-hero-snap-ready", "true");
+  await expect(canvas).toHaveClass(/opacity-100/);
 
-  await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 1.25)));
-  await expect
-    .poll(async () => Number(await canvas.getAttribute("data-frame-index")))
-    .toBeGreaterThan(0);
-  await expect(page.locator("[data-scroll-canvas-section]")).toHaveAttribute("data-active-hero-state", "main");
+  const scrollToProgress = async (progress: number) => {
+    await page.evaluate((targetProgress) => {
+      const hero = document.querySelector<HTMLElement>("[data-scroll-canvas-section]");
+      if (!hero) throw new Error("Hero section not found");
+      const scrollRange = hero.offsetHeight - window.innerHeight;
+      window.scrollTo(0, hero.offsetTop + scrollRange * targetProgress);
+    }, progress);
+  };
 
-  await page.evaluate(() => window.scrollTo(0, Math.round(window.innerHeight * 1.75)));
-  await expect(page.locator("[data-scroll-canvas-section]")).toHaveAttribute("data-active-hero-state", "rooms");
+  const getScrollProgress = () =>
+    page.evaluate(() => {
+      const hero = document.querySelector<HTMLElement>("[data-scroll-canvas-section]");
+      if (!hero) throw new Error("Hero section not found");
+      const scrollRange = hero.offsetHeight - window.innerHeight;
+      return (window.scrollY - hero.offsetTop) / scrollRange;
+    });
+
+  await scrollToProgress(0.48);
+  await expect(canvas).toHaveAttribute("data-frame-index", "32");
+  await expect(section).toHaveAttribute("data-active-hero-state", "main");
+  await expect.poll(getScrollProgress).toBeCloseTo(0.48, 2);
+
+  await scrollToProgress(1);
+  await expect(canvas).toHaveAttribute("data-frame-index", "56");
+  await expect(section).toHaveAttribute("data-active-hero-state", "rooms");
+  await expect.poll(getScrollProgress).toBeCloseTo(1, 2);
   await expect(page.getByRole("heading", { name: "Mỗi ý tưởng cần một không gian vừa vặn" })).toBeVisible();
+
+  await scrollToProgress(0.48);
+  await expect(canvas).toHaveAttribute("data-frame-index", "32");
+  await expect(section).toHaveAttribute("data-active-hero-state", "main");
+  await expect.poll(getScrollProgress).toBeCloseTo(0.48, 2);
+
+  await scrollToProgress(0);
+  await expect(canvas).toHaveAttribute("data-frame-index", "0");
+  await expect(section).toHaveAttribute("data-active-hero-state", "brand");
+  await expect.poll(getScrollProgress).toBeCloseTo(0, 2);
 });
 
 test("mobile uses poster only and never requests the desktop sequence", async ({ page }) => {
