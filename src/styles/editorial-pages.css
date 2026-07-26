@@ -15,7 +15,7 @@
 
 .auth-split-wordmark {
   margin: 0;
-  color: var(--color-text-subtle);
+  color: var(--color-text-muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
   font-weight: 600;
@@ -101,6 +101,12 @@
 .auth-split-brand-overlay .section-marker-rule { background: rgb(247 245 239 / 35%); }
 
 .auth-split-brand-statement { margin: 0; color: #f7f5ef; }
+
+/* Marquee accent (spec 5.5): brand overlay is dark-on-image, so the track
+   needs light text/border rather than the page-default warm-dark tokens. */
+.auth-split-brand-overlay .marquee { border-block-color: rgb(247 245 239 / 35%); }
+
+.auth-split-brand-overlay .marquee-track > span { color: rgb(247 245 239 / 80%); }
 
 @media (min-width: 1024px) {
   .auth-split {
@@ -355,22 +361,6 @@
   .booking-ticket { animation: none; }
 }
 
-/* Booking summary: ticket stub — dashed tear-off edge, mono totals. */
-
-.booking-summary {
-  border-block-start: 1px dashed var(--color-border);
-  padding-block-start: clamp(1.25rem, 3vw, 2rem);
-}
-
-@media (min-width: 901px) {
-  .booking-summary {
-    border-block-start: 0;
-    border-inline-start: 1px dashed var(--color-border);
-    padding-block-start: 0;
-    padding-inline-start: clamp(1.25rem, 3vw, 2rem);
-  }
-}
-
 /* Confirmation page: booking receipt restyle — one ticket, sections torn apart by
    dashed rules instead of stacked cards. Composes `.booking-ticket .ui-surface` for
    the outer frame and resets the nested `.ui-surface` cards (booking summary, payment
@@ -566,6 +556,7 @@
 }
 
 .account-filters-select {
+  min-height: 2.75rem;
   border: 1px solid var(--color-control-border);
   border-radius: var(--radius-sm);
   background: var(--color-espresso);
@@ -828,6 +819,9 @@
 .account-detail-danger-field { max-width: 28rem; }
 
 .account-detail-danger-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   justify-self: start;
   border: 0;
   background: transparent;

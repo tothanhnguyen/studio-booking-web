@@ -112,7 +112,7 @@
 }
 
 .admin-nav-mobile-select {
-  min-height: 44px;
+  min-height: 2.75rem;
   min-width: 11rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-control-border);
@@ -390,6 +390,7 @@
 .admin-text-action {
   display: inline-flex;
   align-items: center;
+  min-height: 2.75rem;
   border: none;
   background: transparent;
   padding: 0.25rem 0.125rem;

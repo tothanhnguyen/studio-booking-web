@@ -135,9 +135,11 @@
 .admin-catalog-summary {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1rem;
+  min-height: 2.75rem;
+  padding-block: 0.5rem;
   cursor: pointer;
   list-style: none;
 }
