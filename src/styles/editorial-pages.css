@@ -129,8 +129,9 @@
 
 /* Room story (/studios/[slug]), service sheet (/services/[slug]), booking
    ticket transitions, confirmation receipt and old payment receipt layouts
-   are superseded by proof-room-*/proof-service-*/log-frame/confirmation-*/
-   payment-ledger in proof-sheet.css (see that file for the live styles). */
+   are superseded by the proof-room, proof-service, log-frame, confirmation
+   and payment-ledger classes in proof-sheet.css (see that file for the
+   live styles). */
 
 /* /account/bookings: page shell, claim strip and filters. History rail is the
    .account-log-rail/.account-log-row session-log device in proof-sheet.css. */
