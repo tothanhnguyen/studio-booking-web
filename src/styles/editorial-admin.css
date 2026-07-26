@@ -243,3 +243,173 @@
   gap: 0.4rem;
 }
 
+/* Agenda + schedule --------------------------------------------------------
+   Calendar (day-grouped agenda, no month/week grid) and the schedule/blocked-
+   slots pages. Reuses .admin-row-list/.admin-row for hairline rows and
+   .type-mono for time/room codes rather than duplicating row chrome. */
+
+.admin-agenda {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-agenda {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.admin-agenda-day {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-agenda-day-heading {
+  margin: 0;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Room accent bar mirrors .account-ticket[data-room-material]::before. */
+.admin-agenda-entry {
+  position: relative;
+  padding-inline-start: 1.75rem;
+}
+
+.admin-agenda-entry::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.9rem;
+  inset-inline-start: 1rem;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-text-subtle);
+}
+
+.admin-agenda-entry[data-room-material="photo"]::before { background: var(--color-brass); }
+.admin-agenda-entry[data-room-material="music"]::before { background: var(--color-sage); }
+
+.admin-agenda-time {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .admin-agenda-entry {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+/* Schedule editor: working-hours + block-creation forms, sharing FormField
+   (.ui-field) and .ui-surface card chrome — see forms.css for field styles. */
+
+.admin-schedule-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-schedule-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.admin-schedule-form-heading {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+/* Blocked slots: agenda/timeline rows emphasizing room + time range. */
+
+.admin-blocked-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.admin-blocked-list > li {
+  border-top: 1px solid var(--color-border);
+  transition: background-color var(--motion-fast) ease;
+}
+
+.admin-blocked-list > li:first-child { border-top: none; }
+
+.admin-blocked-list > li:hover,
+.admin-blocked-list > li:focus-within {
+  background: var(--color-surface-raised);
+}
+
+.admin-blocked-row {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .admin-blocked-row {
+    grid-template-columns: minmax(9rem, 1.2fr) minmax(11rem, 1.4fr) auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.admin-blocked-room {
+  margin: 0;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.admin-blocked-time {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.admin-blocked-reason {
+  margin: 0.15rem 0 0;
+  color: var(--color-text-subtle);
+  font-size: 0.8125rem;
+}
+
+/* Muted text action — a quiet delete affordance detached from the
+   primary/secondary/danger chip buttons in action.ts; visible focus ring,
+   clay only on the danger variant so it reads as calm, not alarming. */
+
+.admin-text-action {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.125rem;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--motion-fast) ease;
+}
+
+.admin-text-action:hover { color: var(--color-text); }
+
+.admin-text-action--danger { color: var(--color-danger); }
+
+.admin-text-action--danger:hover { text-decoration: underline; }
+
+.admin-text-action:focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+

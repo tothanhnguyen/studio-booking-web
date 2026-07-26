@@ -1,6 +1,8 @@
 import { addDays } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { getAdminCalendar } from "@/features/dashboard/application/admin-booking-queries";
 import { BookingCalendar } from "@/features/dashboard/presentation/booking-calendar";
@@ -28,14 +30,21 @@ export default async function AdminBookingCalendarPage({ searchParams }: Readonl
   const rangeEnd = addDays(toUtcFromStudioLocal(to, "00:00"), 1);
   const bookings = await getAdminCalendar(actor, { from: rangeStart, to: rangeEnd });
 
-  return <section aria-labelledby="calendar-heading">
-    <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Asia/Ho_Chi_Minh</p>
-    <h1 id="calendar-heading" className="mt-3 text-3xl font-semibold">Lịch booking</h1>
-    <form action="/admin/bookings/calendar" className="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-      <label className="grid gap-1 text-sm"><span className="text-[var(--color-text-muted)]">Từ ngày</span><input className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] px-3 py-2 text-[var(--color-text)]" type="date" name="from" defaultValue={from} /></label>
-      <label className="grid gap-1 text-sm"><span className="text-[var(--color-text-muted)]">Đến ngày</span><input className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] px-3 py-2 text-[var(--color-text)]" type="date" name="to" defaultValue={to} /></label>
-      <button className="rounded-full bg-[var(--color-action)] px-4 py-2 text-sm font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]">Xem lịch</button>
-    </form>
-    <div className="mt-6"><BookingCalendar bookings={bookings} /></div>
-  </section>;
+  return (
+    <div className="admin-view">
+      <PageHeading eyebrow="Asia/Ho_Chi_Minh" headingId="calendar-heading" title="Lịch booking" />
+
+      <form action="/admin/bookings/calendar" className="account-filters">
+        <label className="account-filters-label"><span>Từ ngày</span><input className="account-filters-select" type="date" name="from" defaultValue={from} /></label>
+        <label className="account-filters-label"><span>Đến ngày</span><input className="account-filters-select" type="date" name="to" defaultValue={to} /></label>
+        <button className="ui-action ui-action--primary ui-action--compact">Xem lịch</button>
+      </form>
+
+      <section aria-labelledby="calendar-list-heading" className="admin-section">
+        <SectionMarker index={1} label="Danh sách theo ngày" />
+        <h2 className="sr-only" id="calendar-list-heading">Danh sách theo ngày</h2>
+        <BookingCalendar bookings={bookings} />
+      </section>
+    </div>
+  );
 }
