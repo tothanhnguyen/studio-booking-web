@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { actionClassName } from "@/components/ui/action";
 import type { ServiceRecord } from "@/features/service/application/service-repository";
+import { RoomVisual } from "@/features/studio-room/presentation/room-visual";
 
 const vndFormatter = new Intl.NumberFormat("vi-VN", {
   currency: "VND",
@@ -12,9 +13,10 @@ const vndFormatter = new Intl.NumberFormat("vi-VN", {
 export type ServiceCardProps = Readonly<{
   service: ServiceRecord;
   index: number;
+  visual?: { slug: string; variant: "detail-1" | "detail-2" };
 }>;
 
-export function ServiceCard({ index, service }: ServiceCardProps) {
+export function ServiceCard({ index, service, visual }: ServiceCardProps) {
   return (
     <article className="service-row log-row">
       <p className="log-row__index type-mono">{String(index).padStart(2, "0")}</p>
@@ -39,6 +41,16 @@ export function ServiceCard({ index, service }: ServiceCardProps) {
           Xem dịch vụ
         </Link>
       </div>
+      {visual ? (
+        <div className="service-row__thumb">
+          <RoomVisual
+            alt={`Phòng`}
+            className="service-row__thumb-image"
+            slug={visual.slug}
+            variant={visual.variant}
+          />
+        </div>
+      ) : null}
     </article>
   );
 }

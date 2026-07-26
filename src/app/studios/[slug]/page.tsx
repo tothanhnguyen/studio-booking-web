@@ -122,7 +122,14 @@ export default async function RoomPage({ params }: RoomPageProps) {
                   delayMs={Math.min(index * STAGGER_STEP_MS, STAGGER_CAP_MS)}
                   key={service.id}
                 >
-                  <ServiceCard index={index + 1} service={service} />
+                  <ServiceCard
+                    index={index + 1}
+                    service={service}
+                    visual={{
+                      slug: room.slug,
+                      variant: index % 2 === 0 ? "detail-1" : "detail-2",
+                    }}
+                  />
                 </ScrollReveal>
               ))}
             </div>

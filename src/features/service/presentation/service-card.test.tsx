@@ -37,4 +37,23 @@ describe("ServiceCard", () => {
     render(<ServiceCard index={3} service={serviceFixture} />);
     expect(screen.getByText("03")).toBeInTheDocument();
   });
+
+  it("renders a thumbnail when visual prop is provided", () => {
+    render(
+      <ServiceCard
+        index={1}
+        service={serviceFixture}
+        visual={{ slug: "photo-studio", variant: "detail-1" }}
+      />,
+    );
+    expect(screen.getByTestId("room-visual")).toBeInTheDocument();
+    expect(
+      screen.getByAltText("Phòng"),
+    ).toBeInTheDocument();
+  });
+
+  it("does not render a thumbnail when visual prop is absent", () => {
+    render(<ServiceCard index={1} service={serviceFixture} />);
+    expect(screen.queryByTestId("room-visual")).not.toBeInTheDocument();
+  });
 });
