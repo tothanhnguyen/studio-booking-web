@@ -40,7 +40,7 @@ export default async function AdminServicesPage() {
           <ul className="admin-row-list">
             {services.map((service) => (
               <li className="admin-row" key={service.id}>
-                <details open>
+                <details>
                   <summary className="admin-catalog-summary">
                     <span className="admin-row-primary">{service.name}</span>
                     <span className="type-mono admin-row-secondary">{service.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>

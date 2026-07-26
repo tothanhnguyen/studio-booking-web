@@ -35,7 +35,7 @@ export default async function AdminRoomsPage() {
           <ul className="admin-row-list">
             {rooms.map((room) => (
               <li className="admin-row" key={room.id}>
-                <details open>
+                <details>
                   <summary className="admin-catalog-summary">
                     <span className="admin-row-primary">{room.name}</span>
                     <span className="type-mono admin-row-secondary">{room.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>

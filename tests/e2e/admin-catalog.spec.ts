@@ -7,6 +7,8 @@ test("admin edits a service and public catalog reflects the change", async ({ co
   ]);
   await page.goto("/admin/services");
 
+  await page.locator('details:has(form[data-service-slug="photo-room-rental"]) summary').click();
+
   const form = page.locator('form[data-service-slug="photo-room-rental"]');
   const nameInput = form.locator('input[name="name"]');
   const originalName = await nameInput.inputValue();
@@ -21,6 +23,7 @@ test("admin edits a service and public catalog reflects the change", async ({ co
     await expect(page.getByRole("heading", { name: updatedName })).toBeVisible();
   } finally {
     await page.goto("/admin/services");
+    await page.locator('details:has(form[data-service-slug="photo-room-rental"]) summary').click();
     const restoreForm = page.locator('form[data-service-slug="photo-room-rental"]');
     await restoreForm.locator('input[name="name"]').fill(originalName);
     await restoreForm.getByRole("button", { name: "Lưu dịch vụ" }).click();
