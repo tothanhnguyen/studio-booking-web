@@ -9,18 +9,24 @@ const vndFormatter = new Intl.NumberFormat("vi-VN", {
   style: "currency",
 });
 
-export function ServiceCard({ service }: Readonly<{ service: ServiceRecord }>) {
+export type ServiceCardProps = Readonly<{
+  service: ServiceRecord;
+  index: number;
+}>;
+
+export function ServiceCard({ index, service }: ServiceCardProps) {
   return (
-    <article className="service-row">
+    <article className="service-row log-row">
+      <p className="log-row__index type-mono">{String(index).padStart(2, "0")}</p>
       <header className="service-row__identity">
         <p className="page-eyebrow">
           {service.bookingType === "ASSISTED" ? "Có hỗ trợ" : "Chỉ thuê phòng"}
         </p>
         <h3>{service.name}</h3>
+        <p className="service-row__description">
+          {service.description ?? `${service.durationMinutes} phút sử dụng studio.`}
+        </p>
       </header>
-      <p className="service-row__description">
-        {service.description ?? `${service.durationMinutes} phút sử dụng studio.`}
-      </p>
       <div className="service-row__details">
         <p className="type-mono service-row__duration">{service.durationMinutes} phút</p>
         <p className="type-mono service-row__price">
