@@ -223,71 +223,6 @@
 .service-row__duration { color: var(--color-smoke); font-size: 0.875rem; }
 .service-row__price { margin-bottom: 0.625rem; color: var(--color-bone); font-weight: 600; }
 
-.service-sheet {
-  display: grid;
-  gap: clamp(3rem, 7vw, 6rem);
-  padding-block: clamp(1rem, 3vw, 3rem);
-}
-
-.service-sheet__narrative { display: grid; align-content: start; gap: clamp(3rem, 8vw, 7rem); }
-.service-sheet__context {
-  max-width: 38rem;
-  border-block-start: 1px solid var(--color-warm-line);
-  padding-top: 1.5rem;
-}
-
-.service-sheet__context h2,
-.service-sheet__booking h2 {
-  margin: 0.625rem 0 0;
-  color: var(--color-bone);
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-}
-
-.service-sheet__context h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
-.service-sheet__context > p:last-child {
-  margin: 1rem 0 0;
-  color: var(--color-smoke);
-  line-height: 1.75;
-}
-
-.service-sheet__booking {
-  align-self: start;
-  border: 1px solid var(--color-warm-line);
-  border-radius: var(--radius-lg);
-  background: var(--color-espresso);
-  padding: clamp(1.5rem, 4vw, 2.25rem);
-}
-
-.service-sheet__booking h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
-.service-sheet__booking dl { margin: 1.75rem 0 0; }
-.service-sheet__booking dl > div {
-  display: flex;
-  min-height: 3.25rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  border-block-start: 1px solid var(--color-warm-line);
-  padding-block: 0.75rem;
-}
-
-.service-sheet__booking dt { color: var(--color-smoke); font-size: 0.875rem; }
-.service-sheet__booking dd { margin: 0; color: var(--color-bone); text-align: end; }
-.service-sheet__booking dd.service-sheet__price {
-  color: var(--color-champagne);
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-.service-sheet__deposit {
-  margin: 0 0 1.25rem;
-  border-block-start: 1px solid var(--color-warm-line);
-  padding-top: 1rem;
-  color: var(--color-brass);
-  font-size: 0.875rem;
-}
-
-.service-sheet__booking .ui-action { width: 100%; }
-
 .facts-rail {
   display: grid;
   grid-template-columns: 1fr;
@@ -664,13 +599,6 @@
 
   .payment-layout__rail,
   .confirmation-layout__rail { position: sticky; top: 7rem; }
-
-  .service-sheet {
-    grid-template-columns: minmax(0, 7fr) minmax(20rem, 5fr);
-    align-items: start;
-  }
-
-  .service-sheet__booking { position: sticky; top: 7rem; }
 
   .booking-composition {
     grid-template-areas: "window context";
