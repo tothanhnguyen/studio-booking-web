@@ -26,3 +26,7 @@ body {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media (min-width: 1024px) {
+  body { font-size: 1.0625rem; }
+}

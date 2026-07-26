@@ -98,6 +98,7 @@
 .type-mono {
   font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
+  font-weight: 500;
 }
 
 .room-visual {
