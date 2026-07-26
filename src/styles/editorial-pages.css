@@ -267,6 +267,7 @@
   box-shadow: none;
   background: transparent;
   padding-inline: 0;
+  border-block-end: 0;
 }
 
 /* Re-assert tear line for booking summary in confirmation receipt */
