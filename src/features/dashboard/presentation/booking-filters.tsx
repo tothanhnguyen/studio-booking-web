@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { actionClassName } from "@/components/ui/action";
 import type { BookingStatus } from "@/features/booking/domain/booking-types";
 import type { BookingPage } from "@/features/dashboard/application/dashboard-booking-repository";
 import { getBookingStatusLabel } from "@/features/dashboard/presentation/booking-status-badge";
@@ -16,14 +17,14 @@ export function parsePage(value: string | string[] | undefined) {
 }
 
 export function BookingFilters({ action, status }: Readonly<{ action: string; status?: BookingStatus }>) {
-  return <form action={action} className="flex flex-wrap items-end gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-    <label className="grid gap-1 text-sm"><span className="text-[var(--color-text-muted)]">Trạng thái</span>
-      <select name="status" defaultValue={status ?? ""} className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] px-3 py-2 text-[var(--color-text)]">
+  return <form action={action} className="account-filters">
+    <label className="account-filters-label"><span>Trạng thái</span>
+      <select className="account-filters-select" defaultValue={status ?? ""} name="status">
         <option value="">Tất cả</option>
         {bookingStatuses.map((item) => <option key={item} value={item}>{getBookingStatusLabel(item)}</option>)}
       </select>
     </label>
-    <button className="rounded-full bg-[var(--color-action)] px-4 py-2 text-sm font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]">Lọc booking</button>
+    <button className={`${actionClassName("primary", true)} account-filters-submit`}>Lọc booking</button>
   </form>;
 }
 

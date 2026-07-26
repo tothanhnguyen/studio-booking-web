@@ -497,3 +497,172 @@
 .payment-status[data-payment-state="pending"] .payment-status__badge { color: var(--color-warning); }
 .payment-status[data-payment-state="failed"] .payment-status__badge { color: var(--color-danger); }
 .payment-status[data-payment-state="expired"] .payment-status__badge { color: var(--color-text-muted); }
+
+/* /account/bookings: ticket rail restyle — history as vertical ticket stubs. */
+
+.account-bookings {
+  display: grid;
+  max-width: var(--content-transaction);
+  margin-inline: auto;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.account-page-heading .page-heading h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: var(--text-display-md);
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+/* Contextual strip for the guest-booking claim action — a hairline row, not a hero. */
+
+.account-claim-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block: 1px solid var(--color-warm-line);
+  padding-block: 1rem;
+}
+
+.account-claim-strip-label {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.account-claim-strip-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.account-claim-strip-message {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 0.8125rem;
+}
+
+/* Filters: native select everywhere, restyled as a segmented control on desktop. */
+
+.account-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.account-filters-label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+}
+
+.account-filters-select {
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 0.625rem 0.875rem;
+  color: var(--color-bone);
+  font: inherit;
+}
+
+@media (min-width: 768px) {
+  .account-filters {
+    display: inline-flex;
+    border: 1px solid var(--color-warm-line);
+    border-radius: 999px;
+    padding: 0.25rem;
+    gap: 0;
+  }
+
+  .account-filters-label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline-start: 0.75rem;
+  }
+
+  .account-filters-label > span {
+    color: var(--color-smoke);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .account-filters-select {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.8125rem;
+  }
+
+  .account-filters-submit { border-radius: 999px; }
+}
+
+/* History rail: each booking is a ticket stub with a room-material accent bar. */
+
+.account-ticket-rail {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.account-ticket {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--color-warm-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 1rem 1.25rem 1rem 1.5rem;
+}
+
+.account-ticket::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.75rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-smoke);
+}
+
+.account-ticket[data-room-material="photo"]::before { background: var(--color-brass); }
+.account-ticket[data-room-material="music"]::before { background: var(--color-sage); }
+
+.account-ticket-meta {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 9rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+}
+
+.account-ticket-code { color: var(--color-text-subtle); }
+
+.account-ticket-body { display: grid; gap: 0.25rem; flex: 1 1 16rem; }
+
+.account-ticket-service {
+  color: var(--color-bone);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.account-ticket-service:hover { color: var(--color-champagne); }
+
+.account-ticket-room { margin: 0; color: var(--color-smoke); font-size: 0.875rem; }
