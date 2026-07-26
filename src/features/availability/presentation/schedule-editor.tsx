@@ -47,23 +47,23 @@ export function ScheduleEditor({ rooms }: Readonly<{ rooms: RoomOption[] }>) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <form className="grid gap-3 rounded-2xl border border-white/10 p-5" onSubmit={submitSchedule}>
+      <form className="grid gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" onSubmit={submitSchedule}>
         <h2 className="text-xl font-semibold">Giờ làm việc</h2>
-        <label className="grid gap-1 text-sm">Phòng<select name="roomId" className="rounded-lg bg-stone-900 p-2">{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
-        <label className="grid gap-1 text-sm">Thứ trong tuần<select name="weekday" className="rounded-lg bg-stone-900 p-2">{["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"].map((label, index) => <option key={label} value={index}>{label}</option>)}</select></label>
-        <label className="grid gap-1 text-sm">Các khung giờ<input name="windows" defaultValue="09:00-12:00,13:00-21:00" className="rounded-lg bg-stone-900 p-2" /><span className="text-xs text-stone-400">Phân cách bằng dấu phẩy.</span></label>
-        {scheduleResult && <p role="status" className={scheduleResult.ok ? "text-emerald-300" : "text-red-300"}>{scheduleResult.message}</p>}
-        <button className="rounded-full bg-amber-300 px-4 py-2 font-semibold text-stone-950">Lưu giờ làm việc</button>
+        <label className="grid gap-1 text-sm">Phòng<select name="roomId" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]">{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
+        <label className="grid gap-1 text-sm">Thứ trong tuần<select name="weekday" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]">{["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"].map((label, index) => <option key={label} value={index}>{label}</option>)}</select></label>
+        <label className="grid gap-1 text-sm">Các khung giờ<input name="windows" defaultValue="09:00-12:00,13:00-21:00" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" /><span className="text-xs text-[var(--color-text-muted)]">Phân cách bằng dấu phẩy.</span></label>
+        {scheduleResult && <p role="status" className={scheduleResult.ok ? "text-[var(--color-success)]" : "text-[var(--color-danger)]"}>{scheduleResult.message}</p>}
+        <button className="rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]">Lưu giờ làm việc</button>
       </form>
 
-      <form className="grid gap-3 rounded-2xl border border-white/10 p-5" onSubmit={submitBlocked}>
+      <form className="grid gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" onSubmit={submitBlocked}>
         <h2 className="text-xl font-semibold">Chặn khung giờ</h2>
-        <label className="grid gap-1 text-sm">Phòng<select name="roomId" className="rounded-lg bg-stone-900 p-2">{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
-        <label className="grid gap-1 text-sm">Bắt đầu<input required name="startTime" type="datetime-local" className="rounded-lg bg-stone-900 p-2" /></label>
-        <label className="grid gap-1 text-sm">Kết thúc<input required name="endTime" type="datetime-local" className="rounded-lg bg-stone-900 p-2" /></label>
-        <label className="grid gap-1 text-sm">Lý do<input required name="reason" className="rounded-lg bg-stone-900 p-2" /></label>
-        {blockedResult && <p role="status" className={blockedResult.ok ? "text-emerald-300" : "text-red-300"}>{blockedResult.message}</p>}
-        <button className="rounded-full bg-amber-300 px-4 py-2 font-semibold text-stone-950">Chặn lịch</button>
+        <label className="grid gap-1 text-sm">Phòng<select name="roomId" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]">{rooms.map((room) => <option key={room.id} value={room.id}>{room.name}</option>)}</select></label>
+        <label className="grid gap-1 text-sm">Bắt đầu<input required name="startTime" type="datetime-local" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" /></label>
+        <label className="grid gap-1 text-sm">Kết thúc<input required name="endTime" type="datetime-local" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" /></label>
+        <label className="grid gap-1 text-sm">Lý do<input required name="reason" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-2 text-[var(--color-text)]" /></label>
+        {blockedResult && <p role="status" className={blockedResult.ok ? "text-[var(--color-success)]" : "text-[var(--color-danger)]"}>{blockedResult.message}</p>}
+        <button className="rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]">Chặn lịch</button>
       </form>
     </div>
   );

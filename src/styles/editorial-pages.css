@@ -1,0 +1,668 @@
+/* /login, /register: editorial brand split — form column + brand imagery column. */
+
+.auth-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.auth-split-form {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 28rem;
+}
+
+.auth-split-wordmark {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.auth-split-form-fields {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.auth-split-message {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.auth-split-actions {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.auth-split-actions .ui-action { width: 100%; }
+
+.auth-split-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-split-divider::before,
+.auth-split-divider::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: var(--color-border);
+}
+
+.auth-split-switch {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.auth-split-switch-link {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.auth-split-switch-link:hover { color: var(--color-action); }
+
+.auth-split-brand {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  min-block-size: 32rem;
+}
+
+.auth-split-brand img { object-fit: cover; }
+
+.auth-split-brand-overlay {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  background: linear-gradient(to top, rgb(26 27 24 / 78%), rgb(26 27 24 / 0%) 70%);
+  color: #f7f5ef;
+}
+
+.auth-split-brand-overlay .section-marker-index,
+.auth-split-brand-overlay .section-marker-label { color: #f7f5ef; }
+
+.auth-split-brand-overlay .section-marker-rule { background: rgb(247 245 239 / 35%); }
+
+.auth-split-brand-statement { margin: 0; color: #f7f5ef; }
+
+@media (min-width: 1024px) {
+  .auth-split {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    min-block-size: 34rem;
+  }
+
+  .auth-split-form {
+    grid-column: span 5;
+    align-self: center;
+    max-width: none;
+  }
+
+  .auth-split-brand {
+    display: block;
+    grid-column: span 7;
+  }
+}
+
+/* Editorial page layer: room-story cover story restyle for /studios/[slug]. */
+
+.room-story {
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.room-story-hero {
+  position: relative;
+}
+
+.room-story-hero-frame { will-change: transform; }
+
+.room-story-hero-visual {
+  aspect-ratio: auto;
+  min-block-size: clamp(24rem, 65vh, 44rem);
+}
+
+.room-story-title {
+  position: relative;
+  z-index: 1;
+  max-width: 60rem;
+  margin: clamp(-3.5rem, -7vw, -2rem) 0 0;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  color: var(--color-text);
+}
+
+.room-story-description {
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0 0;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.room-story-facts {
+  margin-top: clamp(2rem, 5vw, 4rem);
+}
+
+.room-story-facts strong {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.room-story-services {
+  margin-top: clamp(4rem, 9vw, 8rem);
+}
+
+.room-story-services > h2 {
+  max-width: 48rem;
+  margin: 0 0 clamp(2rem, 5vw, 3.5rem);
+  color: var(--color-text);
+}
+
+.room-story-service-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 7vw, 6rem);
+}
+
+.room-story-service {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.room-story-service-visual { width: 100%; }
+
+@media (min-width: 768px) {
+  .room-story-service {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .room-story-service-visual { grid-column: span 7; }
+  .room-story-service .service-row { grid-column: span 5; }
+
+  .room-story-service[data-align="right"] .room-story-service-visual { order: 2; }
+  .room-story-service[data-align="right"] .service-row { order: 1; }
+}
+
+.room-story-cta {
+  display: grid;
+  justify-items: start;
+  gap: 1.5rem;
+  margin-top: clamp(4rem, 9vw, 8rem);
+  padding-block-start: clamp(2rem, 5vw, 3rem);
+  border-block-start: 1px solid var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-story-hero-frame { transform: none !important; }
+}
+
+/* /services/[slug]: editorial spec sheet restyle. */
+
+.service-sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 3rem);
+}
+
+.service-sheet-heading { display: grid; gap: 1rem; }
+
+.service-sheet-body {
+  display: grid;
+  align-content: start;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+  min-width: 0;
+}
+
+.service-sheet-room-link {
+  justify-self: start;
+  color: var(--color-accent);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
+  text-transform: uppercase;
+}
+
+.service-sheet-explainer { display: grid; gap: 0.625rem; max-width: 38rem; }
+
+.service-sheet-explainer h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.service-sheet-explainer p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.service-sheet-rate-card {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+}
+
+.service-sheet-rate-card h2 {
+  margin: 0.5rem 0 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.service-sheet-rate-card dl { margin: 1.75rem 0 0; }
+
+.service-sheet-rate-card dl > div {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.service-sheet-rate-card dt { color: var(--color-text-muted); font-size: 0.875rem; }
+.service-sheet-rate-card dd { margin: 0; color: var(--color-text); text-align: end; }
+
+.service-sheet-price {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.service-sheet-deposit {
+  margin: 0 0 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-top: 1rem;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+}
+
+.service-sheet-rate-card .ui-action { width: 100%; }
+
+@media (min-width: 901px) {
+  .service-sheet {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .service-sheet-heading { grid-column: 1 / span 7; order: 1; }
+
+  .service-sheet-rate-card {
+    grid-column: 8 / span 5;
+    grid-row: 1 / span 2;
+    order: 2;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .service-sheet-body { grid-column: 1 / span 7; order: 3; }
+}
+
+/* Booking wizard + confirmation: studio ticket panel + directional step transitions.
+   Compose with `.ui-surface` for the card chrome (border/background/shadow/padding) —
+   this class only adds the ticket-specific position/motion behaviour. */
+
+.booking-ticket {
+  --booking-ticket-offset: 14px;
+
+  position: relative;
+  animation: booking-ticket-enter var(--motion-base) ease-out both;
+}
+
+.booking-ticket[data-direction="back"] { --booking-ticket-offset: -14px; }
+
+.booking-ticket__meta {
+  margin: 0 0 1.25rem;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@keyframes booking-ticket-enter {
+  from { opacity: 0; transform: translateX(var(--booking-ticket-offset)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-ticket { animation: none; }
+}
+
+/* Booking summary: ticket stub — dashed tear-off edge, mono totals. */
+
+.booking-summary {
+  border-block-start: 1px dashed var(--color-border);
+  padding-block-start: clamp(1.25rem, 3vw, 2rem);
+}
+
+@media (min-width: 901px) {
+  .booking-summary {
+    border-block-start: 0;
+    border-inline-start: 1px dashed var(--color-border);
+    padding-block-start: 0;
+    padding-inline-start: clamp(1.25rem, 3vw, 2rem);
+  }
+}
+
+/* Confirmation page: booking receipt restyle — one ticket, sections torn apart by
+   dashed rules instead of stacked cards. Composes `.booking-ticket .ui-surface` for
+   the outer frame and resets the nested `.ui-surface` cards (booking summary, payment
+   status, remaining balance) down to plain sections. */
+
+.confirmation-receipt {
+  display: grid;
+  gap: 0;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  max-width: 34rem;
+}
+
+.confirmation-receipt > .booking-summary,
+.confirmation-receipt > aside .ui-surface {
+  border-inline: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding-inline: 0;
+  border-block-end: 0;
+}
+
+/* Re-assert tear line for booking summary in confirmation receipt */
+.confirmation-receipt > .booking-summary {
+  border-block-start: 1px dashed var(--color-border);
+  padding-block-start: clamp(1.25rem, 3vw, 2rem);
+}
+
+@media (min-width: 901px) {
+  .confirmation-receipt > .booking-summary {
+    border-block-start: 0;
+    border-inline-start: 1px dashed var(--color-border);
+    padding-block-start: 0;
+    padding-inline-start: clamp(1.25rem, 3vw, 2rem);
+  }
+}
+
+.confirmation-receipt > .booking-summary + aside .ui-surface,
+.confirmation-receipt > aside .ui-surface + .ui-surface {
+  border-block-start: 1px dashed var(--color-border);
+  padding-block-start: clamp(1.25rem, 3vw, 2rem);
+}
+
+.confirmation-page__code strong {
+  display: block;
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+}
+
+.confirmation-page > .ui-action {
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* Payment page: transfer receipt restyle — single-column itemized stack. */
+
+.payment-receipt {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.payment-qr__cards {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  margin-top: 1.5rem;
+}
+
+.payment-qr-card { display: grid; justify-items: center; }
+
+.payment-transfer-card > .copy-payment-value:first-child { border-block-start: 0; }
+
+.payment-amounts { margin: 0; display: grid; }
+
+.payment-amounts__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.payment-amounts__row:first-child { border-block-start: 0; padding-block-start: 0; }
+
+.payment-amounts dt { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; }
+.payment-amounts dd { margin: 0; color: var(--color-text); }
+
+.payment-amounts__row--remaining {
+  margin-top: 0.25rem;
+  border-block-start: 1px dashed var(--color-border);
+}
+
+.payment-amounts__row--remaining dt { color: var(--color-text); font-weight: 600; }
+
+.payment-amounts__remaining {
+  color: var(--color-accent);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.payment-status__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.payment-status__badge {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.payment-status[data-payment-state="paid"] .payment-status__badge { color: var(--color-success); }
+.payment-status[data-payment-state="pending"] .payment-status__badge { color: var(--color-warning); }
+.payment-status[data-payment-state="failed"] .payment-status__badge { color: var(--color-danger); }
+.payment-status[data-payment-state="expired"] .payment-status__badge { color: var(--color-text-muted); }
+
+/* /account/bookings: ticket rail restyle — history as vertical ticket stubs. */
+
+.account-bookings {
+  display: grid;
+  max-width: var(--content-transaction);
+  margin-inline: auto;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.account-page-heading .page-heading h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: var(--text-display-md);
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+/* Contextual strip for the guest-booking claim action — a hairline row, not a hero. */
+
+.account-claim-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block: 1px solid var(--color-warm-line);
+  padding-block: 1rem;
+}
+
+.account-claim-strip-label {
+  margin: 0;
+  max-width: 34rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.account-claim-strip-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.account-claim-strip-message {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 0.8125rem;
+}
+
+/* Filters: native select everywhere, restyled as a segmented control on desktop. */
+
+.account-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.account-filters-label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+}
+
+.account-filters-select {
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 0.625rem 0.875rem;
+  color: var(--color-bone);
+  font: inherit;
+}
+
+@media (min-width: 768px) {
+  .account-filters {
+    display: inline-flex;
+    border: 1px solid var(--color-warm-line);
+    border-radius: 999px;
+    padding: 0.25rem;
+    gap: 0;
+  }
+
+  .account-filters-label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline-start: 0.75rem;
+  }
+
+  .account-filters-label > span {
+    color: var(--color-smoke);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .account-filters-select {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    padding: 0.5rem 0.75rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.8125rem;
+  }
+
+  .account-filters-submit { border-radius: 999px; }
+}
+
+/* History rail: each booking is a ticket stub with a room-material accent bar. */
+
+.account-ticket-rail {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.account-ticket {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--color-warm-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-espresso);
+  padding: 1rem 1.25rem 1rem 1.5rem;
+}
+
+.account-ticket::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.75rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-smoke);
+}
+
+.account-ticket[data-room-material="photo"]::before { background: var(--color-brass); }
+.account-ticket[data-room-material="music"]::before { background: var(--color-sage); }
+
+.account-ticket-meta {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 9rem;
+  color: var(--color-smoke);
+  font-size: 0.8125rem;
+}
+
+.account-ticket-code { color: var(--color-text-subtle); }
+
+.account-ticket-body { display: grid; gap: 0.25rem; flex: 1 1 16rem; }
+
+.account-ticket-service {
+  color: var(--color-bone);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.account-ticket-service:hover { color: var(--color-champagne); }
+
+.account-ticket-room { margin: 0; color: var(--color-smoke); font-size: 0.875rem; }

@@ -10,7 +10,7 @@ export function ScrollVideoHero() {
   return (
     <section
       aria-labelledby="home-hero-title"
-      className="relative min-h-[100svh] w-full overflow-clip bg-[#070807] font-sans md:min-h-[300vh] motion-reduce:min-h-[100svh]"
+      className="home-hero relative min-h-[100svh] w-full overflow-clip font-sans md:min-h-[300vh] motion-reduce:min-h-[100svh]"
       data-scroll-canvas-section
       id={HERO_SECTION_ID}
     >

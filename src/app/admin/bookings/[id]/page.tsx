@@ -19,13 +19,13 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
   if (!booking) notFound();
   return (
     <section>
-      <p className="text-sm uppercase tracking-[0.2em] text-amber-300">
+      <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">
         Booking #{booking.id.slice(0, 8)}
       </p>
       <h1 className="mt-3 text-3xl font-semibold">Chi tiết booking</h1>
       <BookingDetail booking={booking} showCustomer />
 
-      <div className="mt-6 grid gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="mt-6 grid gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
         <h2 className="font-semibold">Lifecycle actions</h2>
 
         {booking.bookingType === "ASSISTED" && booking.bookingStatus === "PENDING" && (
@@ -37,7 +37,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
           >
             <button
               type="submit"
-              className="rounded-full bg-emerald-400 px-4 py-2 font-semibold text-stone-950"
+              className="rounded-full bg-[var(--color-success)] px-4 py-2 font-semibold text-[var(--color-on-action)]"
             >
               Xác nhận booking ASSISTED
             </button>
@@ -57,18 +57,18 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
               await cancelBookingByAdminAction(booking.id, reason);
             }}
           >
-            <label className="text-sm text-stone-300" htmlFor="admin-cancel-reason">
+            <label className="text-sm text-[var(--color-text-muted)]" htmlFor="admin-cancel-reason">
               Lý do hủy / từ chối
             </label>
             <input
               id="admin-cancel-reason"
               name="reason"
               required
-              className="rounded-lg bg-stone-900 p-3"
+              className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
             />
             <button
               type="submit"
-              className="w-fit rounded-full bg-rose-400 px-4 py-2 font-semibold text-stone-950"
+              className="w-fit rounded-full bg-[var(--color-danger)] px-4 py-2 font-semibold text-[var(--color-on-action)]"
             >
               {booking.bookingType === "ASSISTED" ? "Từ chối booking" : "Hủy booking"}
             </button>
@@ -86,24 +86,24 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
             );
           }}
         >
-          <label className="text-sm text-stone-300" htmlFor="refund-status">
+          <label className="text-sm text-[var(--color-text-muted)]" htmlFor="refund-status">
             Cập nhật refund status
           </label>
           <select
             id="refund-status"
             name="status"
             defaultValue={booking.refundStatus}
-            className="rounded-lg bg-stone-900 p-3"
+            className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
           >
             <option value="REQUESTED">REQUESTED</option>
             <option value="PROCESSING">PROCESSING</option>
             <option value="REFUNDED">REFUNDED</option>
             <option value="REJECTED">REJECTED</option>
           </select>
-          <input name="note" placeholder="Ghi chú hoàn tiền" className="rounded-lg bg-stone-900 p-3" />
+          <input name="note" placeholder="Ghi chú hoàn tiền" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]" />
           <button
             type="submit"
-            className="w-fit rounded-full bg-amber-300 px-4 py-2 font-semibold text-stone-950"
+            className="w-fit rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]"
           >
             Lưu refund status
           </button>

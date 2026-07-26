@@ -18,9 +18,23 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
 
   await expect(page).toHaveURL(/\/booking\/[0-9a-f-]+\/payment$/);
   const bookingId = new URL(page.url()).pathname.split("/")[2]!;
+  await expect(page.getByRole("heading", { name: "Thanh toán tiền cọc" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "Mã VietQR thanh toán tiền cọc" })).toBeVisible();
+  await expect(page.getByText(new RegExp(bookingId, "i"))).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Sao chép Nội dung chuyển khoản" }),
+  ).toBeVisible();
+  await expect(page.getByText("PENDING_PAYMENT", { exact: true })).toBeVisible();
+  await expect(page.getByText("PENDING", { exact: true })).toBeVisible();
 
   const webhookBody = JSON.stringify({
-    id: `evt-e2e-room-only-${testInfo.project.name}`,
+    // Event id must be unique per booking (not just per browser project): the
+    // SePay webhook handler is idempotent on (provider, eventId), and this
+    // suite runs repeatedly against a persistent, non-reset database. A
+    // fixed id collides with leftover PaymentEvent rows from earlier runs,
+    // so the webhook is silently treated as a duplicate and the booking
+    // never transitions to PAID/CONFIRMED.
+    id: `evt-e2e-room-only-${bookingId}`,
     amount: 240000,
     currency: "VND",
     content: `Thanh toan coc BOOKING:${bookingId}`,
@@ -32,9 +46,11 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
   });
   expect(webhookResponse.ok()).toBeTruthy();
 
-  await page.goto(`/booking/${bookingId}/confirmation`);
+  await page.getByRole("link", { name: "Xem xác nhận" }).click();
+  await expect(page).toHaveURL(`/booking/${bookingId}/confirmation`);
+  await expect(page.getByRole("heading", { name: "Đã nhận tiền cọc." })).toBeVisible();
   await expect(page.getByText("Trạng thái booking:")).toBeVisible();
-  await expect(page.getByText("CONFIRMED")).toBeVisible();
+  await expect(page.getByText("CONFIRMED", { exact: true })).toBeVisible();
   await expect(page.getByText("Trạng thái thanh toán:")).toBeVisible();
-  await expect(page.getByText("PAID")).toBeVisible();
+  await expect(page.getByText("PAID", { exact: true })).toBeVisible();
 });

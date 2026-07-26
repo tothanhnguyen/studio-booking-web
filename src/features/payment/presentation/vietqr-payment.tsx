@@ -1,3 +1,5 @@
+import { CopyPaymentValue } from "./copy-payment-value";
+
 const money = new Intl.NumberFormat("vi-VN", {
   style: "currency",
   currency: "VND",
@@ -6,6 +8,7 @@ const money = new Intl.NumberFormat("vi-VN", {
 
 export function VietQrPayment({
   amount,
+  remainingAmount,
   accountName,
   accountNumber,
   bankBin,
@@ -13,45 +16,56 @@ export function VietQrPayment({
   qrImageUrl,
 }: Readonly<{
   amount: number;
+  remainingAmount: number;
   accountName: string;
   accountNumber: string;
   bankBin: string;
   transferContent: string;
   qrImageUrl: string;
 }>) {
+  const totalAmount = amount + remainingAmount;
+
   return (
-    <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-      <h2 className="text-2xl font-semibold">Chuyển khoản VietQR</h2>
-      <p className="mt-2 text-stone-300">
+    <section className="payment-qr" aria-labelledby="vietqr-heading">
+      <p className="page-eyebrow">Tiền cọc 30%</p>
+      <h2 id="vietqr-heading">Chuyển khoản VietQR</h2>
+      <p className="payment-qr__intro">
         Bạn có thể quét mã QR hoặc nhập tay thông tin bên dưới.
       </p>
-      <div className="mt-4 grid gap-6 md:grid-cols-[220px_1fr]">
-        {/* eslint-disable-next-line @next/next/no-img-element -- QR image URL comes from provider and is not a static asset */}
-        <img
-          src={qrImageUrl}
-          alt="Mã VietQR thanh toán tiền cọc"
-          className="h-[220px] w-[220px] rounded-2xl border border-white/10 bg-white p-2"
-        />
-        <dl className="grid gap-2 text-sm">
-          <div>
-            <dt className="text-stone-400">Số tiền</dt>
-            <dd className="font-semibold text-amber-300">{money.format(amount)}</dd>
+
+      <div className="payment-qr__cards">
+        <div className="payment-qr-card ui-surface">
+          <div className="payment-qr__image-frame">
+            {/* eslint-disable-next-line @next/next/no-img-element -- QR image URL comes from provider and is not a static asset */}
+            <img
+              src={qrImageUrl}
+              alt="Mã VietQR thanh toán tiền cọc"
+              className="payment-qr__image"
+            />
           </div>
-          <div>
-            <dt className="text-stone-400">Ngân hàng (BIN)</dt>
-            <dd>{bankBin}</dd>
+        </div>
+
+        <div className="payment-transfer-card ui-surface">
+          <CopyPaymentValue label="Ngân hàng (BIN)" value={bankBin} />
+          <CopyPaymentValue label="Chủ tài khoản" value={accountName} />
+          <CopyPaymentValue label="Số tài khoản" value={accountNumber} />
+          <CopyPaymentValue label="Nội dung chuyển khoản" value={transferContent} />
+        </div>
+
+        <dl className="payment-amounts ui-surface">
+          <div className="payment-amounts__row">
+            <dt>Tiền cọc (thanh toán ngay)</dt>
+            <dd className="type-mono">{money.format(amount)}</dd>
           </div>
-          <div>
-            <dt className="text-stone-400">Số tài khoản</dt>
-            <dd>{accountNumber}</dd>
+          <div className="payment-amounts__row">
+            <dt>Tổng giá trị đặt phòng</dt>
+            <dd className="type-mono">{money.format(totalAmount)}</dd>
           </div>
-          <div>
-            <dt className="text-stone-400">Chủ tài khoản</dt>
-            <dd>{accountName}</dd>
-          </div>
-          <div>
-            <dt className="text-stone-400">Nội dung chuyển khoản</dt>
-            <dd className="font-semibold">{transferContent}</dd>
+          <div className="payment-amounts__row payment-amounts__row--remaining">
+            <dt>Số tiền còn lại</dt>
+            <dd className="type-mono payment-amounts__remaining">
+              {money.format(remainingAmount)}
+            </dd>
           </div>
         </dl>
       </div>

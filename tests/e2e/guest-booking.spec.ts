@@ -8,6 +8,8 @@ test.describe.serial("guest booking journey", () => {
     await page.goto("/services/photo-room-rental");
     await page.getByRole("link", { name: "Đặt lịch dịch vụ này" }).click();
     await expect(page.getByRole("heading", { name: "Thông tin liên hệ" })).toBeVisible();
+    await expect(page.getByRole("list", { name: "Các bước đặt lịch" })).toBeVisible();
+    await expect(page.getByText("Cọc 30% ở bước thanh toán")).toBeVisible();
     await page.getByLabel("Họ tên").fill("Nguyễn Khách");
     await page.getByLabel("Email").fill(`guest-${testInfo.project.name}@example.com`);
     await page.getByLabel("Số điện thoại").fill("0900000000");
@@ -30,7 +32,9 @@ test.describe.serial("guest booking journey", () => {
     await expect(page).toHaveURL(/\/booking\/[0-9a-f-]+\/payment$/);
     privatePaymentPath = new URL(page.url()).pathname;
     await expect(page.getByRole("timer")).toContainText("Giữ chỗ còn");
-    await expect(page.getByText("Tiền cọc 30%")) .toBeVisible();
+    await expect(
+      page.getByRole("region", { name: "Chuyển khoản VietQR" }).getByText("Tiền cọc 30%"),
+    ).toBeVisible();
     expect(page.url()).not.toContain("token");
   });
 

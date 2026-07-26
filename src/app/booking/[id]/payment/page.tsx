@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { actionClassName } from "@/components/ui/action";
 import { guestCookieName } from "@/features/booking/application/guest-cookie";
 import { BookingSummary } from "@/features/booking/presentation/booking-summary";
 import { HoldCountdown } from "@/features/booking/presentation/hold-countdown";
@@ -20,38 +21,39 @@ export default async function PaymentPage({ params }: Readonly<{ params: Promise
   if (!booking) notFound();
 
   return (
-    <section className="mx-auto max-w-3xl">
-      <h1 className="text-4xl font-semibold">Thanh toán tiền cọc</h1>
-      {booking.holdExpiresAt && (
-        <div className="mt-4">
-          <HoldCountdown expiresAt={booking.holdExpiresAt} />
-        </div>
-      )}
-      <div className="mt-6">
-        <BookingSummary booking={booking} />
-      </div>
-      <div className="mt-6">
-        <PaymentStatus
-          bookingStatus={booking.bookingStatus}
-          paymentStatus={booking.paymentStatus}
-        />
-      </div>
-      <div className="mt-6">
+    <section className="payment-page">
+      <header className="payment-page__header">
+        <p className="page-eyebrow">Bước thanh toán</p>
+        <h1>Thanh toán tiền cọc</h1>
+        <p>Quét mã hoặc dùng đúng thông tin chuyển khoản để giữ lịch đặt.</p>
+        {booking.holdExpiresAt ? (
+          <div className="payment-page__countdown">
+            <HoldCountdown expiresAt={booking.holdExpiresAt} />
+          </div>
+        ) : null}
+      </header>
+      <div className="payment-receipt">
         <VietQrPayment
           amount={booking.instructions.amount}
+          remainingAmount={booking.remainingAmount}
           accountName={booking.instructions.accountName}
           accountNumber={booking.instructions.accountNumber}
           bankBin={booking.instructions.bankBin}
           transferContent={booking.instructions.transferContent}
           qrImageUrl={booking.instructions.qrImageUrl}
         />
+        <PaymentStatus
+          bookingStatus={booking.bookingStatus}
+          paymentStatus={booking.paymentStatus}
+        />
+        <BookingSummary booking={booking} />
+        <Link
+          className={actionClassName("primary")}
+          href={`/booking/${id}/confirmation`}
+        >
+          Xem xác nhận
+        </Link>
       </div>
-      <Link
-        className="mt-6 inline-flex rounded-full bg-amber-300 px-5 py-3 font-semibold text-stone-950"
-        href={`/booking/${id}/confirmation`}
-      >
-        Xem xác nhận
-      </Link>
     </section>
   );
 }

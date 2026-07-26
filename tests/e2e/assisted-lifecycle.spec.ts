@@ -26,7 +26,7 @@ test.describe("assisted booking lifecycle", () => {
 
     // Step 2: Simulate SePay payment webhook (deposit = 30% of 1,200,000 = 360,000 VND)
     const webhookPayload = JSON.stringify({
-      id: `evt-e2e-assisted-${testInfo.project.name}`,
+      id: `evt-e2e-assisted-${bookingId}`,
       amount: 360000,
       currency: "VND",
       content: `Thanh toan coc BOOKING:${bookingId}`,
@@ -59,9 +59,9 @@ test.describe("assisted booking lifecycle", () => {
     ).toBeVisible();
     await page.getByRole("button", { name: "Xác nhận booking ASSISTED" }).click();
 
-    // Step 5: Verify booking is now CONFIRMED
+    // Step 5: Verify booking is now CONFIRMED (admin badge renders the localized label)
     await page.waitForURL(`/admin/bookings/${bookingId}`);
-    await expect(page.getByText("CONFIRMED")).toBeVisible();
+    await expect(page.getByText("Đã xác nhận")).toBeVisible();
   });
 
   test("admin can reject ASSISTED booking", async ({ context, page }, testInfo) => {
@@ -79,11 +79,12 @@ test.describe("assisted booking lifecycle", () => {
     await page.getByRole("button", { name: "Tiếp tục" }).click();
     await page.getByRole("button", { name: "Giữ chỗ 10 phút" }).click();
 
+    await expect(page).toHaveURL(/\/booking\/[0-9a-f-]+\/payment$/);
     const bookingId = new URL(page.url()).pathname.split("/")[2]!;
 
     // Pay deposit
     const webhookPayload = JSON.stringify({
-      id: `evt-e2e-reject-${testInfo.project.name}`,
+      id: `evt-e2e-reject-${bookingId}`,
       amount: 360000,
       currency: "VND",
       content: `Thanh toan coc BOOKING:${bookingId}`,
@@ -104,9 +105,13 @@ test.describe("assisted booking lifecycle", () => {
     await page.getByLabel("Lý do hủy / từ chối").fill("Không đủ kỹ thuật viên");
     await page.getByRole("button", { name: "Từ chối booking" }).click();
 
-    // Verify booking is CANCELLED with refund requested
+    // Verify booking is CANCELLED with refund requested (admin badge renders the localized
+    // label; scope the refund-status check to the <dd> tag so it doesn't also match the
+    // "REQUESTED" <option> inside the refund-status <select> further down the page — a plain
+    // "definition" role query would not work here since Playwright does not compute an
+    // accessible name from text content for non-widget roles like <dd>)
     await page.waitForURL(`/admin/bookings/${bookingId}`);
-    await expect(page.getByText("CANCELLED")).toBeVisible();
-    await expect(page.getByText("REQUESTED")).toBeVisible();
+    await expect(page.getByText("Đã hủy")).toBeVisible();
+    await expect(page.locator("dd").filter({ hasText: "REQUESTED" })).toBeVisible();
   });
 });

@@ -1,8 +1,24 @@
 import Link from "next/link";
 
-import { signInWithGoogleAction } from "@/features/auth/application/auth-actions";
 import { AuthForm } from "@/features/auth/presentation/auth-form";
+import { AuthShell } from "@/features/auth/presentation/auth-shell";
 
 export default function LoginPage() {
-  return <section className="mx-auto max-w-md"><h1 className="text-4xl font-semibold">Đăng nhập</h1><p className="mt-3 text-stone-300">Theo dõi booking và lịch sử studio của bạn.</p><AuthForm mode="login" /><form action={signInWithGoogleAction} className="mt-3"><button className="w-full rounded-full border border-white/20 px-5 py-3">Tiếp tục với Google</button></form><p className="mt-5 text-sm">Chưa có tài khoản? <Link className="text-amber-300" href="/register">Đăng ký</Link></p></section>;
+  return (
+    <AuthShell
+      description="Theo dõi booking và lịch sử studio của bạn."
+      eyebrow="Tài khoản"
+      footer={
+        <p className="auth-split-switch">
+          Chưa có tài khoản?{" "}
+          <Link className="auth-split-switch-link" href="/register">
+            Đăng ký
+          </Link>
+        </p>
+      }
+      title="Đăng nhập"
+    >
+      <AuthForm mode="login" />
+    </AuthShell>
+  );
 }

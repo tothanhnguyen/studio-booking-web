@@ -29,12 +29,12 @@ export default async function AdminBookingCalendarPage({ searchParams }: Readonl
   const bookings = await getAdminCalendar(actor, { from: rangeStart, to: rangeEnd });
 
   return <section aria-labelledby="calendar-heading">
-    <p className="text-sm uppercase tracking-[0.2em] text-amber-300">Asia/Ho_Chi_Minh</p>
+    <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Asia/Ho_Chi_Minh</p>
     <h1 id="calendar-heading" className="mt-3 text-3xl font-semibold">Lịch booking</h1>
-    <form action="/admin/bookings/calendar" className="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-white/10 p-4">
-      <label className="grid gap-1 text-sm"><span className="text-stone-400">Từ ngày</span><input className="rounded-lg border border-white/15 bg-stone-900 px-3 py-2" type="date" name="from" defaultValue={from} /></label>
-      <label className="grid gap-1 text-sm"><span className="text-stone-400">Đến ngày</span><input className="rounded-lg border border-white/15 bg-stone-900 px-3 py-2" type="date" name="to" defaultValue={to} /></label>
-      <button className="rounded-full bg-amber-300 px-4 py-2 text-sm font-semibold text-stone-950">Xem lịch</button>
+    <form action="/admin/bookings/calendar" className="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
+      <label className="grid gap-1 text-sm"><span className="text-[var(--color-text-muted)]">Từ ngày</span><input className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] px-3 py-2 text-[var(--color-text)]" type="date" name="from" defaultValue={from} /></label>
+      <label className="grid gap-1 text-sm"><span className="text-[var(--color-text-muted)]">Đến ngày</span><input className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] px-3 py-2 text-[var(--color-text)]" type="date" name="to" defaultValue={to} /></label>
+      <button className="rounded-full bg-[var(--color-action)] px-4 py-2 text-sm font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]">Xem lịch</button>
     </form>
     <div className="mt-6"><BookingCalendar bookings={bookings} /></div>
   </section>;
