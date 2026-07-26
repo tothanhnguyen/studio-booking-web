@@ -105,7 +105,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
         <ScrollReveal className="room-story-cta">
           <SectionMarker index={room.services.length + 1} label="Đặt lịch" />
           <Link className={actionClassName("primary")} href={`/booking/${firstService.id}`}>
-            Đặt lịch dịch vụ này
+            Đặt lịch {firstService.name}
           </Link>
         </ScrollReveal>
       ) : null}
