@@ -1,5 +1,7 @@
 # Phase 03 — Booking and Payment
 
+> **Superseded 2026-07-26** by `plans/260726-1736-editorial-studio-magazine-ui/phase-04-booking-ticket.md` — remaining unchecked items (16–25) are absorbed there; do not execute further from this file.
+
 ## Task 1: Add transaction shell and progress rail
 
 **Files:**

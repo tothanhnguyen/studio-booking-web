@@ -122,7 +122,7 @@ Phases run in order. Do not parallelize edits to shared CSS or `src/components/u
 
 ## Plan Status
 
-**Status:** In progress — Phases 1–4 CLOSED; Phase 5: 2/4 tasks done (next: task 3 account booking detail); Phases 6–7 pending. See `plans/reports/progress-260726-2242-editorial-ui-pass-status.md` and `.superpowers/sdd/progress.md`.
+**Status:** In progress — Phases 1–6 CLOSED (see `.superpowers/sdd/progress.md`). Phase 7: final-branch-review Critical/Important fixes landed (`plans/reports/fixes-260727-0005-GH-26-final-review-fixes.md`) and automated gates (`pnpm ci:verify`, `pnpm build`, full Playwright) verified green; the manual visual/responsive sweep, interaction/a11y sweep, and performance spot checks in `phase-07-qa-polish.md` Tasks 2–4 were not run and remain open. Not "Complete" until those are closed or explicitly re-scoped.
 
 **Supersedes:** remaining unchecked work in `plans/260715-0031-cozy-dark-ui-system/` (phase-03 items 16–25, phases 04–06). Do not execute that plan further; its unfinished restyle scope is absorbed by phases 4–6 here.
 

@@ -2,7 +2,7 @@
 
 **Context:** `plan.md` (Global Constraints, Stable Interfaces), spec §3.
 **Priority:** Highest — every later phase consumes these primitives.
-**Status:** Not started
+**Status:** Complete (commits 66529c2..7405913 per `.superpowers/sdd/progress.md`, tasks P1.1–P1.6 all reviewed clean; two phase-gate manual checks below were never explicitly re-run and are left open)
 
 ## Task 1: Register Fraunces and extend tokens
 
@@ -13,7 +13,7 @@
 **Interfaces:**
 - Produces: CSS vars `--font-display`, `--text-display-xl`, `--text-display-lg`, `--text-display-md`, `--motion-marquee`, `--grain-opacity`.
 
-- [ ] **Step 1: Add Fraunces to layout.tsx**
+- [x] **Step 1: Add Fraunces to layout.tsx**
 
 In `src/app/layout.tsx`, extend the `next/font/google` import and add the font (keep existing fonts unchanged):
 
@@ -30,7 +30,7 @@ const display = Fraunces({
 
 Add `${display.variable}` to the `<body>` className template string.
 
-- [ ] **Step 2: Extend tokens.css**
+- [x] **Step 2: Extend tokens.css**
 
 Append inside `:root` in `src/styles/tokens.css`:
 
@@ -42,7 +42,7 @@ Append inside `:root` in `src/styles/tokens.css`:
   --grain-opacity: 0.035;
 ```
 
-- [ ] **Step 3: Verify compile**
+- [x] **Step 3: Verify compile**
 
 Run: `pnpm typecheck && pnpm lint`
 Expected: PASS.
@@ -50,7 +50,7 @@ Expected: PASS.
 Run: `pnpm vitest run src/app/layout.test.tsx`
 Expected: PASS (if the test asserts body class names, add `--font-display` expectation in the same change).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 `feat: register fraunces display font and editorial tokens`
 
@@ -60,7 +60,7 @@ Expected: PASS (if the test asserts body class names, add `--font-display` expec
 - Create: `src/styles/editorial.css`
 - Modify: `src/app/globals.css` (add `@import "../styles/editorial.css";` after utilities import)
 
-- [ ] **Step 1: Write `src/styles/editorial.css`** (complete file):
+- [x] **Step 1: Write `src/styles/editorial.css`** (complete file):
 
 ```css
 /* Editorial Studio Magazine layer: display type, grain, markers, motion. */
@@ -167,16 +167,16 @@ Expected: PASS (if the test asserts body class names, add `--font-display` expec
 }
 ```
 
-- [ ] **Step 2: Import in globals.css**
+- [x] **Step 2: Import in globals.css**
 
 Add `@import "../styles/editorial.css";` as the last style import in `src/app/globals.css`.
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `pnpm lint && pnpm build`
 Expected: PASS, no CSS syntax errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 `feat: add editorial css layer with grain, marquee, reveal, display type`
 
@@ -189,7 +189,7 @@ Expected: PASS, no CSS syntax errors.
 **Interfaces:**
 - Produces: `SectionMarker({ index, label })` — see plan.md Stable Interfaces.
 
-- [ ] **Step 1: Write failing test** `src/components/ui/section-marker.test.tsx`:
+- [x] **Step 1: Write failing test** `src/components/ui/section-marker.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react";
@@ -211,12 +211,12 @@ describe("SectionMarker", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify failure**
+- [x] **Step 2: Run to verify failure**
 
 Run: `pnpm vitest run src/components/ui/section-marker.test.tsx`
 Expected: FAIL — module not found.
 
-- [ ] **Step 3: Implement** `src/components/ui/section-marker.tsx` (complete file):
+- [x] **Step 3: Implement** `src/components/ui/section-marker.tsx` (complete file):
 
 ```tsx
 export type SectionMarkerProps = Readonly<{
@@ -236,7 +236,7 @@ export function SectionMarker({ index, label }: SectionMarkerProps) {
 }
 ```
 
-- [ ] **Step 4: Run test — PASS.** Then commit: `feat: add section marker primitive`
+- [x] **Step 4: Run test — PASS.** Then commit: `feat: add section marker primitive`
 
 ## Task 4: Marquee component (TDD)
 
@@ -244,7 +244,7 @@ export function SectionMarker({ index, label }: SectionMarkerProps) {
 - Create: `src/components/ui/marquee.tsx`
 - Test: `src/components/ui/marquee.test.tsx`
 
-- [ ] **Step 1: Write failing test** `src/components/ui/marquee.test.tsx`:
+- [x] **Step 1: Write failing test** `src/components/ui/marquee.test.tsx`:
 
 ```tsx
 import { render } from "@testing-library/react";
@@ -268,9 +268,9 @@ describe("Marquee", () => {
 });
 ```
 
-- [ ] **Step 2: Run — FAIL (module not found).**
+- [x] **Step 2: Run — FAIL (module not found).**
 
-- [ ] **Step 3: Implement** `src/components/ui/marquee.tsx` (complete file, server component):
+- [x] **Step 3: Implement** `src/components/ui/marquee.tsx` (complete file, server component):
 
 ```tsx
 export type MarqueeProps = Readonly<{
@@ -292,7 +292,7 @@ export function Marquee({ items, className }: MarqueeProps) {
 }
 ```
 
-- [ ] **Step 4: Run test — PASS.** Commit: `feat: add marquee primitive`
+- [x] **Step 4: Run test — PASS.** Commit: `feat: add marquee primitive`
 
 ## Task 5: ScrollReveal component (TDD)
 
@@ -302,7 +302,7 @@ export function Marquee({ items, className }: MarqueeProps) {
 
 Behavior contract: children render immediately (no hidden-by-default without JS); after mount, if motion is allowed and IntersectionObserver exists, the wrapper enters `data-state="pending"` until it intersects, then `data-state="revealed"`. Reduced motion or missing IO ⇒ stays `revealed`.
 
-- [ ] **Step 1: Write failing test** `src/components/ui/scroll-reveal.test.tsx`:
+- [x] **Step 1: Write failing test** `src/components/ui/scroll-reveal.test.tsx`:
 
 ```tsx
 import { render, screen, waitFor } from "@testing-library/react";
@@ -367,9 +367,9 @@ describe("ScrollReveal", () => {
 });
 ```
 
-- [ ] **Step 2: Run — FAIL (module not found).**
+- [x] **Step 2: Run — FAIL (module not found).**
 
-- [ ] **Step 3: Implement** `src/components/ui/scroll-reveal.tsx` (complete file):
+- [x] **Step 3: Implement** `src/components/ui/scroll-reveal.tsx` (complete file):
 
 ```tsx
 "use client";
@@ -420,7 +420,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
 }
 ```
 
-- [ ] **Step 4: Run test — PASS.** Commit: `feat: add scroll reveal primitive`
+- [x] **Step 4: Run test — PASS.** Commit: `feat: add scroll reveal primitive`
 
 ## Task 6: ParallaxFrame component (TDD)
 
@@ -430,7 +430,7 @@ export function ScrollReveal({ children, className, delayMs = 0 }: ScrollRevealP
 
 Behavior contract: wraps children in `.parallax-frame`; on scroll (rAF-throttled) applies `translate3d(0, offset, 0)` where offset = element-center distance from viewport center, normalized to `[-amplitude, amplitude]`. No listener under reduced motion or viewport < 768px.
 
-- [ ] **Step 1: Write failing test** `src/components/ui/parallax-frame.test.tsx`:
+- [x] **Step 1: Write failing test** `src/components/ui/parallax-frame.test.tsx`:
 
 ```tsx
 import { render, screen } from "@testing-library/react";
@@ -480,9 +480,9 @@ describe("ParallaxFrame", () => {
 });
 ```
 
-- [ ] **Step 2: Run — FAIL (module not found).**
+- [x] **Step 2: Run — FAIL (module not found).**
 
-- [ ] **Step 3: Implement** `src/components/ui/parallax-frame.tsx` (complete file):
+- [x] **Step 3: Implement** `src/components/ui/parallax-frame.tsx` (complete file):
 
 ```tsx
 "use client";
@@ -536,14 +536,14 @@ export function ParallaxFrame({ amplitude = 16, children, className }: ParallaxF
 }
 ```
 
-- [ ] **Step 4: Run test — PASS.** Commit: `feat: add parallax frame primitive`
+- [x] **Step 4: Run test — PASS.** Commit: `feat: add parallax frame primitive`
 
 ## Task 7: Phase gate
 
-- [ ] Run `pnpm ci:verify` — PASS.
-- [ ] Run `pnpm build` — PASS.
-- [ ] Manually check `/` (hero unchanged) and any internal page at 1440px + 375px: grain invisible-but-present, no layout shift, no horizontal overflow.
-- [ ] Verify Fraunces renders Vietnamese diacritics at `--text-display-xl` without clipping (temporary test heading with "Phòng Thu Âm Nhạc ĐẶNG Ữ" is acceptable, must be removed before commit).
+- [x] Run `pnpm ci:verify` — PASS.
+- [x] Run `pnpm build` — PASS.
+- [ ] Manually check `/` (hero unchanged) and any internal page at 1440px + 375px: grain invisible-but-present, no layout shift, no horizontal overflow. (No dedicated manual pass recorded in the ledger; folded into the still-open Phase 7 visual sweep.)
+- [ ] Verify Fraunces renders Vietnamese diacritics at `--text-display-xl` without clipping. (Ledger: "deferred to first display-type usage in P3.1" — P3 shipped Fraunces headings across several review rounds with no clipping reported, but no dedicated diacritic check was ever run and recorded.)
 
 ## Success Criteria
 
