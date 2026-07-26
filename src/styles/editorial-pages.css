@@ -1,3 +1,126 @@
+/* /login, /register: editorial brand split — form column + brand imagery column. */
+
+.auth-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.auth-split-form {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 28rem;
+}
+
+.auth-split-wordmark {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.auth-split-form-fields {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.auth-split-message {
+  margin: 0;
+  color: var(--color-success);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.auth-split-actions {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.auth-split-actions .ui-action { width: 100%; }
+
+.auth-split-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.auth-split-divider::before,
+.auth-split-divider::after {
+  content: "";
+  flex: 1;
+  block-size: 1px;
+  background: var(--color-border);
+}
+
+.auth-split-switch {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.auth-split-switch-link {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.auth-split-switch-link:hover { color: var(--color-action); }
+
+.auth-split-brand {
+  position: relative;
+  display: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  min-block-size: 32rem;
+}
+
+.auth-split-brand img { object-fit: cover; }
+
+.auth-split-brand-overlay {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(2rem, 4vw, 3rem);
+  background: linear-gradient(to top, rgb(26 27 24 / 78%), rgb(26 27 24 / 0%) 70%);
+  color: #f7f5ef;
+}
+
+.auth-split-brand-overlay .section-marker-index,
+.auth-split-brand-overlay .section-marker-label { color: #f7f5ef; }
+
+.auth-split-brand-overlay .section-marker-rule { background: rgb(247 245 239 / 35%); }
+
+.auth-split-brand-statement { margin: 0; color: #f7f5ef; }
+
+@media (min-width: 1024px) {
+  .auth-split {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: stretch;
+    min-block-size: 34rem;
+  }
+
+  .auth-split-form {
+    grid-column: span 5;
+    align-self: center;
+    max-width: none;
+  }
+
+  .auth-split-brand {
+    display: block;
+    grid-column: span 7;
+  }
+}
+
 /* Editorial page layer: room-story cover story restyle for /studios/[slug]. */
 
 .room-story {

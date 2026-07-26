@@ -1,7 +1,24 @@
 import Link from "next/link";
 
 import { AuthForm } from "@/features/auth/presentation/auth-form";
+import { AuthShell } from "@/features/auth/presentation/auth-shell";
 
 export default function RegisterPage() {
-  return <section className="mx-auto max-w-md"><h1 className="text-4xl font-semibold">Tạo tài khoản</h1><p className="mt-3 text-[var(--color-text-muted)]">Đăng ký để quản lý các booking đã xác minh.</p><AuthForm mode="register" /><p className="mt-5 text-sm">Đã có tài khoản? <Link className="font-semibold text-[var(--color-accent)] hover:text-[var(--color-action)]" href="/login">Đăng nhập</Link></p></section>;
+  return (
+    <AuthShell
+      description="Đăng ký để quản lý các booking đã xác minh."
+      eyebrow="Tài khoản"
+      footer={
+        <p className="auth-split-switch">
+          Đã có tài khoản?{" "}
+          <Link className="auth-split-switch-link" href="/login">
+            Đăng nhập
+          </Link>
+        </p>
+      }
+      title="Tạo tài khoản"
+    >
+      <AuthForm mode="register" />
+    </AuthShell>
+  );
 }
