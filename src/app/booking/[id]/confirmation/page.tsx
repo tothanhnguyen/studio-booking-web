@@ -43,17 +43,19 @@ export default async function ConfirmationPage({ params }: Readonly<{ params: Pr
       <div className="confirmation-receipt booking-ticket ui-surface">
         <p className="booking-ticket__meta type-mono">Biên nhận đặt lịch</p>
         <BookingSummary booking={booking} />
-        <PaymentStatus
-          bookingStatus={booking.bookingStatus}
-          paymentStatus={booking.paymentStatus}
-        />
-        <section className="confirmation-remaining ui-surface">
-          <p className="page-eyebrow">Số tiền còn lại</p>
-          <p className="type-mono confirmation-remaining__amount">
-            {money.format(booking.remainingAmount)}
-          </p>
-          <p>Số dư hiện tại của lịch đặt sau khoản tiền cọc.</p>
-        </section>
+        <aside aria-label="Bước tiếp theo">
+          <PaymentStatus
+            bookingStatus={booking.bookingStatus}
+            paymentStatus={booking.paymentStatus}
+          />
+          <section className="confirmation-remaining ui-surface">
+            <p className="page-eyebrow">Số tiền còn lại</p>
+            <p className="type-mono confirmation-remaining__amount">
+              {money.format(booking.remainingAmount)}
+            </p>
+            <p>Số dư hiện tại của lịch đặt sau khoản tiền cọc.</p>
+          </section>
+        </aside>
       </div>
       <Link className={actionClassName("primary")} href="/studios">
         Về trang studio

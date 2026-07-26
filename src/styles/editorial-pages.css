@@ -260,7 +260,7 @@
   max-width: 34rem;
 }
 
-.confirmation-receipt > .ui-surface {
+.confirmation-receipt > aside .ui-surface {
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -269,12 +269,12 @@
 }
 
 .confirmation-receipt > .booking-summary,
-.confirmation-receipt > .ui-surface + .ui-surface {
+.confirmation-receipt > aside .ui-surface + .ui-surface {
   border-inline-start: 0;
   padding-inline-start: 0;
 }
 
-.confirmation-receipt > .ui-surface + .ui-surface {
+.confirmation-receipt > aside .ui-surface + .ui-surface {
   border-block-start: 1px dashed var(--color-border);
   padding-block-start: clamp(1.25rem, 3vw, 2rem);
 }

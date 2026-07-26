@@ -437,12 +437,6 @@
   line-height: 1.6;
 }
 
-.confirmation-page__code strong {
-  display: inline-block;
-  margin-inline-start: 0.375rem;
-  overflow-wrap: anywhere;
-  color: var(--color-champagne);
-}
 
 .confirmation-remaining__amount {
   margin: 0.75rem 0 0;
