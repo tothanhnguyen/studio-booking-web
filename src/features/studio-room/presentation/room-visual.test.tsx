@@ -53,4 +53,16 @@ describe("RoomVisual", () => {
       "featured-room",
     );
   });
+
+  it("resolves detail variants to suffixed assets", () => {
+    render(<RoomVisual alt="Chi tiết phòng" slug="music-studio" variant="detail-1" />);
+    const image = screen.getByRole("img", { name: "Chi tiết phòng" });
+    expect(image.getAttribute("src")).toContain("music-studio-detail-1.webp");
+  });
+
+  it("defaults to the hero asset when variant is omitted", () => {
+    render(<RoomVisual alt="Phòng nhạc" slug="music-studio" />);
+    const image = screen.getByRole("img", { name: "Phòng nhạc" });
+    expect(image.getAttribute("src")).toContain("music-studio.webp");
+  });
 });

@@ -2,11 +2,14 @@ import Image from "next/image";
 
 export type RoomMaterial = "photo" | "podcast" | "music";
 
+export type RoomVisualVariant = "hero" | "detail-1" | "detail-2";
+
 export type RoomVisualProps = Readonly<{
   slug: string;
   alt: string;
   priority?: boolean;
   className?: string;
+  variant?: RoomVisualVariant;
 }>;
 
 const roomVisuals = {
@@ -34,23 +37,30 @@ export function RoomVisual({
   alt,
   priority,
   className,
+  variant,
 }: RoomVisualProps) {
-  const visual =
+  const isKnownRoom = slug in roomVisuals;
+  const base =
     roomVisuals[slug as keyof typeof roomVisuals] ?? fallbackVisual;
+  const src =
+    variant && variant !== "hero" && isKnownRoom
+      ? base.src.replace(/\.webp$/, `-${variant}.webp`)
+      : base.src;
   const classes = ["room-visual", className].filter(Boolean).join(" ");
 
   return (
     <figure
       className={classes}
-      data-room-material={visual.material}
+      data-room-material={base.material}
       data-testid="room-visual"
+      data-variant={variant ?? "hero"}
     >
       <Image
         alt={alt}
         fill
         priority={priority}
         sizes="(min-width: 1024px) 44vw, 100vw"
-        src={visual.src}
+        src={src}
       />
     </figure>
   );
