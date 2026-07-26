@@ -7,7 +7,11 @@ test.describe("assisted booking lifecycle", () => {
     context,
     page,
   }, testInfo) => {
-    const date = testInfo.project.name === "mobile-chrome" ? "2027-05-06" : "2027-05-05";
+    // Fixed dates in this suite accumulate CONFIRMED bookings run over run (this
+    // path never cancels, unlike the reject test below) against the shared,
+    // non-reset seeded database — 2027-05-05/06 filled to the room's daily
+    // capacity from repeated prior runs, so this uses a fresh date pair.
+    const date = testInfo.project.name === "mobile-chrome" ? "2027-08-05" : "2027-08-04";
 
     // Step 1: Guest creates an ASSISTED booking
     await page.goto("/services/assisted-photo-session");
@@ -44,9 +48,8 @@ test.describe("assisted booking lifecycle", () => {
     // Step 3: Verify ASSISTED booking transitions to PENDING (not CONFIRMED like ROOM_ONLY)
     await page.goto(`/booking/${bookingId}/confirmation`);
     await expect(page.getByText("Trạng thái booking:")).toBeVisible();
-    await expect(page.getByText("PENDING")).toBeVisible();
-    await expect(page.getByText("Trạng thái thanh toán:")).toBeVisible();
-    await expect(page.getByText("PAID")).toBeVisible();
+    await expect(page.getByText("Chờ xác nhận", { exact: true })).toBeVisible();
+    await expect(page.getByText("Đã thanh toán", { exact: true })).toBeVisible();
 
     // Step 4: Admin confirms the ASSISTED booking
     await context.addCookies([
@@ -105,13 +108,13 @@ test.describe("assisted booking lifecycle", () => {
     await page.getByLabel("Lý do hủy / từ chối").fill("Không đủ kỹ thuật viên");
     await page.getByRole("button", { name: "Từ chối booking" }).click();
 
-    // Verify booking is CANCELLED with refund requested (admin badge renders the localized
-    // label; scope the refund-status check to the <dd> tag so it doesn't also match the
-    // "REQUESTED" <option> inside the refund-status <select> further down the page — a plain
-    // "definition" role query would not work here since Playwright does not compute an
-    // accessible name from text content for non-widget roles like <dd>)
+    // Verify booking is CANCELLED with refund requested — both the booking status
+    // badge and the refund-status <dd> now render localized Vietnamese labels
+    // instead of the raw enum, so there is no collision with the raw-English
+    // <option value="REQUESTED"> inside the refund-status <select> further down
+    // the page.
     await page.waitForURL(`/admin/bookings/${bookingId}`);
     await expect(page.getByText("Đã hủy")).toBeVisible();
-    await expect(page.locator("dd").filter({ hasText: "REQUESTED" })).toBeVisible();
+    await expect(page.locator("dd").filter({ hasText: "Đã yêu cầu" })).toBeVisible();
   });
 });
