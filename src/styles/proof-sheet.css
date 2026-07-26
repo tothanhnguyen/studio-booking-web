@@ -711,3 +711,51 @@
   max-width: 34rem;
   margin-top: clamp(2rem, 5vw, 3rem);
 }
+
+/* Confirmation: oversized mono booking code + developed-frame receipt. */
+.confirmation-code {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.confirmation-code strong {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.developed-frame {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.confirmation-next {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.confirmation-remaining .log-row__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.confirmation-cta { margin-top: clamp(1.5rem, 4vw, 2.5rem); }
+
+@media (min-width: 901px) {
+  .developed-frame {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
+    max-width: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .confirmation-code strong { font-size: clamp(1.5rem, 8vw, 2rem); }
+}
