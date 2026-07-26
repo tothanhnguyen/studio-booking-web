@@ -6,6 +6,9 @@ import {
   rejectAssistedBookingAction,
   updateRefundStatusAction,
 } from "@/app/admin/bookings/[id]/actions";
+import { actionClassName } from "@/components/ui/action";
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { getAdminBooking } from "@/features/dashboard/application/admin-booking-queries";
 import { BookingDetail } from "@/features/dashboard/presentation/booking-detail";
@@ -17,98 +20,101 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
   const actor = await getAdminPageActor(`/admin/bookings/${id}`);
   const booking = await getAdminBooking(actor, id);
   if (!booking) notFound();
+
   return (
-    <section>
-      <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">
-        Booking #{booking.id.slice(0, 8)}
-      </p>
-      <h1 className="mt-3 text-3xl font-semibold">Chi tiết booking</h1>
-      <BookingDetail booking={booking} showCustomer />
+    <div className="admin-view">
+      <PageHeading eyebrow={`Booking #${booking.id.slice(0, 8)}`} title="Chi tiết booking" />
 
-      <div className="mt-6 grid gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-        <h2 className="font-semibold">Lifecycle actions</h2>
+      <section aria-labelledby="admin-booking-detail-heading" className="admin-section">
+        <SectionMarker index={1} label="Lịch & thanh toán" />
+        <h2 className="sr-only" id="admin-booking-detail-heading">Lịch & thanh toán</h2>
+        <BookingDetail booking={booking} showCustomer />
+      </section>
 
-        {booking.bookingType === "ASSISTED" && booking.bookingStatus === "PENDING" && (
-          <form
-            action={async () => {
-              "use server";
-              await confirmAssistedBookingAction(booking.id);
-            }}
-          >
-            <button
-              type="submit"
-              className="rounded-full bg-[var(--color-success)] px-4 py-2 font-semibold text-[var(--color-on-action)]"
+      <section aria-labelledby="admin-booking-lifecycle-heading" className="admin-section">
+        <SectionMarker index={2} label="Thao tác vòng đời" />
+        <div className="ui-surface grid gap-4">
+          <h2 className="font-semibold" id="admin-booking-lifecycle-heading">Lifecycle actions</h2>
+
+          {booking.bookingType === "ASSISTED" && booking.bookingStatus === "PENDING" && (
+            <div className="admin-actions-group">
+              <form
+                action={async () => {
+                  "use server";
+                  await confirmAssistedBookingAction(booking.id);
+                }}
+              >
+                <button className={actionClassName("primary")} type="submit">
+                  Xác nhận booking ASSISTED
+                </button>
+              </form>
+            </div>
+          )}
+
+          {booking.bookingStatus !== "CANCELLED" && (
+            <div className="admin-actions-group">
+              <form
+                action={async (formData) => {
+                  "use server";
+                  const reason = String(formData.get("reason") ?? "");
+                  if (booking.bookingType === "ASSISTED") {
+                    await rejectAssistedBookingAction(booking.id, reason);
+                    return;
+                  }
+                  await cancelBookingByAdminAction(booking.id, reason);
+                }}
+                className="admin-form-field"
+              >
+                <label className="text-sm text-[var(--color-text-muted)]" htmlFor="admin-cancel-reason">
+                  Lý do hủy / từ chối
+                </label>
+                <input
+                  id="admin-cancel-reason"
+                  name="reason"
+                  required
+                  className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
+                />
+                <button className={`w-fit ${actionClassName("danger")}`} type="submit">
+                  {booking.bookingType === "ASSISTED" ? "Từ chối booking" : "Hủy booking"}
+                </button>
+              </form>
+            </div>
+          )}
+
+          <div className="admin-actions-group">
+            <form
+              action={async (formData) => {
+                "use server";
+                await updateRefundStatusAction(
+                  booking.id,
+                  String(formData.get("status") ?? ""),
+                  String(formData.get("note") ?? ""),
+                );
+              }}
+              className="admin-form-field"
             >
-              Xác nhận booking ASSISTED
-            </button>
-          </form>
-        )}
-
-        {booking.bookingStatus !== "CANCELLED" && (
-          <form
-            className="grid gap-2"
-            action={async (formData) => {
-              "use server";
-              const reason = String(formData.get("reason") ?? "");
-              if (booking.bookingType === "ASSISTED") {
-                await rejectAssistedBookingAction(booking.id, reason);
-                return;
-              }
-              await cancelBookingByAdminAction(booking.id, reason);
-            }}
-          >
-            <label className="text-sm text-[var(--color-text-muted)]" htmlFor="admin-cancel-reason">
-              Lý do hủy / từ chối
-            </label>
-            <input
-              id="admin-cancel-reason"
-              name="reason"
-              required
-              className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
-            />
-            <button
-              type="submit"
-              className="w-fit rounded-full bg-[var(--color-danger)] px-4 py-2 font-semibold text-[var(--color-on-action)]"
-            >
-              {booking.bookingType === "ASSISTED" ? "Từ chối booking" : "Hủy booking"}
-            </button>
-          </form>
-        )}
-
-        <form
-          className="grid gap-2"
-          action={async (formData) => {
-            "use server";
-            await updateRefundStatusAction(
-              booking.id,
-              String(formData.get("status") ?? ""),
-              String(formData.get("note") ?? ""),
-            );
-          }}
-        >
-          <label className="text-sm text-[var(--color-text-muted)]" htmlFor="refund-status">
-            Cập nhật refund status
-          </label>
-          <select
-            id="refund-status"
-            name="status"
-            defaultValue={booking.refundStatus}
-            className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
-          >
-            <option value="REQUESTED">REQUESTED</option>
-            <option value="PROCESSING">PROCESSING</option>
-            <option value="REFUNDED">REFUNDED</option>
-            <option value="REJECTED">REJECTED</option>
-          </select>
-          <input name="note" placeholder="Ghi chú hoàn tiền" className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]" />
-          <button
-            type="submit"
-            className="w-fit rounded-full bg-[var(--color-action)] px-4 py-2 font-semibold text-[var(--color-on-action)] hover:bg-[var(--color-action-hover)]"
-          >
-            Lưu refund status
-          </button>
-        </form>
-      </div>
-    </section>
+              <label className="text-sm text-[var(--color-text-muted)]" htmlFor="refund-status">
+                Cập nhật refund status
+              </label>
+              <select
+                id="refund-status"
+                name="status"
+                defaultValue={booking.refundStatus}
+                className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]"
+              >
+                <option value="REQUESTED">REQUESTED</option>
+                <option value="PROCESSING">PROCESSING</option>
+                <option value="REFUNDED">REFUNDED</option>
+                <option value="REJECTED">REJECTED</option>
+              </select>
+              <input className="rounded-lg border border-[var(--color-control-border)] bg-[var(--color-surface-raised)] p-3 text-[var(--color-text)]" name="note" placeholder="Ghi chú hoàn tiền" />
+              <button className={`w-fit ${actionClassName("secondary")}`} type="submit">
+                Lưu refund status
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

@@ -18,8 +18,11 @@ const statusStyles: Record<BookingStatus, string> = {
   COMPLETED: "border-[#b6a3bd] bg-[#e1d9e6] text-[#594461]",
 };
 
+// Colors above are muted-semantic pairs verified for WCAG AA text contrast
+// (>= 4.5:1) both against their own pill background and against
+// var(--color-surface); see tokens.css for the surface value.
 export function BookingStatusBadge({ status }: Readonly<{ status: BookingStatus }>) {
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${statusStyles[status]}`}>{statusLabels[status]}</span>;
+  return <span className={`inline-flex shrink-0 items-center rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ${statusStyles[status]}`}>{statusLabels[status]}</span>;
 }
 
 export function getBookingStatusLabel(status: BookingStatus) {

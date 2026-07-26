@@ -1,3 +1,5 @@
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { listAdminBookings } from "@/features/dashboard/application/admin-booking-queries";
 import { BookingFilters, BookingPagination, parseBookingStatus, parsePage } from "@/features/dashboard/presentation/booking-filters";
@@ -10,12 +12,21 @@ export default async function AdminBookingsPage({ searchParams }: Readonly<{ sea
   const params = await searchParams;
   const status = parseBookingStatus(params.status);
   const result = await listAdminBookings(actor, { status, page: parsePage(params.page), pageSize: 20 });
-  return <section aria-labelledby="admin-bookings-heading">
-    <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Vận hành</p>
-    <h1 id="admin-bookings-heading" className="mt-3 text-3xl font-semibold">Quản lý booking</h1>
-    <p className="mt-3 text-[var(--color-text-muted)]">{result.total} booking trong bộ lọc hiện tại.</p>
-    <div className="mt-6"><BookingFilters action="/admin/bookings" status={status} /></div>
-    <div className="mt-6"><BookingList result={result} detailBasePath="/admin/bookings" /></div>
-    <BookingPagination result={result} basePath="/admin/bookings" status={status} />
-  </section>;
+  return (
+    <div className="admin-view">
+      <PageHeading
+        description={`${result.total} booking trong bộ lọc hiện tại.`}
+        eyebrow="Vận hành"
+        headingId="admin-bookings-heading"
+        title="Quản lý booking"
+      />
+      <section aria-labelledby="admin-bookings-list-heading" className="admin-section">
+        <SectionMarker index={1} label="Danh sách booking" />
+        <h2 className="sr-only" id="admin-bookings-list-heading">Danh sách booking</h2>
+        <BookingFilters action="/admin/bookings" status={status} />
+        <BookingList detailBasePath="/admin/bookings" result={result} />
+        <BookingPagination basePath="/admin/bookings" result={result} status={status} />
+      </section>
+    </div>
+  );
 }

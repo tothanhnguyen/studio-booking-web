@@ -122,3 +122,124 @@
   font-size: 0.9375rem;
 }
 
+/* Section rhythm ----------------------------------------------------------- */
+
+.admin-view {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.admin-section {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-section:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.admin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Compact row lists (bookings, payments) ---------------------------------- */
+
+.admin-row-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.admin-row {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--color-border);
+  transition: background-color var(--motion-fast) ease;
+}
+
+.admin-row:first-child { border-top: none; }
+
+.admin-row:hover,
+.admin-row:focus-within {
+  background: var(--color-surface-raised);
+}
+
+@media (min-width: 768px) {
+  .admin-row--booking {
+    grid-template-columns: 6.5rem 5.5rem minmax(10rem, 1.4fr) minmax(9rem, 1fr) 7rem auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .admin-row--payment {
+    grid-template-columns: minmax(10rem, 1.6fr) 7rem 7rem 8rem 6.5rem;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.admin-row-primary {
+  min-width: 0;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--motion-fast) ease;
+}
+
+.admin-row-primary:hover,
+.admin-row-primary:focus-visible {
+  color: var(--color-action);
+}
+
+.admin-row-secondary {
+  margin: 0;
+  min-width: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.admin-row-cell {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .admin-row-cell--end { justify-self: end; text-align: right; }
+}
+
+.admin-empty-state {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.5rem;
+  color: var(--color-text-muted);
+}
+
+/* Detail + action separation ----------------------------------------------- */
+
+.admin-actions-group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-actions-group + .admin-actions-group {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.admin-form-field {
+  display: grid;
+  gap: 0.4rem;
+}
+

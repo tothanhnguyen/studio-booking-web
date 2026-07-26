@@ -1,9 +1,14 @@
 import Link from "next/link";
 
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { prisma } from "@/lib/db/prisma";
 
 export const dynamic = "force-dynamic";
+
+const amountFormatter = new Intl.NumberFormat("vi-VN");
+const updatedAtFormatter = new Intl.DateTimeFormat("vi-VN", { dateStyle: "short", timeStyle: "short" });
 
 export default async function AdminPaymentsPage() {
   await getAdminPageActor("/admin/payments");
@@ -29,34 +34,42 @@ export default async function AdminPaymentsPage() {
   });
 
   return (
-    <section>
-      <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Tài chính</p>
-      <h1 className="mt-3 text-3xl font-semibold">Theo dõi thanh toán & hoàn tiền</h1>
-      <p className="mt-2 text-[var(--color-text-muted)]">Danh sách booking cần đối soát payment/refund.</p>
-      <ul className="mt-6 space-y-3">
-        {bookings.map((booking) => (
-          <li key={booking.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <Link href={`/admin/bookings/${booking.id}`} className="font-semibold hover:text-[var(--color-action)]">
-                  {booking.serviceName}
-                </Link>
-                <p className="text-sm text-[var(--color-text-muted)]">{booking.customerName}</p>
-              </div>
-              <div className="text-right text-sm">
-                <p>Payment: <strong>{booking.paymentStatus}</strong></p>
-                <p>Refund: <strong>{booking.refundStatus}</strong></p>
-                <p className="text-[var(--color-text-muted)]">
-                  {new Intl.NumberFormat("vi-VN").format(booking.depositAmount)} {booking.currency}
-                </p>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-      {bookings.length === 0 && (
-        <p className="mt-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-[var(--color-text-muted)]">Chưa có payment/refund cần theo dõi.</p>
-      )}
-    </section>
+    <div className="admin-view">
+      <PageHeading
+        description="Danh sách booking cần đối soát payment/refund."
+        eyebrow="Tài chính"
+        title="Theo dõi thanh toán & hoàn tiền"
+      />
+
+      <section aria-labelledby="admin-payments-heading" className="admin-section">
+        <SectionMarker index={1} label="Cần đối soát" />
+        <h2 className="sr-only" id="admin-payments-heading">Cần đối soát</h2>
+
+        {bookings.length === 0 ? (
+          <p className="admin-empty-state">Chưa có payment/refund cần theo dõi.</p>
+        ) : (
+          <ul className="admin-row-list">
+            {bookings.map((booking) => (
+              <li className="admin-row admin-row--payment" key={booking.id}>
+                <div className="admin-row-cell">
+                  <Link className="admin-row-primary" href={`/admin/bookings/${booking.id}`}>
+                    {booking.serviceName}
+                  </Link>
+                  <p className="admin-row-secondary">{booking.customerName}</p>
+                </div>
+                <div className="type-mono admin-row-secondary">{booking.paymentStatus}</div>
+                <div className="type-mono admin-row-secondary">{booking.refundStatus}</div>
+                <div className="type-mono admin-row-cell admin-row-cell--end">
+                  {amountFormatter.format(booking.depositAmount)} {booking.currency}
+                </div>
+                <div className="type-mono admin-row-cell admin-row-cell--end admin-row-secondary">
+                  {updatedAtFormatter.format(booking.updatedAt)}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
   );
 }

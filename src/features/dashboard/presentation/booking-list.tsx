@@ -21,16 +21,29 @@ function resolveRoomMaterial(roomName: string): RoomMaterial {
   return "podcast";
 }
 
+const amountFormatter = new Intl.NumberFormat("vi-VN");
+
+/** Compact admin operations list: mono date/time/code/amount columns, hairline dividers. */
 export function BookingList({ result, detailBasePath }: Readonly<{ result: BookingPage; detailBasePath: string }>) {
-  if (result.items.length === 0) return <p className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-[var(--color-text-muted)]">Chưa có booking phù hợp.</p>;
-  return <ul className="space-y-4">
-    {result.items.map((booking) => <li key={booking.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <Link className="text-lg font-semibold hover:text-[var(--color-action)]" href={`${detailBasePath}/${booking.id}`}>{booking.serviceName}</Link>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">{booking.roomName} · <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time></p>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">{booking.customerName} · {booking.customerEmail}</p>
-        </div>
+  if (result.items.length === 0) return <p className="admin-empty-state">Chưa có booking phù hợp.</p>;
+  return <ul className="admin-row-list">
+    {result.items.map((booking) => <li className="admin-row admin-row--booking" key={booking.id}>
+      <div className="type-mono admin-row-secondary">
+        <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time>
+      </div>
+      <div className="type-mono admin-row-secondary">#{booking.id.slice(0, 8)}</div>
+      <div className="admin-row-cell">
+        <Link className="admin-row-primary" href={`${detailBasePath}/${booking.id}`}>{booking.customerName}</Link>
+        <p className="admin-row-secondary">{booking.customerEmail}</p>
+      </div>
+      <div className="admin-row-cell">
+        <p className="admin-row-secondary">{booking.serviceName}</p>
+        <p className="admin-row-secondary">{booking.roomName}</p>
+      </div>
+      <div className="type-mono admin-row-cell admin-row-cell--end">
+        {amountFormatter.format(booking.depositAmount)} {booking.currency}
+      </div>
+      <div className="admin-row-cell admin-row-cell--end">
         <BookingStatusBadge status={booking.bookingStatus} />
       </div>
     </li>)}
