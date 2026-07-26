@@ -9,6 +9,15 @@ export function getPaymentStatusDescription(
       : "Đang chờ thanh toán tiền cọc.";
 }
 
+const bookingStatusLabel: Record<string, string> = {
+  PENDING_PAYMENT: "Chờ thanh toán",
+  PENDING: "Chờ xác nhận",
+  CONFIRMED: "Đã xác nhận",
+  CANCELLED: "Đã hủy",
+  EXPIRED: "Đã hết hạn",
+  COMPLETED: "Đã hoàn thành",
+};
+
 const paymentStatusBadgeLabel: Record<string, string> = {
   PENDING: "Đang chờ",
   PAID: "Đã thanh toán",
@@ -37,11 +46,7 @@ export function PaymentStatus({
       <dl>
         <div>
           <dt>Trạng thái booking:</dt>
-          <dd className="type-mono">{bookingStatus}</dd>
-        </div>
-        <div>
-          <dt>Trạng thái thanh toán:</dt>
-          <dd className="type-mono">{paymentStatus}</dd>
+          <dd className="type-mono">{bookingStatusLabel[bookingStatus] ?? bookingStatus}</dd>
         </div>
       </dl>
       <p className="payment-status__description">{description}</p>
