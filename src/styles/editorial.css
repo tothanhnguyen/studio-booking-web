@@ -88,56 +88,8 @@
 /* Parallax frame */
 .parallax-frame { will-change: transform; }
 
-/* Studios index: editorial magazine rows */
-.studio-index-intro {
-  display: grid;
-  gap: 0.75rem;
-  max-width: 46rem;
-  margin-block-end: clamp(2rem, 5vw, 3.5rem);
-}
-
-.studio-index-list {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(6rem, 9vw, 8rem);
-  margin-top: clamp(3rem, 7vw, 6rem);
-}
-
-.studio-index-row {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.studio-index-row__visual { order: 1; }
-
-.studio-index-row__copy {
-  display: flex;
-  order: 2;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.studio-index-row__description {
-  max-width: 31rem;
-  margin: 0.5rem 0 0;
-  color: var(--color-text-muted);
-  font-size: 1rem;
-  line-height: 1.75;
-  text-wrap: pretty;
-}
-
-.studio-index-row__meta {
-  margin: 0 0 0.5rem;
-  color: var(--color-text-muted);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
+/* Studios index: empty-state message (row/intro/list layout superseded by
+   .proof-contact-sheet / .proof-room-frame* in proof-sheet.css). */
 .studio-index-empty {
   margin: 3rem 0 0;
   border: 1px solid var(--color-border);
@@ -146,20 +98,6 @@
   padding: 1.5rem;
   color: var(--color-text-muted);
   line-height: 1.7;
-}
-
-@media (min-width: 768px) {
-  .studio-index-row {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    align-items: center;
-    gap: clamp(2.5rem, 6vw, 5rem);
-  }
-
-  .studio-index-row__visual { grid-column: span 7; }
-  .studio-index-row__copy { grid-column: span 5; }
-
-  .studio-index-row[data-align="right"] .studio-index-row__visual { order: 2; }
-  .studio-index-row[data-align="right"] .studio-index-row__copy { order: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -175,103 +113,5 @@
   .parallax-frame { transform: none !important; }
 }
 
-/* Booking progress rail: continuous step connector with state markers */
-.booking-rail {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 0;
-  align-items: flex-start;
-}
-
-.booking-rail__step {
-  position: relative;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
-}
-
-.booking-rail__step::before {
-  content: "";
-  position: absolute;
-  top: 1.25rem;
-  left: 50%;
-  right: -50%;
-  height: 1px;
-  background: var(--color-border);
-  z-index: 0;
-}
-
-.booking-rail__step[data-step-state="completed"]::before {
-  background: var(--color-action);
-}
-
-.booking-rail__step:last-child::before {
-  display: none;
-}
-
-.booking-rail__position {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.booking-rail__step[data-step-state="active"] .booking-rail__position {
-  background: var(--color-action);
-  color: var(--color-surface);
-  border-color: var(--color-action);
-}
-
-.booking-rail__step[data-step-state="completed"] .booking-rail__position {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-color: var(--color-action);
-}
-
-.booking-rail__label {
-  text-align: center;
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  line-height: 1.4;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-.booking-rail__step[data-step-state="active"] .booking-rail__label {
-  color: var(--color-text);
-  font-weight: 500;
-}
-
-@media (max-width: 375px) {
-  .booking-rail {
-    flex-wrap: wrap;
-  }
-
-  .booking-rail__step {
-    flex-basis: 100%;
-    margin-bottom: 1.5rem;
-  }
-
-  .booking-rail__step::before {
-    display: none;
-  }
-
-  .booking-rail__label {
-    margin-top: 0.25rem;
-  }
-}
+/* Booking progress rail superseded by the shared .log-rail/.log-row session-log
+   device (see BookingProgress in booking-progress.tsx, styled in proof-sheet.css). */
