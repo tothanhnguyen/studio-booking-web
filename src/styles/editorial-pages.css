@@ -320,5 +320,6 @@
 }
 
 .payment-status[data-payment-state="paid"] .payment-status__badge { color: var(--color-success); }
-.payment-status[data-payment-state="failed"] .payment-status__badge,
-.payment-status[data-payment-state="expired"] .payment-status__badge { color: var(--color-danger); }
+.payment-status[data-payment-state="pending"] .payment-status__badge { color: var(--color-warning); }
+.payment-status[data-payment-state="failed"] .payment-status__badge { color: var(--color-danger); }
+.payment-status[data-payment-state="expired"] .payment-status__badge { color: var(--color-text-muted); }
