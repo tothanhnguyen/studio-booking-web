@@ -188,72 +188,6 @@
   padding-block: clamp(1rem, 3vw, 2.5rem);
 }
 
-.room-atlas {
-  margin-top: clamp(3rem, 7vw, 6rem);
-  border-block-start: 1px solid var(--color-warm-line);
-}
-
-.room-atlas-row {
-  display: grid;
-  gap: 1.75rem;
-  border-block-end: 1px solid var(--color-warm-line);
-  padding-block: clamp(2rem, 6vw, 4.5rem);
-}
-
-.room-atlas-row__copy {
-  display: flex;
-  max-width: 34rem;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.room-atlas-row__meta {
-  margin: 0 0 0.75rem;
-  color: var(--color-brass);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.room-atlas-row h2 {
-  margin: 0;
-  color: var(--color-bone);
-  font-size: clamp(1.75rem, 4vw, 3.5rem);
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  text-wrap: balance;
-}
-
-.room-atlas-row__description {
-  max-width: 31rem;
-  margin: 1.25rem 0 1.75rem;
-  color: var(--color-smoke);
-  font-size: 1rem;
-  line-height: 1.75;
-  text-wrap: pretty;
-}
-
-.room-atlas-row:focus-within .room-visual img {
-  transform: scale(1.025);
-}
-
-.room-atlas-row:focus-within .room-visual {
-  border-color: var(--color-brass);
-}
-
-.room-atlas__empty {
-  margin: 3rem 0 0;
-  border: 1px solid var(--color-warm-line);
-  border-radius: var(--radius-md);
-  background: var(--color-espresso);
-  padding: 1.5rem;
-  color: var(--color-smoke);
-  line-height: 1.7;
-}
-
 .room-portal {
   padding-block: clamp(1rem, 3vw, 2.5rem);
 }
@@ -724,7 +658,6 @@
   .ui-action--tertiary:hover { color: var(--color-champagne); }
   .ui-action--danger:hover { background: rgb(139 62 53 / 20%); }
   .room-visual:hover img { transform: scale(1.025); }
-  .room-atlas-row:hover .room-visual { border-color: var(--color-brass); }
 }
 
 @media (min-width: 640px) {
@@ -754,20 +687,6 @@
   .payment-transfer dd,
   .booking-summary dd,
   .payment-status dd { text-align: end; }
-
-  .room-atlas-row {
-    grid-template-areas: "visual copy";
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    align-items: center;
-    gap: clamp(2.5rem, 6vw, 6rem);
-  }
-
-  .room-atlas-row:nth-child(even) {
-    grid-template-areas: "copy visual";
-  }
-
-  .room-atlas-row > .room-visual { grid-area: visual; }
-  .room-atlas-row__copy { grid-area: copy; }
 
   .service-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(11rem, 0.65fr);

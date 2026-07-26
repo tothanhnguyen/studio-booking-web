@@ -1,11 +1,25 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PublicRoom } from "@/features/studio-room/application/list-public-rooms";
 
 import { RoomCard } from "./room-card";
 
-afterEach(cleanup);
+beforeEach(() => {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn().mockReturnValue({
+      addEventListener: vi.fn(),
+      matches: false,
+      removeEventListener: vi.fn(),
+    }),
+  );
+});
+
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+});
 
 const roomFixture = {
   id: "room-photo",
@@ -49,7 +63,7 @@ const roomFixture = {
 
 describe("RoomCard", () => {
   it("renders a room as an accessible atlas row", () => {
-    render(<RoomCard room={roomFixture} />);
+    render(<RoomCard index={1} room={roomFixture} />);
 
     expect(screen.getByRole("article")).toHaveAttribute(
       "data-room-slug",
@@ -62,5 +76,10 @@ describe("RoomCard", () => {
     expect(
       screen.getByRole("link", { name: "Khám phá Photo Studio" }),
     ).toHaveAttribute("href", "/studios/photo-studio");
+  });
+
+  it("renders its magazine index marker", () => {
+    render(<RoomCard index={2} room={roomFixture} />);
+    expect(screen.getByText("02")).toBeInTheDocument();
   });
 });
