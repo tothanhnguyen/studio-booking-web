@@ -76,6 +76,10 @@ export function RoomForm({ initialValue = emptyRoom }: Readonly<{ initialValue?:
 
       <input type="hidden" value="Asia/Ho_Chi_Minh" {...register("timezone")} />
 
+      {(errors.id ?? errors.timezone) && (
+        <p className="ui-field__error" role="alert">{String((errors.id ?? errors.timezone)?.message)}</p>
+      )}
+
       {result && (
         <p className={result.ok ? "ui-field__hint" : "ui-field__error"} role="status">
           {result.message}

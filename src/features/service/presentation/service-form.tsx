@@ -129,6 +129,10 @@ export function ServiceForm({ rooms, initialValue }: Readonly<{ rooms: RoomOptio
         Đang hoạt động
       </label>
 
+      {(errors.id ?? errors.currency) && (
+        <p className="ui-field__error" role="alert">{String((errors.id ?? errors.currency)?.message)}</p>
+      )}
+
       {result && (
         <p className={result.ok ? "ui-field__hint" : "ui-field__error"} role="status">
           {result.message}
