@@ -16,8 +16,8 @@ describe("BookingProgress", () => {
 
     expect(screen.getByRole("list", { name: "Các bước đặt lịch" })).toBeInTheDocument();
     expect(screen.getByText("Khung giờ").closest("li")).toHaveAttribute("aria-current", "step");
-    expect(screen.getByText("Liên hệ").closest("li")).toHaveAttribute("data-step-state", "complete");
-    expect(screen.getByText("Xác nhận").closest("li")).toHaveAttribute("data-step-state", "upcoming");
+    expect(screen.getByText("Liên hệ").closest("li")).toHaveAttribute("data-step-state", "completed");
+    expect(screen.getByText("Xác nhận").closest("li")).toHaveAttribute("data-step-state", "future");
   });
 
   it("keeps positional steps uniquely keyed when labels repeat", () => {
@@ -27,5 +27,13 @@ describe("BookingProgress", () => {
 
     expect(screen.getAllByText("Ngày")).toHaveLength(2);
     expect(consoleError.mock.calls.flat().join(" ")).not.toContain("same key");
+  });
+
+  it("marks completed, active, and future steps on the rail", () => {
+    render(<BookingProgress currentStep={1} steps={["Chọn giờ", "Thông tin", "Xác nhận"]} />);
+    const items = screen.getAllByRole("listitem");
+    expect(items[0]).toHaveAttribute("data-step-state", "completed");
+    expect(items[1]).toHaveAttribute("data-step-state", "active");
+    expect(items[2]).toHaveAttribute("data-step-state", "future");
   });
 });
