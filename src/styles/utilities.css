@@ -95,53 +95,6 @@
   padding: clamp(1.25rem, 3vw, 2rem);
 }
 
-.booking-progress {
-  display: flex;
-  max-width: 100%;
-  margin: 0;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  padding: 0;
-  list-style: none;
-  scrollbar-color: var(--color-warm-line) transparent;
-}
-
-.booking-progress__step {
-  display: grid;
-  min-width: 9rem;
-  min-height: 3.5rem;
-  flex: 1 0 9rem;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 0.625rem;
-  border-block-start: 1px solid var(--color-warm-line);
-  padding: 0.875rem 1rem 0.5rem 0;
-  color: var(--color-smoke);
-}
-
-.booking-progress__step[data-step-state="complete"] {
-  border-block-start-color: var(--color-brass);
-  color: var(--color-brass);
-}
-
-.booking-progress__step[data-step-state="active"] {
-  border-block-start-color: var(--color-champagne);
-  color: var(--color-champagne);
-}
-
-.booking-progress__position {
-  font-size: 0.75rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.booking-progress__label {
-  color: inherit;
-  font-size: 0.875rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
 .type-mono {
   font-family: var(--font-mono), monospace;
   font-variant-numeric: tabular-nums;
