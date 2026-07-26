@@ -122,7 +122,7 @@ Phases run in order. Do not parallelize edits to shared CSS or `src/components/u
 
 ## Plan Status
 
-**Status:** Not started
+**Status:** In progress — Phases 1–4 CLOSED; Phase 5: 2/4 tasks done (next: task 3 account booking detail); Phases 6–7 pending. See `plans/reports/progress-260726-2242-editorial-ui-pass-status.md` and `.superpowers/sdd/progress.md`.
 
 **Supersedes:** remaining unchecked work in `plans/260715-0031-cozy-dark-ui-system/` (phase-03 items 16–25, phases 04–06). Do not execute that plan further; its unfinished restyle scope is absorbed by phases 4–6 here.
 
