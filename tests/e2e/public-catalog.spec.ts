@@ -13,7 +13,7 @@ test("guest discovers a service from home through the studio catalog", async ({ 
     { name: "Voice/Podcast Booth", slug: "voice-podcast-booth" },
     { name: "Music Studio", slug: "music-studio" },
   ]) {
-    await expect(page.getByRole("img", { name: new RegExp(room.name) })).toBeVisible();
+    await expect(page.getByRole("img", { name: new RegExp(room.name) }).first()).toBeVisible();
     await expect(
       page.getByRole("link", { name: `Khám phá ${room.name}` }),
     ).toHaveAttribute("href", `/studios/${room.slug}`);
