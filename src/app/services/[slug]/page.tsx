@@ -27,7 +27,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
   const [service, rooms] = await Promise.all([getPublicServiceBySlug(slug), listPublicRooms()]);
   if (!service) notFound();
 
-  const room = rooms.find((candidate) => candidate.services.some((item) => item.id === service.id));
+  const room = rooms.find((room) => room.id === service.roomId);
   const bookingTypeLabel = service.bookingType === "ASSISTED" ? "Có hỗ trợ" : "Chỉ thuê phòng";
   const bookingTypeDescription = service.bookingType === "ASSISTED"
     ? "Dịch vụ này thuộc hình thức có hỗ trợ."
