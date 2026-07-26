@@ -15,10 +15,10 @@ export default async function AdminServicesPage() {
   const roomOptions = rooms.map(({ id, name }) => ({ id, name }));
 
   return (
-    <div className="admin-view">
+    <div className="console-view">
       <PageHeading description="Tạo dịch vụ mới hoặc cập nhật dịch vụ hiện có." eyebrow="Vận hành" title="Dịch vụ" />
 
-      <section aria-labelledby="admin-services-new-heading" className="admin-section">
+      <section aria-labelledby="admin-services-new-heading" className="console-section">
         <SectionMarker index={1} label="Thêm dịch vụ" />
         <h2 className="sr-only" id="admin-services-new-heading">
           Thêm dịch vụ
@@ -28,28 +28,28 @@ export default async function AdminServicesPage() {
         </div>
       </section>
 
-      <section aria-labelledby="admin-services-list-heading" className="admin-section">
+      <section aria-labelledby="admin-services-list-heading" className="console-section">
         <SectionMarker index={2} label="Danh sách dịch vụ" />
         <h2 className="sr-only" id="admin-services-list-heading">
           Danh sách dịch vụ
         </h2>
 
         {services.length === 0 ? (
-          <p className="admin-empty-state">Chưa có dịch vụ nào.</p>
+          <p className="console-empty-state">Chưa có dịch vụ nào.</p>
         ) : (
-          <ul className="admin-row-list">
+          <ul className="console-row-list">
             {services.map((service) => (
-              <li className="admin-row" key={service.id}>
+              <li className="console-row" key={service.id}>
                 <details>
-                  <summary className="admin-catalog-summary">
-                    <span className="admin-row-primary">{service.name}</span>
-                    <span className="type-mono admin-row-secondary">{service.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
+                  <summary className="console-catalog-summary">
+                    <span className="console-row-primary">{service.name}</span>
+                    <span className="type-mono console-row-secondary">{service.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
                   </summary>
-                  <div className="admin-catalog-edit">
-                    <div className="admin-actions-group">
+                  <div className="console-catalog-edit">
+                    <div className="console-actions-group">
                       <ServiceForm initialValue={{ ...service, currency: "VND" }} rooms={roomOptions} />
                     </div>
-                    <div className="admin-actions-group">
+                    <div className="console-actions-group">
                       <form action={setServiceActiveAction.bind(null, service.id, !service.isActive)}>
                         <button className={actionClassName("secondary")} type="submit">
                           {service.isActive ? "Tạm ẩn dịch vụ" : "Mở lại dịch vụ"}

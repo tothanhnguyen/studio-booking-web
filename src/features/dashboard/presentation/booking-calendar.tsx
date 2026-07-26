@@ -24,33 +24,33 @@ function resolveRoomMaterial(roomName: string): RoomMaterial {
   return "podcast";
 }
 
-/** Admin agenda grouped by day — day headers in mono with a hairline rule,
- * entries as compact rows reusing .admin-row-list/.admin-row with a 3px
+/** Console agenda grouped by day — day headers in mono with a hairline rule,
+ * entries as compact rows reusing .console-row-list/.console-row with a 3px
  * room-material accent bar (mirrors .account-ticket's convention). */
 export function BookingCalendar({ bookings }: Readonly<{ bookings: DashboardBooking[] }>) {
   const grouped = Map.groupBy(bookings, (booking) => formatInTimeZone(new Date(booking.startTime), STUDIO_TIME_ZONE, "yyyy-MM-dd"));
   if (bookings.length === 0) {
-    return <p className="admin-empty-state">Không có booking trong khoảng ngày này.</p>;
+    return <p className="console-empty-state">Không có booking trong khoảng ngày này.</p>;
   }
 
   return (
-    <div aria-label="Lịch booking dạng danh sách" className="admin-agenda">
+    <div aria-label="Lịch booking dạng danh sách" className="console-agenda">
       {[...grouped.entries()].map(([date, items]) => (
-        <section className="admin-agenda-day" key={date}>
-          <h2 className="admin-agenda-day-heading type-mono">
+        <section className="console-agenda-day" key={date}>
+          <h2 className="console-agenda-day-heading type-mono">
             {formatInTimeZone(new Date(items[0]!.startTime), STUDIO_TIME_ZONE, "EEEE, dd/MM/yyyy")}
           </h2>
-          <ul className="admin-row-list">
+          <ul className="console-row-list">
             {items.map((booking) => (
-              <li className="admin-row admin-agenda-entry" data-room-material={resolveRoomMaterial(booking.roomName)} key={booking.id}>
-                <div className="type-mono admin-agenda-time">
+              <li className="console-row console-agenda-entry" data-room-material={resolveRoomMaterial(booking.roomName)} key={booking.id}>
+                <div className="type-mono console-agenda-time">
                   {formatStudioTime(booking.startTime)}–{formatStudioTime(booking.endTime)}
                 </div>
-                <div className="admin-row-cell">
-                  <Link className="admin-row-primary" href={`/admin/bookings/${booking.id}`}>
+                <div className="console-row-cell">
+                  <Link className="console-row-primary" href={`/admin/bookings/${booking.id}`}>
                     {booking.serviceName}
                   </Link>
-                  <p className="admin-row-secondary">{booking.customerName} · {booking.roomName}</p>
+                  <p className="console-row-secondary">{booking.customerName} · {booking.roomName}</p>
                 </div>
                 <BookingStatusBadge status={booking.bookingStatus} />
               </li>

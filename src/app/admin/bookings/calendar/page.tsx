@@ -31,16 +31,16 @@ export default async function AdminBookingCalendarPage({ searchParams }: Readonl
   const bookings = await getAdminCalendar(actor, { from: rangeStart, to: rangeEnd });
 
   return (
-    <div className="admin-view">
+    <div className="console-view">
       <PageHeading eyebrow="Asia/Ho_Chi_Minh" headingId="calendar-heading" title="Lịch booking" />
 
-      <form action="/admin/bookings/calendar" className="account-filters">
-        <label className="account-filters-label"><span>Từ ngày</span><input className="account-filters-select" type="date" name="from" defaultValue={from} /></label>
-        <label className="account-filters-label"><span>Đến ngày</span><input className="account-filters-select" type="date" name="to" defaultValue={to} /></label>
+      <form action="/admin/bookings/calendar" className="console-calendar-filters">
+        <label><span>Từ ngày</span><input type="date" name="from" defaultValue={from} /></label>
+        <label><span>Đến ngày</span><input type="date" name="to" defaultValue={to} /></label>
         <button className="ui-action ui-action--primary ui-action--compact">Xem lịch</button>
       </form>
 
-      <section aria-labelledby="calendar-list-heading" className="admin-section">
+      <section aria-labelledby="calendar-list-heading" className="console-section">
         <SectionMarker index={1} label="Danh sách theo ngày" />
         <h2 className="sr-only" id="calendar-list-heading">Danh sách theo ngày</h2>
         <BookingCalendar bookings={bookings} />

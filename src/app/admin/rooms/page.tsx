@@ -10,10 +10,10 @@ export default async function AdminRoomsPage() {
   const rooms = await new PrismaRoomRepository(prisma).listAll();
 
   return (
-    <div className="admin-view">
+    <div className="console-view">
       <PageHeading description="Tạo phòng mới hoặc cập nhật phòng hiện có." eyebrow="Vận hành" title="Phòng studio" />
 
-      <section aria-labelledby="admin-rooms-new-heading" className="admin-section">
+      <section aria-labelledby="admin-rooms-new-heading" className="console-section">
         <SectionMarker index={1} label="Thêm phòng" />
         <h2 className="sr-only" id="admin-rooms-new-heading">
           Thêm phòng
@@ -23,28 +23,28 @@ export default async function AdminRoomsPage() {
         </div>
       </section>
 
-      <section aria-labelledby="admin-rooms-list-heading" className="admin-section">
+      <section aria-labelledby="admin-rooms-list-heading" className="console-section">
         <SectionMarker index={2} label="Danh sách phòng" />
         <h2 className="sr-only" id="admin-rooms-list-heading">
           Danh sách phòng
         </h2>
 
         {rooms.length === 0 ? (
-          <p className="admin-empty-state">Chưa có phòng nào.</p>
+          <p className="console-empty-state">Chưa có phòng nào.</p>
         ) : (
-          <ul className="admin-row-list">
+          <ul className="console-row-list">
             {rooms.map((room) => (
-              <li className="admin-row" key={room.id}>
+              <li className="console-row" key={room.id}>
                 <details>
-                  <summary className="admin-catalog-summary">
-                    <span className="admin-row-primary">{room.name}</span>
-                    <span className="type-mono admin-row-secondary">{room.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
+                  <summary className="console-catalog-summary">
+                    <span className="console-row-primary">{room.name}</span>
+                    <span className="type-mono console-row-secondary">{room.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
                   </summary>
-                  <div className="admin-catalog-edit">
-                    <div className="admin-actions-group">
+                  <div className="console-catalog-edit">
+                    <div className="console-actions-group">
                       <RoomForm initialValue={{ ...room, timezone: "Asia/Ho_Chi_Minh" }} />
                     </div>
-                    <div className="admin-actions-group">
+                    <div className="console-actions-group">
                       <form action={setRoomActiveAction.bind(null, room.id, !room.isActive)}>
                         <button className={actionClassName("secondary")} type="submit">
                           {room.isActive ? "Tạm ẩn phòng" : "Mở lại phòng"}

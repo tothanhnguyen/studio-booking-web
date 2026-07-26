@@ -59,9 +59,9 @@ export function ScheduleEditor({ rooms }: Readonly<{ rooms: RoomOption[] }>) {
   }
 
   return (
-    <div className="admin-schedule-grid">
+    <div className="console-form-grid">
       <form className="ui-surface admin-catalog-form" onSubmit={submitSchedule}>
-        <h2 className="admin-schedule-form-heading">Giờ làm việc</h2>
+        <h2 className="console-form-heading">Giờ làm việc</h2>
 
         <FormField htmlFor="schedule-room" label="Phòng">
           <select id="schedule-room" name="roomId">
@@ -85,7 +85,7 @@ export function ScheduleEditor({ rooms }: Readonly<{ rooms: RoomOption[] }>) {
       </form>
 
       <form className="ui-surface admin-catalog-form" onSubmit={submitBlocked}>
-        <h2 className="admin-schedule-form-heading">Chặn khung giờ</h2>
+        <h2 className="console-form-heading">Chặn khung giờ</h2>
 
         <FormField htmlFor="blocked-room" label="Phòng">
           <select id="blocked-room" name="roomId">

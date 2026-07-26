@@ -343,3 +343,202 @@
 }
 
 .console-form-field { display: grid; gap: 0.4rem; }
+
+/* Agenda + schedule -----------------------------------------------------------
+   Calendar (day-grouped agenda, no month/week grid) and the schedule/blocked-
+   slots pages. Reuses .console-row-list/.console-row for hairline rows and
+   .type-mono for time/room codes rather than duplicating row chrome. */
+
+.console-agenda { display: grid; gap: 1.75rem; }
+
+@media (min-width: 1024px) {
+  .console-agenda {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.console-agenda-day { display: grid; gap: 0.75rem; }
+
+.console-agenda-day-heading {
+  margin: 0;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Room accent bar mirrors .account-ticket[data-room-material]::before. */
+.console-agenda-entry {
+  position: relative;
+  padding-inline-start: 1.75rem;
+}
+
+.console-agenda-entry::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.9rem;
+  inset-inline-start: 1rem;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-text-subtle);
+}
+
+.console-agenda-entry[data-room-material="photo"]::before { background: var(--color-brass); }
+.console-agenda-entry[data-room-material="music"]::before { background: var(--color-sage); }
+
+.console-agenda-time {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .console-agenda-entry {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.console-calendar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console-calendar-filters label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.console-calendar-filters input {
+  min-height: 2.75rem;
+  border: 1px solid var(--color-control-border);
+  background: var(--color-surface-raised);
+  padding: 0 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-mono), monospace;
+}
+
+/* Schedule editor: working-hours + block-creation forms, sharing FormField
+   (.ui-field) and .ui-surface card chrome — see forms.css for field styles. */
+
+.console-form-grid { display: grid; gap: 1.5rem; }
+
+@media (min-width: 1024px) {
+  .console-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.console-form-heading {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Blocked slots: agenda/timeline rows emphasizing room + time range. */
+
+.console-blocked-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console-blocked-list > li { border-top: 1px solid var(--color-border); transition: background-color var(--motion-fast) ease; }
+.console-blocked-list > li:first-child { border-top: none; }
+.console-blocked-list > li:hover,
+.console-blocked-list > li:focus-within { background: var(--color-surface-raised); }
+
+.console-blocked-row {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .console-blocked-row {
+    grid-template-columns: minmax(9rem, 1.2fr) minmax(11rem, 1.4fr) auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.console-blocked-room { margin: 0; color: var(--color-text); font-weight: 600; }
+.console-blocked-time { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; }
+.console-blocked-reason { margin: 0.15rem 0 0; color: var(--color-text-subtle); font-size: 0.8125rem; }
+
+/* Catalog: <details> rows for rooms/services, collapsed by default. */
+
+.console-catalog-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.console-catalog-summary::-webkit-details-marker { display: none; }
+
+.console-catalog-summary::after {
+  content: "+";
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 1rem;
+}
+
+details[open] > .console-catalog-summary::after { content: "\2212"; }
+
+.console-catalog-edit {
+  display: grid;
+  gap: 1.25rem;
+  padding-block-start: 1rem;
+  margin-block-start: 1rem;
+  border-block-start: 1px dashed var(--color-border);
+}
+
+/* Muted text action — a quiet delete affordance detached from the
+   primary/secondary/danger chip buttons in action.ts; visible focus ring,
+   clay only on the danger variant so it reads as calm, not alarming. */
+
+.console-text-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.125rem;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--motion-fast) ease;
+}
+
+.console-text-action:hover { color: var(--color-text); }
+
+.console-text-action--danger { color: var(--color-danger); }
+
+.console-text-action--danger:hover { text-decoration: underline; }
+
+.console-text-action:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
