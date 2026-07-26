@@ -35,4 +35,9 @@
   --motion-base: 220ms;
   --content-public: 92rem;
   --content-transaction: 72rem;
+  --text-display-xl: clamp(2.75rem, 8vw, 7.5rem);
+  --text-display-lg: clamp(2.25rem, 5.5vw, 4.5rem);
+  --text-display-md: clamp(1.75rem, 3.5vw, 2.75rem);
+  --motion-marquee: 28s;
+  --grain-opacity: 0.035;
 }

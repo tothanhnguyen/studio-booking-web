@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
@@ -21,6 +21,13 @@ const mono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
+const display = Fraunces({
+  axes: ["opsz"],
+  display: "swap",
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-display",
+});
+
 export const metadata: Metadata = {
   title: "MowStudio",
   description: "Đặt lịch creative studio tại MowStudio.",
@@ -30,7 +37,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const actor = await getCurrentActor();
   return (
     <html lang="vi">
-      <body className={`${sans.variable} ${mono.variable}`}>
+      <body className={`${sans.variable} ${mono.variable} ${display.variable}`}>
         <AppShell actor={actor} onSignOut={signOutAction}>{children}</AppShell>
       </body>
     </html>
