@@ -40,8 +40,9 @@ export function BookingList({ result, detailBasePath }: Readonly<{ result: Booki
         <p className="admin-row-secondary">{booking.serviceName}</p>
         <p className="admin-row-secondary">{booking.roomName}</p>
       </div>
-      <div className="type-mono admin-row-cell admin-row-cell--end">
-        {amountFormatter.format(booking.depositAmount)} {booking.currency}
+      <div className="admin-row-cell admin-row-cell--end">
+        <p className="admin-row-secondary">Cọc 30%</p>
+        <p className="type-mono">{amountFormatter.format(booking.depositAmount)} {booking.currency}</p>
       </div>
       <div className="admin-row-cell admin-row-cell--end">
         <BookingStatusBadge status={booking.bookingStatus} />
