@@ -17,6 +17,7 @@
   --color-danger: #8b3e35;
   --color-info: #315a66;
   --color-focus: #254238;
+  --color-record: #b8371f;
   --shadow-surface: 0 0.75rem 2.25rem rgb(59 45 31 / 10%);
   --color-void: var(--color-canvas);
   --color-ink: var(--color-surface);
@@ -35,9 +36,9 @@
   --motion-base: 220ms;
   --content-public: 92rem;
   --content-transaction: 72rem;
-  --text-display-xl: clamp(2.75rem, 8vw, 7.5rem);
-  --text-display-lg: clamp(2.25rem, 5.5vw, 4.5rem);
-  --text-display-md: clamp(1.75rem, 3.5vw, 2.75rem);
+  --text-display-xl: clamp(3.25rem, 9vw, 8.5rem);
+  --text-display-lg: clamp(2.5rem, 6vw, 5rem);
+  --text-display-md: clamp(2rem, 4vw, 3.25rem);
   --motion-marquee: 28s;
   --grain-opacity: 0.035;
 }

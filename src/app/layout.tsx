@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/app-shell";
@@ -21,11 +21,11 @@ const mono = IBM_Plex_Mono({
   weight: ["400", "500", "600"],
 });
 
-const display = Fraunces({
-  axes: ["opsz"],
+const display = Bricolage_Grotesque({
   display: "swap",
   subsets: ["latin", "vietnamese"],
   variable: "--font-display",
+  weight: ["700", "800"],
 });
 
 export const metadata: Metadata = {

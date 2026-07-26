@@ -3,10 +3,10 @@
 .display-xl,
 .display-lg,
 .display-md {
-  font-family: var(--font-display), Georgia, serif;
-  font-weight: 560;
-  letter-spacing: -0.015em;
-  line-height: 1.02;
+  font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 

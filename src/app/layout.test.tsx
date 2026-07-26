@@ -6,7 +6,7 @@ import RootLayout from "./layout";
 vi.mock("next/font/google", () => ({
   Plus_Jakarta_Sans: () => ({ variable: "font-sans-variable" }),
   IBM_Plex_Mono: () => ({ variable: "font-mono-variable" }),
-  Fraunces: () => ({ variable: "font-display-variable" }),
+  Bricolage_Grotesque: () => ({ variable: "font-display-variable" }),
 }));
 
 vi.mock("@/features/auth/application/current-actor", () => ({
