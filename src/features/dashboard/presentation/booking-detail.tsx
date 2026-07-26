@@ -1,10 +1,34 @@
+import type { ReactNode } from "react";
+
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { SectionMarker } from "@/components/ui/section-marker";
 import type { DashboardBooking } from "@/features/dashboard/application/dashboard-booking-repository";
 import { formatStudioDateTime } from "@/features/dashboard/presentation/booking-calendar";
 import { BookingStatusBadge } from "@/features/dashboard/presentation/booking-status-badge";
 
+// Admin gets no scroll-reveal choreography (Global Constraint: "no parallax/
+// marquee/scroll-reveal" on admin surfaces) — a plain passthrough wrapper
+// keeps the section markup identical without the reveal transition.
+function PlainSection({ children }: Readonly<{ children: ReactNode; delayMs?: number }>) {
+  return <>{children}</>;
+}
+
 const currency = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+
+const paymentStatusLabel: Record<string, string> = {
+  PENDING: "Đang chờ",
+  PAID: "Đã thanh toán",
+  FAILED: "Thất bại",
+  EXPIRED: "Hết hạn",
+};
+
+const refundStatusLabel: Record<string, string> = {
+  NONE: "Không có",
+  REQUESTED: "Đã yêu cầu",
+  PROCESSING: "Đang xử lý",
+  REFUNDED: "Đã hoàn tiền",
+  REJECTED: "Đã từ chối",
+};
 
 /**
  * Booking detail body — task-priority sections (01 Lịch studio, 02 Thanh toán,
@@ -25,11 +49,12 @@ export function BookingDetail({
 }: Readonly<{ booking: DashboardBooking; showCustomer?: boolean; variant?: "account" | "admin" }>) {
   const isAdmin = variant === "admin";
   const sectionClassName = isAdmin ? "account-detail-section-flat" : "account-detail-section";
+  const Reveal = isAdmin ? PlainSection : ScrollReveal;
 
   return (
     <div className="account-detail-sections">
       <div className="account-detail-content">
-        <ScrollReveal>
+        <Reveal>
           <section aria-label="Lịch studio" className={sectionClassName}>
             <div className="account-detail-schedule-head">
               {!isAdmin && <SectionMarker index={1} label="Lịch studio" />}
@@ -54,10 +79,10 @@ export function BookingDetail({
               </div>
             </dl>
           </section>
-        </ScrollReveal>
+        </Reveal>
 
         {showCustomer && (
-          <ScrollReveal delayMs={60}>
+          <Reveal delayMs={60}>
             <section aria-label="Thông tin khách hàng" className={sectionClassName}>
               <h2 className="account-detail-subheading">Thông tin khách hàng</h2>
               <p className="account-detail-customer">
@@ -66,12 +91,12 @@ export function BookingDetail({
               </p>
               {booking.note && <p className="account-detail-note">Ghi chú: {booking.note}</p>}
             </section>
-          </ScrollReveal>
+          </Reveal>
         )}
       </div>
 
       <aside className="account-detail-meta">
-        <ScrollReveal delayMs={80}>
+        <Reveal delayMs={80}>
           <section aria-label="Thanh toán" className={sectionClassName}>
             {!isAdmin && <SectionMarker index={2} label="Thanh toán" />}
             <dl className="account-detail-fields">
@@ -89,19 +114,19 @@ export function BookingDetail({
               </div>
               <div>
                 <dt>Trạng thái thanh toán</dt>
-                <dd>{booking.paymentStatus}</dd>
+                <dd>{paymentStatusLabel[booking.paymentStatus] ?? booking.paymentStatus}</dd>
               </div>
               <div>
                 <dt>Trạng thái hoàn tiền</dt>
-                <dd>{booking.refundStatus}</dd>
+                <dd>{refundStatusLabel[booking.refundStatus] ?? booking.refundStatus}</dd>
               </div>
             </dl>
           </section>
-        </ScrollReveal>
+        </Reveal>
 
         {!isAdmin && (
-          <ScrollReveal delayMs={140}>
-            <section aria-label="Chính sách" className="account-detail-section">
+          <Reveal delayMs={140}>
+            <section aria-label="Chính sách" className={sectionClassName}>
               <SectionMarker index={3} label="Chính sách" />
               <ul className="account-detail-policy">
                 <li>Yêu cầu hủy được gửi qua biểu mẫu bên dưới; MowStudio xác nhận thay đổi trạng thái qua email.</li>
@@ -109,7 +134,7 @@ export function BookingDetail({
                 <li>Cần đổi lịch hoặc có thắc mắc? Liên hệ đội ngũ MowStudio để được hỗ trợ.</li>
               </ul>
             </section>
-          </ScrollReveal>
+          </Reveal>
         )}
       </aside>
     </div>
