@@ -759,3 +759,54 @@
 @media (max-width: 375px) {
   .confirmation-code strong { font-size: clamp(1.5rem, 8vw, 2rem); }
 }
+
+/* Account log */
+
+/* /account/bookings: session-log rail — each booking is a numbered `.log-row`
+   entry (mono date/time + code standing in for the row index, service+room
+   as the body), a room-accent bar on the leading edge mirroring
+   `.console-agenda-entry`, and the shared BookingStatusBadge LED for status.
+   List reset only; row chrome (border, padding, position) is inherited from
+   the shared `.log-row` primitive declared above. */
+.account-log-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-log-row.log-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding-inline-start: 1.125rem;
+}
+
+.account-log-row.log-row::before {
+  content: "";
+  position: absolute;
+  inset-block: 1rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-text-subtle);
+}
+
+.account-log-row[data-room-material="photo"].log-row::before { background: var(--color-accent); }
+.account-log-row[data-room-material="music"].log-row::before { background: var(--color-success); }
+
+.account-log-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 9rem;
+  color: var(--color-text-muted);
+}
+
+.account-log-row__code { color: var(--color-text-subtle); }
+
+.account-log-row__body { display: grid; gap: 0.25rem; flex: 1 1 16rem; min-width: 0; }
+
+.account-log-row .log-row__title { color: var(--color-text); text-decoration: none; }
+.account-log-row .log-row__title:hover { color: var(--color-action); }
