@@ -284,3 +284,353 @@
 @media (prefers-reduced-motion: reduce) {
   .led-status__dot { animation: none; }
 }
+
+/* Public pages */
+
+/* /studios: proof-sheet contact sheet of room frames. */
+.proof-studios-page {
+  position: relative;
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.proof-studios-header {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 44rem;
+}
+
+.proof-contact-sheet {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .proof-contact-sheet {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+}
+
+.proof-room-frame {
+  display: flex;
+  flex-direction: column;
+}
+
+.proof-room-frame__media {
+  position: relative;
+  z-index: 2;
+  margin-block: 0.625rem;
+}
+
+.proof-room-frame__media .ghost-index {
+  inset-block-start: -2.5rem;
+  inset-inline-start: -0.375rem;
+  font-size: clamp(3.5rem, 7vw, 5rem);
+}
+
+.proof-room-frame__title {
+  margin: 0.875rem 0 0.25rem;
+  color: var(--color-text);
+  font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.proof-room-frame__meta {
+  margin: 0 0 0.375rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.proof-room-frame__description {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.proof-room-frame__cta {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  border-block-end: 1px solid var(--color-action);
+  padding-block-end: 0.1875rem;
+  color: var(--color-action);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.proof-room-frame__cta:hover {
+  border-color: var(--color-action-hover);
+  color: var(--color-action-hover);
+}
+
+.proof-filmstrip-section {
+  border-block-start: 1px solid var(--color-border);
+  padding-block-start: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.proof-filmstrip-section .film-strip { margin-block-start: 1rem; }
+
+/* /studios/[slug]: proof-sheet room detail frame. */
+.proof-room-page {
+  position: relative;
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.proof-room-hero { display: grid; gap: 0.625rem; }
+
+.proof-room-hero__frame-wrap { position: relative; }
+
+.proof-room-hero__frame-wrap .ghost-index {
+  inset-block-start: -3rem;
+  inset-inline-start: 0.5rem;
+  font-size: clamp(6rem, 14vw, 10rem);
+}
+
+.proof-room-hero__visual {
+  aspect-ratio: auto;
+  min-block-size: clamp(20rem, 55vh, 32rem);
+}
+
+.proof-room-hero__scrim {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(10 10 8 / 55%), rgb(10 10 8 / 0%) 45%);
+  pointer-events: none;
+}
+
+.proof-room-hero__overlay {
+  position: absolute;
+  z-index: 3;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  color: var(--color-on-action);
+}
+
+.proof-room-hero__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.proof-room-hero__overlay h1 {
+  margin: 0;
+  text-shadow: 0 0.125rem 1.5rem rgb(0 0 0 / 35%);
+}
+
+.proof-room-body {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+@media (min-width: 1024px) {
+  .proof-room-body { grid-template-columns: 21.25rem 1fr; }
+}
+
+.proof-room-spec {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .proof-room-spec {
+    border-inline-end: 1px solid var(--color-border);
+    padding-inline-end: 2rem;
+  }
+}
+
+.proof-room-spec__list { margin: 1.5rem 0 0; }
+
+.proof-room-spec__row {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.proof-room-spec__row dt { color: var(--color-text-muted); font-size: 0.8125rem; }
+.proof-room-spec__row dd { margin: 0; color: var(--color-text); text-align: end; }
+
+.proof-room-spec__description {
+  margin: 1.25rem 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.proof-room-spec__cta {
+  margin-top: 1.75rem;
+  width: 100%;
+}
+
+.proof-room-services { min-width: 0; }
+
+.proof-room-services > h2 {
+  margin: 0.5rem 0 0;
+  color: var(--color-text);
+}
+
+.proof-room-services__list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
+/* Session-log rows: numbered service entries reusing the `.log-row` device
+   class for the mono index, plus grid layout for identity + details. */
+.service-row.log-row {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.25rem 1.25rem;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .service-row.log-row { grid-template-columns: 2.25rem 1fr auto; align-items: start; }
+}
+
+.service-row.log-row .log-row__index { margin: 0.1875rem 0 0; }
+.service-row.log-row .service-row__identity { grid-column: 2; display: grid; gap: 0.375rem; }
+.service-row.log-row .service-row__details {
+  grid-column: 2;
+  display: grid;
+  justify-items: start;
+  gap: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .service-row.log-row .service-row__details { grid-column: 3; justify-items: end; }
+}
+
+/* /services/[slug]: proof-sheet spec-block rate card. */
+.proof-service-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 3rem);
+}
+
+.proof-service-heading { display: grid; gap: 1rem; }
+
+.proof-service-body {
+  display: grid;
+  align-content: start;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+  min-width: 0;
+}
+
+.proof-service-room-link {
+  justify-self: start;
+  color: var(--color-accent);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-transform: uppercase;
+  text-underline-offset: 0.25rem;
+}
+
+.proof-service-explainer { display: grid; gap: 0.625rem; max-width: 38rem; }
+
+.proof-service-explainer h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.proof-service-explainer p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.proof-service-rate-card {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+}
+
+.proof-service-rate-card h2 {
+  margin: 0.5rem 0 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.proof-service-rate-card__list { margin: 1.75rem 0 0; }
+
+.proof-service-rate-card__row {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.proof-service-rate-card__row dt { color: var(--color-text-muted); font-size: 0.875rem; }
+.proof-service-rate-card__row dd { margin: 0; color: var(--color-text); text-align: end; }
+
+.proof-service-rate-card__price {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.proof-service-rate-card__deposit {
+  margin: 0 0 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-top: 1rem;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+}
+
+.proof-service-rate-card .ui-action { width: 100%; }
+
+@media (min-width: 1024px) {
+  .proof-service-page {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .proof-service-heading { grid-column: 1 / span 7; order: 1; }
+
+  .proof-service-rate-card {
+    grid-column: 8 / span 5;
+    grid-row: 1 / span 2;
+    order: 2;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .proof-service-body { grid-column: 1 / span 7; order: 3; }
+}
