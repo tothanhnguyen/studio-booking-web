@@ -7,11 +7,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { actionClassName } from "@/components/ui/action";
+import { EmptyState } from "@/components/ui/empty-state";
 import { FormField } from "@/components/ui/form-field";
 import { createBookingAction } from "@/features/booking/application/booking-actions";
 import type { AvailableSlot } from "@/features/availability/application/availability-types";
 
 import { BookingProgress } from "./booking-progress";
+
+type StepDirection = "forward" | "back";
 
 const steps = ["Liên hệ", "Ngày", "Khung giờ", "Xác nhận", "Giữ chỗ"];
 const time = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Ho_Chi_Minh" });
@@ -38,6 +41,7 @@ type BookingWizardProps = Readonly<{
 export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAmount }: BookingWizardProps) {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  const [direction, setDirection] = useState<StepDirection>("forward");
   const { register, handleSubmit, getValues, formState: { errors } } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
     defaultValues: { customerName: "", customerEmail: "", customerPhone: "", note: "" },
@@ -45,23 +49,28 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
   const [date, setDate] = useState(""); const [slots, setSlots] = useState<AvailableSlot[]>([]); const [startTime, setStartTime] = useState("");
   const [message, setMessage] = useState(""); const [loading, setLoading] = useState(false);
 
+  function goToStep(next: number) {
+    setDirection(next >= step ? "forward" : "back");
+    setStep(next);
+  }
+
   async function loadSlots() {
     setLoading(true); setMessage("");
     const response = await fetch(`/api/availability?serviceId=${serviceId}&date=${date}`, { cache: "no-store" });
     const body = await response.json(); setLoading(false);
     if (!response.ok) { setMessage(body.message ?? "Không thể tải lịch trống."); return; }
-    setSlots(body.data); setStep(2);
+    setSlots(body.data); goToStep(2);
   }
 
   async function submit() {
-    setLoading(true); setMessage(""); setStep(4);
+    setLoading(true); setMessage(""); goToStep(4);
     const values = getValues();
     const result = await createBookingAction({
       serviceId, startTime, ...values,
       customerPhone: values.customerPhone || undefined,
       note: values.note || undefined,
     });
-    if (!result.ok) { setLoading(false); setMessage(result.message); setStep(2); return; }
+    if (!result.ok) { setLoading(false); setMessage(result.message); goToStep(2); return; }
     router.push(`/booking/${result.data.bookingId}/payment`);
   }
 
@@ -78,8 +87,17 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
         <p className="booking-context__deposit">Cọc 30% ở bước thanh toán</p>
       </aside>
 
-      <section className="booking-window ui-surface" aria-busy={loading} key={step}>
-        {step === 0 && <form className="booking-form" onSubmit={handleSubmit(() => setStep(1))}>
+      <section
+        aria-busy={loading}
+        className="booking-window booking-ticket"
+        data-direction={direction}
+        key={step}
+      >
+        <p className="booking-ticket__meta type-mono">
+          {serviceName}
+          {date ? ` · ${date}` : ""}
+        </p>
+        {step === 0 && <form className="booking-form" onSubmit={handleSubmit(() => goToStep(1))}>
           <h2 className="booking-step-title">Thông tin liên hệ</h2>
           <FormField label="Họ tên" htmlFor="customer-name" error={errors.customerName?.message}>
             <input id="customer-name" aria-invalid={Boolean(errors.customerName)} {...register("customerName")} />
@@ -102,7 +120,7 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
             <input id="booking-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
           </FormField>
           <div className="booking-actions">
-            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(0)}>Quay lại</button>
+            <button type="button" className={actionClassName("tertiary")} onClick={() => goToStep(0)}>Quay lại</button>
             <button type="button" disabled={!date || loading} onClick={loadSlots} className={actionClassName("primary")}>Xem giờ trống</button>
           </div>
         </div>}
@@ -110,10 +128,25 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
         {step === 2 && <div className="booking-step">
           <h2 className="booking-step-title">Chọn khung giờ</h2>
           <div className="booking-slots">{slots.map((slot) => <button type="button" key={slot.startTime} aria-pressed={startTime === slot.startTime} onClick={() => setStartTime(slot.startTime)} className="booking-slot type-mono">{time.format(new Date(slot.startTime))}</button>)}</div>
-          {slots.length === 0 && <p className="booking-empty">Ngày này chưa có giờ phù hợp.</p>}
+          {slots.length === 0 && (
+            <EmptyState
+              action={
+                <button
+                  className={actionClassName("secondary")}
+                  disabled={loading}
+                  onClick={loadSlots}
+                  type="button"
+                >
+                  Tải lại giờ trống
+                </button>
+              }
+              description="Ngày này chưa có giờ phù hợp."
+              title="Chưa có khung giờ trống"
+            />
+          )}
           <div className="booking-actions">
-            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(1)}>Quay lại</button>
-            <button type="button" disabled={!startTime} onClick={() => setStep(3)} className={actionClassName("primary")}>Tiếp tục</button>
+            <button type="button" className={actionClassName("tertiary")} onClick={() => goToStep(1)}>Quay lại</button>
+            <button type="button" disabled={!startTime} onClick={() => goToStep(3)} className={actionClassName("primary")}>Tiếp tục</button>
           </div>
         </div>}
 
@@ -121,7 +154,7 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
           <h2 className="booking-step-title">Xác nhận giữ chỗ</h2>
           <div className="booking-confirmation"><p><strong>{serviceName}</strong></p><p>{getValues("customerName")} · {getValues("customerEmail")}</p><p className="type-mono">{date} · {time.format(new Date(startTime))}</p></div>
           <div className="booking-actions">
-            <button type="button" className={actionClassName("tertiary")} onClick={() => setStep(2)}>Quay lại</button>
+            <button type="button" className={actionClassName("tertiary")} onClick={() => goToStep(2)}>Quay lại</button>
             <button type="button" disabled={loading} onClick={submit} className={actionClassName("primary")}>Giữ chỗ 10 phút</button>
           </div>
         </div>}

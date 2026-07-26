@@ -201,3 +201,52 @@
 
   .service-sheet-body { grid-column: 1 / span 7; order: 3; }
 }
+
+/* Booking wizard: studio ticket panel + directional step transitions. */
+
+.booking-ticket {
+  --booking-ticket-offset: 14px;
+
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-surface);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  animation: booking-ticket-enter var(--motion-base) ease-out both;
+}
+
+.booking-ticket[data-direction="back"] { --booking-ticket-offset: -14px; }
+
+.booking-ticket__meta {
+  margin: 0 0 1.25rem;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@keyframes booking-ticket-enter {
+  from { opacity: 0; transform: translateX(var(--booking-ticket-offset)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-ticket { animation: none; }
+}
+
+/* Booking summary: ticket stub — dashed tear-off edge, mono totals. */
+
+.booking-summary {
+  border-block-start: 1px dashed var(--color-border);
+  padding-block-start: clamp(1.25rem, 3vw, 2rem);
+}
+
+@media (min-width: 901px) {
+  .booking-summary {
+    border-block-start: 0;
+    border-inline-start: 1px dashed var(--color-border);
+    padding-block-start: 0;
+    padding-inline-start: clamp(1.25rem, 3vw, 2rem);
+  }
+}

@@ -233,7 +233,7 @@
 }
 
 .booking-composition > * { min-width: 0; }
-.booking-window { grid-area: window; animation: booking-window-enter var(--motion-base) ease-out both; }
+.booking-window { grid-area: window; }
 .booking-context { grid-area: context; align-self: start; }
 
 .booking-context h2,
@@ -288,7 +288,6 @@
 
 .booking-confirmation p + p { border-block-start: 1px solid var(--color-warm-line); }
 .booking-confirmation strong { color: var(--color-bone); }
-.booking-empty,
 .booking-loading { margin: 0; color: var(--color-smoke); line-height: 1.7; }
 .booking-message { margin: 1rem 0 0; color: var(--color-clay); line-height: 1.6; }
 
@@ -493,11 +492,6 @@
   line-height: 1.65;
 }
 
-@keyframes booking-window-enter {
-  from { opacity: 0; transform: translateY(0.75rem); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 @media (hover: hover) {
   .ui-action--primary:hover { background: var(--color-action-hover); }
   .ui-action--secondary:hover { border-color: var(--color-brass); color: var(--color-champagne); }
@@ -560,8 +554,4 @@
   }
 
   .booking-context { position: sticky; top: 7rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .booking-window { animation: none; }
 }

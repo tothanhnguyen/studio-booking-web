@@ -36,7 +36,7 @@
 
 .ui-field :where(input, select, textarea):focus {
   border-color: var(--color-focus);
-  box-shadow: 0 0 0 3px rgb(37 66 56 / 18%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-action) 18%, transparent);
 }
 
 .ui-field :where(input, select, textarea)[aria-invalid="true"] {
@@ -95,8 +95,8 @@
 
 .booking-slot[aria-pressed="true"] {
   border-color: var(--color-action);
-  background: color-mix(in srgb, var(--color-action) 14%, var(--color-surface-raised));
-  color: var(--color-bone);
+  background: var(--color-action);
+  color: var(--color-on-action);
 }
 
 @media (hover: hover) {
