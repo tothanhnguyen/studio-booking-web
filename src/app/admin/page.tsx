@@ -10,7 +10,7 @@ import { BookingList } from "@/features/dashboard/presentation/booking-list";
 export default async function AdminPage() {
   const recent = await listAdminBookings(await getAdminPageActor(), { page: 1, pageSize: 5 });
   return (
-    <div className="admin-view">
+    <div className="console-view">
       <PageHeading
         description={`Quản lý phòng, dịch vụ và ${recent.total} booking từ đây.`}
         eyebrow="Dashboard"
@@ -18,16 +18,16 @@ export default async function AdminPage() {
         title="Tổng quan quản trị"
       />
 
-      <section aria-labelledby="admin-actions-heading" className="admin-section">
+      <section aria-labelledby="admin-actions-heading" className="console-section">
         <SectionMarker index={1} label="Thao tác nhanh" />
         <h2 className="sr-only" id="admin-actions-heading">Thao tác nhanh</h2>
-        <div className="admin-quick-actions">
+        <div className="console-quick-actions">
           <Link className={actionClassName("primary")} href="/admin/bookings">Xem booking</Link>
           <Link className={actionClassName("secondary")} href="/admin/bookings/calendar">Mở lịch vận hành</Link>
         </div>
       </section>
 
-      <section aria-labelledby="admin-recent-heading" className="admin-section">
+      <section aria-labelledby="admin-recent-heading" className="console-section">
         <SectionMarker index={2} label="Booking gần đây" />
         <h2 className="sr-only" id="admin-recent-heading">Booking gần đây</h2>
         <BookingList detailBasePath="/admin/bookings" result={recent} />

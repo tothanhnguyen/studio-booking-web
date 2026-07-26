@@ -22,22 +22,22 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
   if (!booking) notFound();
 
   return (
-    <div className="admin-view">
+    <div className="console-view">
       <PageHeading eyebrow={`Booking #${booking.id.slice(0, 8)}`} title="Chi tiết booking" />
 
-      <section aria-labelledby="admin-booking-detail-heading" className="admin-section">
+      <section aria-labelledby="admin-booking-detail-heading" className="console-section">
         <SectionMarker index={1} label="Lịch & thanh toán" />
         <h2 className="sr-only" id="admin-booking-detail-heading">Lịch & thanh toán</h2>
         <BookingDetail booking={booking} showCustomer variant="admin" />
       </section>
 
-      <section aria-labelledby="admin-booking-lifecycle-heading" className="admin-section">
+      <section aria-labelledby="admin-booking-lifecycle-heading" className="console-section">
         <SectionMarker index={2} label="Thao tác vòng đời" />
         <div className="ui-surface grid gap-4">
           <h2 className="font-semibold" id="admin-booking-lifecycle-heading">Lifecycle actions</h2>
 
           {booking.bookingType === "ASSISTED" && booking.bookingStatus === "PENDING" && (
-            <div className="admin-actions-group">
+            <div className="console-actions-group">
               <form
                 action={async () => {
                   "use server";
@@ -52,7 +52,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
           )}
 
           {booking.bookingStatus !== "CANCELLED" && (
-            <div className="admin-actions-group">
+            <div className="console-actions-group">
               <form
                 action={async (formData) => {
                   "use server";
@@ -63,7 +63,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
                   }
                   await cancelBookingByAdminAction(booking.id, reason);
                 }}
-                className="admin-form-field"
+                className="console-form-field"
               >
                 <label className="text-sm text-[var(--color-text-muted)]" htmlFor="admin-cancel-reason">
                   Lý do hủy / từ chối
@@ -81,7 +81,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
             </div>
           )}
 
-          <div className="admin-actions-group">
+          <div className="console-actions-group">
             <form
               action={async (formData) => {
                 "use server";
@@ -91,7 +91,7 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
                   String(formData.get("note") ?? ""),
                 );
               }}
-              className="admin-form-field"
+              className="console-form-field"
             >
               <label className="text-sm text-[var(--color-text-muted)]" htmlFor="refund-status">
                 Cập nhật refund status

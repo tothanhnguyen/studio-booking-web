@@ -23,32 +23,43 @@ function resolveRoomMaterial(roomName: string): RoomMaterial {
 
 const amountFormatter = new Intl.NumberFormat("vi-VN");
 
-/** Compact admin operations list: mono date/time/code/amount columns, hairline dividers. */
+/** Console operations table: dense mono date/time/code/amount columns, exposed
+ * column rules and an LED status dot per row (see BookingStatusBadge). */
 export function BookingList({ result, detailBasePath }: Readonly<{ result: BookingPage; detailBasePath: string }>) {
-  if (result.items.length === 0) return <p className="admin-empty-state">Chưa có booking phù hợp.</p>;
-  return <ul className="admin-row-list">
-    {result.items.map((booking) => <li className="admin-row admin-row--booking" key={booking.id}>
-      <div className="type-mono admin-row-secondary">
-        <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time>
-      </div>
-      <div className="type-mono admin-row-secondary">#{booking.id.slice(0, 8)}</div>
-      <div className="admin-row-cell">
-        <Link className="admin-row-primary" href={`${detailBasePath}/${booking.id}`}>{booking.customerName}</Link>
-        <p className="admin-row-secondary">{booking.customerEmail}</p>
-      </div>
-      <div className="admin-row-cell">
-        <p className="admin-row-secondary">{booking.serviceName}</p>
-        <p className="admin-row-secondary">{booking.roomName}</p>
-      </div>
-      <div className="admin-row-cell admin-row-cell--end">
-        <p className="admin-row-secondary">Cọc 30%</p>
-        <p className="type-mono">{amountFormatter.format(booking.depositAmount)} {booking.currency}</p>
-      </div>
-      <div className="admin-row-cell admin-row-cell--end">
-        <BookingStatusBadge status={booking.bookingStatus} />
-      </div>
-    </li>)}
-  </ul>;
+  if (result.items.length === 0) return <p className="console-empty-state">Chưa có booking phù hợp.</p>;
+  return <div className="console-table">
+    <div aria-hidden="true" className="console-table-head console-table-head--booking">
+      <span>Ngày · Giờ</span>
+      <span>Mã</span>
+      <span>Khách hàng</span>
+      <span>Dịch vụ · Phòng</span>
+      <span className="console-table-head__cell--end">Giá trị</span>
+      <span className="console-table-head__cell--end">Trạng thái</span>
+    </div>
+    <ul className="console-row-list">
+      {result.items.map((booking) => <li className="console-row console-row--booking" key={booking.id}>
+        <div className="type-mono console-row-secondary">
+          <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time>
+        </div>
+        <div className="type-mono console-row-secondary">#{booking.id.slice(0, 8)}</div>
+        <div className="console-row-cell">
+          <Link className="console-row-primary" href={`${detailBasePath}/${booking.id}`}>{booking.customerName}</Link>
+          <p className="console-row-secondary">{booking.customerEmail}</p>
+        </div>
+        <div className="console-row-cell">
+          <p className="console-row-secondary">{booking.serviceName}</p>
+          <p className="console-row-secondary">{booking.roomName}</p>
+        </div>
+        <div className="console-row-cell console-row-cell--end">
+          <p className="console-row-secondary">Cọc 30%</p>
+          <p className="type-mono">{amountFormatter.format(booking.depositAmount)} {booking.currency}</p>
+        </div>
+        <div className="console-row-cell console-row-cell--end">
+          <BookingStatusBadge status={booking.bookingStatus} />
+        </div>
+      </li>)}
+    </ul>
+  </div>;
 }
 
 /** Customer-facing history rail for /account/bookings — a vertical ticket stack. */
