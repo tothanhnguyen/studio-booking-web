@@ -9,17 +9,26 @@ const statusLabels: Record<BookingStatus, string> = {
   COMPLETED: "Đã hoàn thành",
 };
 
-const statusStyles: Record<BookingStatus, string> = {
-  PENDING_PAYMENT: "border-[#c7a85c] bg-[#f0e0b8] text-[#6e4f16]",
-  PENDING: "border-[#9ab7bd] bg-[#d7e4e7] text-[#315a66]",
-  CONFIRMED: "border-[#9aba9f] bg-[#d8e5db] text-[#2f5d46]",
-  CANCELLED: "border-[#c9938b] bg-[#efd8d4] text-[#8b3e35]",
-  EXPIRED: "border-[#c9c0b6] bg-[#e3ded6] text-[#57534e]",
-  COMPLETED: "border-[#b6a3bd] bg-[#e1d9e6] text-[#594461]",
+const statusTones: Record<BookingStatus, string> = {
+  PENDING_PAYMENT: "pending-payment",
+  PENDING: "pending",
+  CONFIRMED: "confirmed",
+  CANCELLED: "cancelled",
+  EXPIRED: "expired",
+  COMPLETED: "completed",
 };
 
+// LED-style status: a small tone dot beside the localized label — the dot is
+// never the sole signal, the label text carries its own color too. Tones
+// mirror the previous pill's WCAG AA-verified text colors (>= 4.5:1 against
+// var(--color-surface)); see proof-admin.css .console-status for the palette.
 export function BookingStatusBadge({ status }: Readonly<{ status: BookingStatus }>) {
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${statusStyles[status]}`}>{statusLabels[status]}</span>;
+  return (
+    <span className="console-status" data-tone={statusTones[status]}>
+      <span aria-hidden="true" className="console-status__dot" />
+      <span className="console-status__label">{statusLabels[status]}</span>
+    </span>
+  );
 }
 
 export function getBookingStatusLabel(status: BookingStatus) {

@@ -1,0 +1,856 @@
+/* Proof Sheet device layer: darkroom contact-sheet devices shared across public, booking, and account pages. */
+
+/* Column grid hairlines: decorative 1px overlay, desktop only. */
+.proof-grid {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.proof-grid__col {
+  block-size: 100%;
+  border-inline-end: 1px solid var(--color-border);
+}
+
+.proof-grid__col:last-child { border-inline-end: none; }
+
+/* Crop marks: L-shaped corners hugging an image frame. */
+.crop-frame { position: relative; }
+
+.crop-frame__body {
+  position: relative;
+  overflow: hidden;
+}
+
+.crop-frame__marks {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+
+.crop-frame__mark {
+  position: absolute;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+}
+
+.crop-frame__mark--tl {
+  inset-block-start: -1px;
+  inset-inline-start: -1px;
+  border-block-start: 2px solid var(--color-text);
+  border-inline-start: 2px solid var(--color-text);
+}
+
+.crop-frame__mark--tr {
+  inset-block-start: -1px;
+  inset-inline-end: -1px;
+  border-block-start: 2px solid var(--color-text);
+  border-inline-end: 2px solid var(--color-text);
+}
+
+.crop-frame__mark--bl {
+  inset-block-end: -1px;
+  inset-inline-start: -1px;
+  border-block-end: 2px solid var(--color-text);
+  border-inline-start: 2px solid var(--color-text);
+}
+
+.crop-frame__mark--br {
+  inset-block-end: -1px;
+  inset-inline-end: -1px;
+  border-block-end: 2px solid var(--color-text);
+  border-inline-end: 2px solid var(--color-text);
+}
+
+/* Mono annotation strip: "FRAME 01 — PHOTO STUDIO — 45M²" style label rows. */
+.proof-annotation {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.625rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Folio corner label: "MOW · PROOF 01/03" */
+.folio-label {
+  position: absolute;
+  z-index: 5;
+  inset-block-start: 1.75rem;
+  inset-inline-end: 2.5rem;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Ghost index: oversized low-opacity mono numeral behind content. */
+.ghost-index {
+  position: absolute;
+  z-index: 0;
+  color: var(--color-border);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(4rem, 10vw, 7.5rem);
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Film strip: thumbnail rail with sprocket-hole dots. */
+.film-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--color-text);
+  padding-block: 0.875rem;
+}
+
+.film-strip__sprockets {
+  display: flex;
+  justify-content: space-around;
+  padding-inline: 0.5rem;
+}
+
+.film-strip__sprocket {
+  inline-size: 0.375rem;
+  block-size: 0.375rem;
+  border-radius: 50%;
+  background: #3a3a35;
+}
+
+.film-strip__list {
+  display: flex;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  list-style: none;
+}
+
+.film-strip__cell { flex-shrink: 0; inline-size: 9.375rem; }
+
+.film-strip__media {
+  display: block;
+  inline-size: 100%;
+  block-size: 6.25rem;
+  object-fit: cover;
+  filter: grayscale(35%) contrast(1.05);
+}
+
+/* LED status: colored dot + mono label; dot never the sole signal. */
+.led-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.led-status__dot {
+  flex-shrink: 0;
+  inline-size: 0.4375rem;
+  block-size: 0.4375rem;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.led-status[data-tone="success"] .led-status__dot { background: var(--color-success); }
+.led-status[data-tone="warning"] .led-status__dot { background: var(--color-warning); }
+.led-status[data-tone="danger"] .led-status__dot { background: var(--color-danger); }
+.led-status[data-tone="neutral"] .led-status__dot { background: var(--color-text-muted); }
+
+.led-status[data-tone="record"] .led-status__dot {
+  background: var(--color-record);
+  box-shadow: 0 0 0 0.1875rem rgb(184 55 31 / 15%);
+  animation: led-record-pulse var(--motion-base) ease-in-out infinite alternate;
+}
+
+@keyframes led-record-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+/* Keep the record dot when a LedStatus rides inside a primary CTA, but let
+   the label keep the button's own typography instead of the mono device
+   type scale (see review IMP-2). */
+.ui-action .led-status {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+}
+
+/* Session-log rows: numbered rail entries for booking + account history. */
+.log-rail {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-row {
+  position: relative;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 1rem;
+}
+
+.log-row__index {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.375rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.log-row__title { margin: 0; font-size: 0.875rem; font-weight: 500; }
+
+.log-row__value {
+  margin: 0.125rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.log-row[data-state="active"] {
+  margin-inline: -1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+  padding-inline: 1rem;
+}
+
+.log-row[data-state="active"] .log-row__index { color: var(--color-record); }
+.log-row[data-state="active"] .log-row__title { color: var(--color-text); font-weight: 600; }
+.log-row[data-state="done"] .log-row__index { color: var(--color-action); }
+
+/* Ticket stub: booking summary receipt with dashed tear. */
+.ticket-stub {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-raised);
+}
+
+.ticket-stub__head {
+  position: relative;
+  border-block-end: 1px dashed var(--color-border);
+  padding: 1.25rem 1.375rem;
+}
+
+.ticket-stub__head::before,
+.ticket-stub__head::after {
+  position: absolute;
+  inset-block-end: -0.5rem;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
+  border-radius: 50%;
+  background: var(--color-canvas);
+  content: "";
+}
+
+.ticket-stub__head::before { inset-inline-start: -0.5rem; }
+.ticket-stub__head::after { inset-inline-end: -0.5rem; }
+
+.ticket-stub__body { padding: 1.25rem 1.375rem; }
+
+.ticket-stub__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.ticket-stub__total {
+  display: flex;
+  justify-content: space-between;
+  border-block-start: 1px solid var(--color-border);
+  padding: 1rem 1.375rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .led-status__dot { animation: none; }
+}
+
+/* Public pages */
+
+/* /studios: proof-sheet contact sheet of room frames. */
+.proof-studios-page {
+  position: relative;
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.proof-studios-header {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 44rem;
+}
+
+.proof-contact-sheet {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+@media (min-width: 1024px) {
+  .proof-contact-sheet {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+}
+
+.proof-room-frame {
+  display: flex;
+  flex-direction: column;
+}
+
+.proof-room-frame__media {
+  position: relative;
+  z-index: 2;
+  margin-block: 0.625rem;
+}
+
+.proof-room-frame__media .ghost-index {
+  inset-block-start: -2.5rem;
+  inset-inline-start: -0.375rem;
+  font-size: clamp(3.5rem, 7vw, 5rem);
+}
+
+.proof-room-frame__title {
+  margin: 0.875rem 0 0.25rem;
+  color: var(--color-text);
+  font-family: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(1.375rem, 2.6vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.proof-room-frame__meta {
+  margin: 0 0 0.375rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.proof-room-frame__description {
+  margin: 0 0 1rem;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.proof-room-frame__cta {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  border-block-end: 1px solid var(--color-action);
+  padding-block: 0.75rem 0.5rem;
+  color: var(--color-action);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.proof-room-frame__cta:hover {
+  border-color: var(--color-action-hover);
+  color: var(--color-action-hover);
+}
+
+.proof-filmstrip-section {
+  border-block-start: 1px solid var(--color-border);
+  padding-block-start: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.proof-filmstrip-section .film-strip { margin-block-start: 1rem; }
+
+/* /studios/[slug]: proof-sheet room detail frame. */
+.proof-room-page {
+  position: relative;
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+  padding-block: clamp(1rem, 3vw, 2.5rem);
+}
+
+.proof-room-hero { display: grid; gap: 0.625rem; }
+
+.proof-room-hero__frame-wrap { position: relative; }
+
+.proof-room-hero__frame-wrap .ghost-index {
+  inset-block-start: -3rem;
+  inset-inline-start: 0.5rem;
+  font-size: clamp(6rem, 14vw, 10rem);
+}
+
+.proof-room-hero__visual {
+  aspect-ratio: auto;
+  min-block-size: clamp(20rem, 55vh, 32rem);
+}
+
+.proof-room-hero__scrim {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(10 10 8 / 55%), rgb(10 10 8 / 0%) 45%);
+  pointer-events: none;
+}
+
+.proof-room-hero__overlay {
+  position: absolute;
+  z-index: 3;
+  inset-inline-start: 0;
+  inset-block-end: 0;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  color: var(--color-on-action);
+}
+
+.proof-room-hero__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+.proof-room-hero__overlay h1 {
+  margin: 0;
+  text-shadow: 0 0.125rem 1.5rem rgb(0 0 0 / 35%);
+}
+
+.proof-room-body {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+@media (min-width: 1024px) {
+  .proof-room-body { grid-template-columns: 21.25rem 1fr; }
+}
+
+.proof-room-spec {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .proof-room-spec {
+    border-inline-end: 1px solid var(--color-border);
+    padding-inline-end: 2rem;
+  }
+}
+
+.proof-room-spec__list { margin: 1.5rem 0 0; }
+
+.proof-room-spec__row {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.proof-room-spec__row dt { color: var(--color-text-muted); font-size: 0.8125rem; }
+.proof-room-spec__row dd { margin: 0; color: var(--color-text); text-align: end; }
+
+.proof-room-spec__description {
+  margin: 1.25rem 0 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.proof-room-spec__cta {
+  margin-top: 1.75rem;
+  width: 100%;
+}
+
+.proof-room-services { min-width: 0; }
+
+.proof-room-services > h2 {
+  margin: 0.5rem 0 0;
+  color: var(--color-text);
+}
+
+.proof-room-services__list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
+
+/* Session-log rows: numbered service entries reusing the `.log-row` device
+   class for the mono index, plus grid layout for identity + details. */
+.service-row.log-row {
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: 0.25rem 1.25rem;
+  border-block-end: 1px solid var(--color-border);
+  padding-block: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .service-row.log-row { grid-template-columns: 2.25rem 1fr auto; align-items: start; }
+}
+
+.service-row.log-row .log-row__index { margin: 0.1875rem 0 0; }
+.service-row.log-row .service-row__identity { grid-column: 2; display: grid; gap: 0.375rem; }
+.service-row.log-row .service-row__details {
+  grid-column: 2;
+  display: grid;
+  justify-items: start;
+  gap: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .service-row.log-row .service-row__details { grid-column: 3; justify-items: end; }
+}
+
+.service-row__thumb {
+  display: none;
+  position: relative;
+  inline-size: 130px;
+  block-size: 80px;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .service-row__thumb {
+    display: block;
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+}
+
+.service-row__thumb-image {
+  position: relative !important;
+  width: 100%;
+  height: 100%;
+}
+
+.service-row__thumb-image figure {
+  width: 100%;
+  height: 100%;
+}
+
+.service-row__thumb-image img {
+  object-fit: cover;
+}
+
+/* /services/[slug]: proof-sheet spec-block rate card. */
+.proof-service-page {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4rem);
+  padding-block: clamp(1rem, 3vw, 3rem);
+}
+
+.proof-service-heading { display: grid; gap: 1rem; }
+
+.proof-service-body {
+  display: grid;
+  align-content: start;
+  gap: clamp(2.5rem, 6vw, 3.5rem);
+  min-width: 0;
+}
+
+.proof-service-room-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  justify-self: start;
+  color: var(--color-accent);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-transform: uppercase;
+  text-underline-offset: 0.25rem;
+}
+
+.proof-service-explainer { display: grid; gap: 0.625rem; max-width: 38rem; }
+
+.proof-service-explainer h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.proof-service-explainer p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.proof-service-rate-card {
+  display: grid;
+  align-content: start;
+  gap: 0;
+  min-width: 0;
+}
+
+.proof-service-rate-card h2 {
+  margin: 0.5rem 0 0;
+  color: var(--color-text);
+  font-size: clamp(1.375rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.proof-service-rate-card__list { margin: 1.75rem 0 0; }
+
+.proof-service-rate-card__row {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+
+.proof-service-rate-card__row dt { color: var(--color-text-muted); font-size: 0.875rem; }
+.proof-service-rate-card__row dd { margin: 0; color: var(--color-text); text-align: end; }
+
+.proof-service-rate-card__price {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.proof-service-rate-card__deposit {
+  margin: 0 0 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+  padding-top: 1rem;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+}
+
+.proof-service-rate-card .ui-action { width: 100%; }
+
+@media (min-width: 1024px) {
+  .proof-service-page {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .proof-service-heading { grid-column: 1 / span 7; order: 1; }
+
+  .proof-service-rate-card {
+    grid-column: 8 / span 5;
+    grid-row: 1 / span 2;
+    order: 2;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .proof-service-body { grid-column: 1 / span 7; order: 3; }
+}
+
+/* Booking session */
+
+/* Session log rail: list-marker reset only — dot/row states, coloring, and
+   the active-record treatment are inherited from the shared .log-rail /
+   .log-row primitives declared above. */
+.booking-session-log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Wizard step frame: directional slide-in per remounted step, framed with
+   the shared CropFrame crop marks (rendered inside by BookingWizard). */
+.log-frame {
+  --log-frame-offset: 0.875rem;
+
+  position: relative;
+  animation: log-frame-enter var(--motion-base) ease-out both;
+}
+
+.log-frame[data-direction="back"] { --log-frame-offset: -0.875rem; }
+
+@keyframes log-frame-enter {
+  from { opacity: 0; transform: translateX(var(--log-frame-offset)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-frame { animation: none; }
+}
+
+/* Selected time slot: thin record-red ring layered on top of the existing
+   Action-filled selected state (grid + fill colors owned by forms.css). */
+.booking-slot[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px var(--color-record);
+}
+
+/* VietQR payment: QR crop-framed on a raised surface, transfer rows and
+   amount ledger sharing the ticket-stub row treatment. */
+.payment-qr__image-frame .crop-frame,
+.payment-qr__image-frame .crop-frame__body {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.payment-qr__group {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  margin-top: 1.5rem;
+}
+
+.payment-ledger > .copy-payment-value:first-child { border-block-start: 0; }
+.payment-ledger > .ticket-stub__row:first-child { border-block-start: 0; }
+
+.payment-ledger__remaining dt,
+.payment-ledger__remaining dd {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Payment status: LED badge row (replaces the old bordered pill badge). */
+.payment-status__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* Booking receipt: page-level itemized stack for the payment route. */
+.booking-receipt {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+/* Confirmation: oversized mono booking code + developed-frame receipt. */
+.confirmation-code {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.confirmation-code strong {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--color-text);
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.developed-frame {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 34rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.confirmation-next {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.confirmation-remaining .log-row__title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.confirmation-cta { margin-top: clamp(1.5rem, 4vw, 2.5rem); }
+
+@media (min-width: 901px) {
+  .developed-frame {
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
+    max-width: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .confirmation-code strong { font-size: clamp(1.5rem, 8vw, 2rem); }
+}
+
+/* Account log */
+
+/* /account/bookings: session-log rail — each booking is a numbered `.log-row`
+   entry (mono date/time + code standing in for the row index, service+room
+   as the body), a room-accent bar on the leading edge mirroring
+   `.console-agenda-entry`, and the shared BookingStatusBadge LED for status.
+   List reset only; row chrome (border, padding, position) is inherited from
+   the shared `.log-row` primitive declared above. */
+.account-log-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-log-row.log-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  padding-inline-start: 1.125rem;
+}
+
+.account-log-row.log-row::before {
+  content: "";
+  position: absolute;
+  inset-block: 1rem;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-text-subtle);
+}
+
+.account-log-row[data-room-material="photo"].log-row::before { background: var(--color-accent); }
+.account-log-row[data-room-material="music"].log-row::before { background: var(--color-success); }
+
+.account-log-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 9rem;
+  color: var(--color-text-muted);
+}
+
+.account-log-row__code { color: var(--color-text-subtle); }
+
+.account-log-row__body { display: grid; gap: 0.25rem; flex: 1 1 16rem; min-width: 0; }
+
+.account-log-row .log-row__title { color: var(--color-text); text-decoration: none; }
+.account-log-row .log-row__title:hover { color: var(--color-action); }

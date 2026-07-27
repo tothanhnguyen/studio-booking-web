@@ -1,0 +1,544 @@
+/* Proof Admin device layer: studio-console shell for /admin pages. Prefix: .console- */
+
+.console-shell { position: relative; }
+
+/* Top bar: wordmark + folio label, hairline rule below. ---------------------- */
+
+.console-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block-end: 1.25rem;
+  margin-block-end: 1.75rem;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.console-topbar__mark {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-display), serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.console-topbar .folio-label { position: static; }
+
+/* Shell layout: nav rail + content, unchanged 2-col breakpoint from prior shell. */
+
+.console-body {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .console-body { grid-template-columns: 15rem 1fr; }
+}
+
+.console-body__content { min-width: 0; }
+
+.console-nav { position: sticky; top: 1.5rem; z-index: 10; }
+
+.console-nav-rail {
+  display: none;
+  flex-direction: column;
+  gap: 1.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .console-nav-rail { display: flex; }
+}
+
+.console-nav-brand {
+  margin: 0 0 0.25rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.console-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.console-nav-eyebrow {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.console-nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid transparent;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+.console-nav-link:hover,
+.console-nav-link:focus-visible {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border);
+  color: var(--color-action);
+  outline: none;
+}
+
+.console-nav-link--active {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  border-inline-start-width: 3px;
+  border-inline-start-color: var(--color-action);
+  padding-inline-start: calc(0.9rem - 2px);
+  color: var(--color-action);
+  font-weight: 600;
+}
+
+.console-nav-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .console-nav-mobile { display: none; }
+}
+
+.console-nav-mobile-brand {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.console-nav-mobile-select {
+  min-height: 2.75rem;
+  min-width: 11rem;
+  border: 1px solid var(--color-control-border);
+  background: var(--color-surface-raised);
+  padding: 0 0.75rem;
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+/* View rhythm --------------------------------------------------------------- */
+
+.console-view { display: grid; gap: 2.5rem; }
+
+.console-section {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.console-section:first-child { padding-top: 0; border-top: none; }
+
+.console-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Console table: dense row list with exposed column rules, header row hidden
+   on mobile — rows stack into blocks below 768px (no second horizontal
+   scroll), so we lean on grid's implicit single column rather than a literal
+   <table> (keeps admin-denial.spec.ts's `ul a` locator on the booking list
+   intact). */
+
+.console-table {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console-table-head {
+  display: none;
+  gap: 1rem;
+  padding: 0.625rem 1.25rem;
+  border-block-end: 1px solid var(--color-text);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .console-table-head { display: grid; }
+}
+
+.console-table-head--booking { grid-template-columns: 6.5rem 5.5rem minmax(10rem, 1.4fr) minmax(9rem, 1fr) 7rem auto; }
+.console-table-head--payment { grid-template-columns: minmax(10rem, 1.6fr) 7rem 7rem 8rem 6.5rem; }
+
+.console-table-head__cell--end { text-align: end; }
+
+.console-row-list { display: flex; flex-direction: column; }
+
+.console-row {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1.25rem;
+  border-block-start: 1px solid var(--color-border);
+  transition: background-color var(--motion-fast) ease;
+}
+
+.console-row:first-child { border-block-start: none; }
+
+.console-row:hover,
+.console-row:focus-within {
+  background: var(--color-surface-raised);
+}
+
+@media (min-width: 768px) {
+  .console-row--booking {
+    grid-template-columns: 6.5rem 5.5rem minmax(10rem, 1.4fr) minmax(9rem, 1fr) 7rem auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .console-row--payment {
+    grid-template-columns: minmax(10rem, 1.6fr) 7rem 7rem 8rem 6.5rem;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Exposed column rules: a hairline between every cell, mirroring the
+     mockup's th/td border-inline-end without hard-coding it per cell. */
+  .console-row--booking > *,
+  .console-row--payment > * {
+    padding-inline-end: 1rem;
+    border-inline-end: 1px solid var(--color-border);
+  }
+
+  .console-row--booking > *:last-child,
+  .console-row--payment > *:last-child {
+    padding-inline-end: 0;
+    border-inline-end: none;
+  }
+}
+
+.console-row-primary {
+  min-width: 0;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--motion-fast) ease;
+}
+
+.console-row-primary:hover,
+.console-row-primary:focus-visible {
+  color: var(--color-action);
+}
+
+.console-row-secondary {
+  margin: 0;
+  min-width: 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.console-row-cell {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .console-row-cell--end { justify-self: end; text-align: right; }
+}
+
+.console-empty-state {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1.5rem;
+  color: var(--color-text-muted);
+}
+
+/* LED status: dot + label. Dot color is a quick-scan accent only — the label
+   text carries its own AA-verified color, so the dot is never the sole
+   signal. Values mirror the previous badge pill's text colors (already
+   verified >= 4.5:1 against var(--color-surface)). */
+
+.console-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.console-status__dot {
+  flex-shrink: 0;
+  inline-size: 0.4375rem;
+  block-size: 0.4375rem;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.console-status__label { color: var(--color-text-muted); }
+
+.console-status[data-tone="pending-payment"] .console-status__dot { background: #c7a85c; }
+.console-status[data-tone="pending-payment"] .console-status__label { color: var(--color-warning); }
+
+.console-status[data-tone="pending"] .console-status__dot { background: #9ab7bd; }
+.console-status[data-tone="pending"] .console-status__label { color: var(--color-info); }
+
+.console-status[data-tone="confirmed"] .console-status__dot { background: var(--color-success); }
+.console-status[data-tone="confirmed"] .console-status__label { color: var(--color-success); }
+
+.console-status[data-tone="cancelled"] .console-status__dot { background: var(--color-danger); }
+.console-status[data-tone="cancelled"] .console-status__label { color: var(--color-text-subtle); text-decoration: line-through; }
+
+.console-status[data-tone="expired"] .console-status__dot { background: var(--color-text-subtle); }
+.console-status[data-tone="expired"] .console-status__label { color: var(--color-text-subtle); }
+
+.console-status[data-tone="completed"] .console-status__dot { background: #594461; }
+.console-status[data-tone="completed"] .console-status__label { color: #594461; }
+
+/* Generic tones for non-booking status strings (payment/refund tracking). */
+.console-status[data-tone="success"] .console-status__dot { background: var(--color-success); }
+.console-status[data-tone="success"] .console-status__label { color: var(--color-success); }
+
+.console-status[data-tone="warning"] .console-status__dot { background: var(--color-warning); }
+.console-status[data-tone="warning"] .console-status__label { color: var(--color-warning); }
+
+.console-status[data-tone="danger"] .console-status__dot { background: var(--color-danger); }
+.console-status[data-tone="danger"] .console-status__label { color: var(--color-danger); }
+
+.console-status[data-tone="info"] .console-status__dot { background: var(--color-info); }
+.console-status[data-tone="info"] .console-status__label { color: var(--color-info); }
+
+/* Detail + action separation -------------------------------------------------- */
+
+.console-actions-group { display: grid; gap: 0.75rem; }
+
+.console-actions-group + .console-actions-group {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.console-form-field { display: grid; gap: 0.4rem; }
+
+/* Agenda + schedule -----------------------------------------------------------
+   Calendar (day-grouped agenda, no month/week grid) and the schedule/blocked-
+   slots pages. Reuses .console-row-list/.console-row for hairline rows and
+   .type-mono for time/room codes rather than duplicating row chrome. */
+
+.console-agenda { display: grid; gap: 1.75rem; }
+
+@media (min-width: 1024px) {
+  .console-agenda {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.console-agenda-day { display: grid; gap: 0.75rem; }
+
+.console-agenda-day-heading {
+  margin: 0;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Room accent bar mirrors .account-log-row[data-room-material]::before. */
+.console-agenda-entry {
+  position: relative;
+  padding-inline-start: 1.75rem;
+}
+
+.console-agenda-entry::before {
+  content: "";
+  position: absolute;
+  inset-block: 0.9rem;
+  inset-inline-start: 1rem;
+  inline-size: 3px;
+  border-radius: 999px;
+  background: var(--color-text-subtle);
+}
+
+.console-agenda-entry[data-room-material="photo"]::before { background: var(--color-accent); }
+.console-agenda-entry[data-room-material="music"]::before { background: var(--color-success); }
+
+.console-agenda-time {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .console-agenda-entry {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.console-calendar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console-calendar-filters label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.console-calendar-filters input {
+  min-height: 2.75rem;
+  border: 1px solid var(--color-control-border);
+  background: var(--color-surface-raised);
+  padding: 0 0.75rem;
+  color: var(--color-text);
+  font-family: var(--font-mono), monospace;
+}
+
+/* Schedule editor: working-hours + block-creation forms, sharing FormField
+   (.ui-field) and .ui-surface card chrome — see forms.css for field styles. */
+
+.console-form-grid { display: grid; gap: 1.5rem; }
+
+@media (min-width: 1024px) {
+  .console-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.console-form-heading {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Blocked slots: agenda/timeline rows emphasizing room + time range. */
+
+.console-blocked-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.console-blocked-list > li { border-top: 1px solid var(--color-border); transition: background-color var(--motion-fast) ease; }
+.console-blocked-list > li:first-child { border-top: none; }
+.console-blocked-list > li:hover,
+.console-blocked-list > li:focus-within { background: var(--color-surface-raised); }
+
+.console-blocked-row {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .console-blocked-row {
+    grid-template-columns: minmax(9rem, 1.2fr) minmax(11rem, 1.4fr) auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.console-blocked-room { margin: 0; color: var(--color-text); font-weight: 600; }
+.console-blocked-time { margin: 0; color: var(--color-text-muted); font-size: 0.875rem; }
+.console-blocked-reason { margin: 0.15rem 0 0; color: var(--color-text-subtle); font-size: 0.8125rem; }
+
+/* Catalog: <details> rows for rooms/services, collapsed by default. */
+
+.console-catalog-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.console-catalog-summary::-webkit-details-marker { display: none; }
+
+.console-catalog-summary::after {
+  content: "+";
+  color: var(--color-text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 1rem;
+}
+
+details[open] > .console-catalog-summary::after { content: "\2212"; }
+
+.console-catalog-edit {
+  display: grid;
+  gap: 1.25rem;
+  padding-block-start: 1rem;
+  margin-block-start: 1rem;
+  border-block-start: 1px dashed var(--color-border);
+}
+
+/* Muted text action — a quiet delete affordance detached from the
+   primary/secondary/danger chip buttons in action.ts; visible focus ring,
+   clay only on the danger variant so it reads as calm, not alarming. */
+
+.console-text-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.125rem;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--motion-fast) ease;
+}
+
+.console-text-action:hover { color: var(--color-text); }
+
+.console-text-action--danger { color: var(--color-danger); }
+
+.console-text-action--danger:hover { text-decoration: underline; }
+
+.console-text-action:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}

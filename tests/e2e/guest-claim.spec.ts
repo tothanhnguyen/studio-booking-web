@@ -1,7 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 test("verified customer explicitly claims an eligible guest booking", async ({ context, page }, testInfo) => {
-  const date = testInfo.project.name === "mobile-chrome" ? "2027-07-06" : "2027-07-05";
+  // Fixed dates in this suite accumulate bookings run over run against the
+  // shared, non-reset seeded database — 2027-07-05/06 filled to the room's
+  // daily capacity from repeated prior runs, so this uses a fresh date pair.
+  const date = testInfo.project.name === "mobile-chrome" ? "2028-01-16" : "2028-01-15";
   await page.goto("/services/photo-room-rental");
   await page.getByRole("link", { name: "Đặt lịch dịch vụ này" }).click();
   await page.getByLabel("Họ tên").fill("Khách Claim");

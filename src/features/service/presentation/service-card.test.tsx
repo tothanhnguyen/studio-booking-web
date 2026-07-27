@@ -23,13 +23,34 @@ const serviceFixture = {
 } satisfies ServiceRecord;
 
 describe("ServiceCard", () => {
-  it("renders a service as an accessible horizontal row", () => {
-    render(<ServiceCard service={serviceFixture} />);
+  it("renders a service as an accessible numbered log row", () => {
+    render(<ServiceCard index={1} service={serviceFixture} />);
 
     expect(screen.getByRole("article")).toHaveClass("service-row");
     expect(screen.getByText("60 phút")).toHaveClass("type-mono");
     expect(
       screen.getByRole("link", { name: "Xem dịch vụ" }),
     ).toHaveAttribute("href", "/services/photo-room-rental");
+  });
+
+  it("renders its position as a padded mono index", () => {
+    render(<ServiceCard index={3} service={serviceFixture} />);
+    expect(screen.getByText("03")).toBeInTheDocument();
+  });
+
+  it("renders a thumbnail when visual prop is provided", () => {
+    render(
+      <ServiceCard
+        index={1}
+        service={serviceFixture}
+        visual={{ slug: "photo-studio", variant: "detail-1" }}
+      />,
+    );
+    expect(screen.getByTestId("room-visual")).toBeInTheDocument();
+  });
+
+  it("does not render a thumbnail when visual prop is absent", () => {
+    render(<ServiceCard index={1} service={serviceFixture} />);
+    expect(screen.queryByTestId("room-visual")).not.toBeInTheDocument();
   });
 });

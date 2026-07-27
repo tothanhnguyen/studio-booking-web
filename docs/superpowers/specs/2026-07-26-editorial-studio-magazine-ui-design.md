@@ -51,6 +51,7 @@ Raise the visual quality of every MowStudio page from "clean and consistent" to 
 Produced with the `ai-multimodal` skill (Nano Banana/Imagen), edited/graded with `imagemagick`.
 
 - Per room (3 rooms): 1 wide hero shot (≥1920w) + 2 detail shots. Art direction: warm film photography, soft natural light, grade matched to Canvas `#E7E1D8` and the hero poster's warm grey stage; each room carries its material accent.
+- **2026-07-26 accepted deviation:** final room hero photography ships at 960px wide (derived from the 1080p `hero-theme.mp4` after the image-generation quota was exhausted), not the ≥1920w line above — accepted with the user given file weights remain within budget.
 - 1 brand-statement image for login/register.
 - Output: `public/media/rooms/*.webp` (and `public/media/brand/*.webp`), optimized; keep total added weight modest (target ≤ 250KB per hero image after webp compression).
 - Iterate generation until grade consistency across the set is visually verified side-by-side; discard off-palette results.

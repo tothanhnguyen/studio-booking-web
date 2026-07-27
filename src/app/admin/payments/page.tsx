@@ -1,9 +1,28 @@
 import Link from "next/link";
 
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { prisma } from "@/lib/db/prisma";
 
 export const dynamic = "force-dynamic";
+
+const amountFormatter = new Intl.NumberFormat("vi-VN");
+const updatedAtFormatter = new Intl.DateTimeFormat("vi-VN", { dateStyle: "short", timeStyle: "short" });
+
+// Console status dots for payment/refund tracking — presentational tone
+// mapping only, mirrors the LED-status pattern used by BookingStatusBadge.
+const paymentTones: Record<string, string> = { PENDING: "pending", PAID: "success", FAILED: "danger", EXPIRED: "expired" };
+const refundTones: Record<string, string> = { REQUESTED: "warning", PROCESSING: "info", REFUNDED: "success", REJECTED: "danger" };
+
+function StatusDot({ label, tone }: Readonly<{ label: string; tone?: string }>) {
+  return (
+    <span className="console-status" data-tone={tone}>
+      <span aria-hidden="true" className="console-status__dot" />
+      <span className="console-status__label">{label}</span>
+    </span>
+  );
+}
 
 export default async function AdminPaymentsPage() {
   await getAdminPageActor("/admin/payments");
@@ -29,34 +48,51 @@ export default async function AdminPaymentsPage() {
   });
 
   return (
-    <section>
-      <p className="text-sm uppercase tracking-[0.2em] text-[var(--color-accent)]">Tài chính</p>
-      <h1 className="mt-3 text-3xl font-semibold">Theo dõi thanh toán & hoàn tiền</h1>
-      <p className="mt-2 text-[var(--color-text-muted)]">Danh sách booking cần đối soát payment/refund.</p>
-      <ul className="mt-6 space-y-3">
-        {bookings.map((booking) => (
-          <li key={booking.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <Link href={`/admin/bookings/${booking.id}`} className="font-semibold hover:text-[var(--color-action)]">
-                  {booking.serviceName}
-                </Link>
-                <p className="text-sm text-[var(--color-text-muted)]">{booking.customerName}</p>
-              </div>
-              <div className="text-right text-sm">
-                <p>Payment: <strong>{booking.paymentStatus}</strong></p>
-                <p>Refund: <strong>{booking.refundStatus}</strong></p>
-                <p className="text-[var(--color-text-muted)]">
-                  {new Intl.NumberFormat("vi-VN").format(booking.depositAmount)} {booking.currency}
-                </p>
-              </div>
+    <div className="console-view">
+      <PageHeading
+        description="Danh sách booking cần đối soát payment/refund."
+        eyebrow="Tài chính"
+        title="Theo dõi thanh toán & hoàn tiền"
+      />
+
+      <section aria-labelledby="admin-payments-heading" className="console-section">
+        <SectionMarker index={1} label="Cần đối soát" />
+        <h2 className="sr-only" id="admin-payments-heading">Cần đối soát</h2>
+
+        {bookings.length === 0 ? (
+          <p className="console-empty-state">Chưa có payment/refund cần theo dõi.</p>
+        ) : (
+          <div className="console-table">
+            <div aria-hidden="true" className="console-table-head console-table-head--payment">
+              <span>Booking</span>
+              <span>Thanh toán</span>
+              <span>Hoàn tiền</span>
+              <span className="console-table-head__cell--end">Giá trị</span>
+              <span className="console-table-head__cell--end">Cập nhật</span>
             </div>
-          </li>
-        ))}
-      </ul>
-      {bookings.length === 0 && (
-        <p className="mt-6 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-[var(--color-text-muted)]">Chưa có payment/refund cần theo dõi.</p>
-      )}
-    </section>
+            <ul className="console-row-list">
+              {bookings.map((booking) => (
+                <li className="console-row console-row--payment" key={booking.id}>
+                  <div className="console-row-cell">
+                    <Link className="console-row-primary" href={`/admin/bookings/${booking.id}`}>
+                      {booking.serviceName}
+                    </Link>
+                    <p className="console-row-secondary">{booking.customerName}</p>
+                  </div>
+                  <StatusDot label={booking.paymentStatus} tone={paymentTones[booking.paymentStatus]} />
+                  <StatusDot label={booking.refundStatus} tone={refundTones[booking.refundStatus]} />
+                  <div className="type-mono console-row-cell console-row-cell--end">
+                    {amountFormatter.format(booking.depositAmount)} {booking.currency}
+                  </div>
+                  <div className="type-mono console-row-cell console-row-cell--end console-row-secondary">
+                    {updatedAtFormatter.format(booking.updatedAt)}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    </div>
   );
 }

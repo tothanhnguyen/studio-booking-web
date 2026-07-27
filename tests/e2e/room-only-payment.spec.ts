@@ -3,7 +3,12 @@ import { expect, test } from "@playwright/test";
 import { signedWebhookHeaders } from "../fixtures/sepay-signature";
 
 test("room-only booking is auto-confirmed after successful payment webhook", async ({ page }, testInfo) => {
-  const date = testInfo.project.name === "mobile-chrome" ? "2027-04-08" : "2027-04-07";
+  // Fixed dates in this suite accumulate CONFIRMED bookings run over run (this
+  // path auto-confirms via webhook and never cancels) against the shared,
+  // non-reset seeded database — 2027-04-07/08, 2027-09-01/02 and 2027-11-04/05
+  // filled to the room's daily capacity from repeated prior runs, so this uses
+  // a fresh date pair.
+  const date = testInfo.project.name === "mobile-chrome" ? "2029-02-05" : "2029-02-04";
 
   await page.goto("/services/photo-room-rental");
   await page.getByRole("link", { name: "Đặt lịch dịch vụ này" }).click();
@@ -24,8 +29,9 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
   await expect(
     page.getByRole("button", { name: "Sao chép Nội dung chuyển khoản" }),
   ).toBeVisible();
-  await expect(page.getByText("PENDING_PAYMENT", { exact: true })).toBeVisible();
-  await expect(page.getByText("PENDING", { exact: true })).toBeVisible();
+  await expect(page.getByText("Trạng thái booking:")).toBeVisible();
+  await expect(page.getByText("Chờ thanh toán", { exact: true })).toBeVisible();
+  await expect(page.getByText("Đang chờ", { exact: true })).toBeVisible();
 
   const webhookBody = JSON.stringify({
     // Event id must be unique per booking (not just per browser project): the
@@ -50,7 +56,6 @@ test("room-only booking is auto-confirmed after successful payment webhook", asy
   await expect(page).toHaveURL(`/booking/${bookingId}/confirmation`);
   await expect(page.getByRole("heading", { name: "Đã nhận tiền cọc." })).toBeVisible();
   await expect(page.getByText("Trạng thái booking:")).toBeVisible();
-  await expect(page.getByText("CONFIRMED", { exact: true })).toBeVisible();
-  await expect(page.getByText("Trạng thái thanh toán:")).toBeVisible();
-  await expect(page.getByText("PAID", { exact: true })).toBeVisible();
+  await expect(page.getByText("Đã xác nhận", { exact: true })).toBeVisible();
+  await expect(page.getByText("Đã thanh toán", { exact: true })).toBeVisible();
 });

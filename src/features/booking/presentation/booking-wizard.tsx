@@ -89,14 +89,11 @@ export function BookingWizard({ serviceId, serviceName, durationMinutes, priceAm
 
       <section
         aria-busy={loading}
-        className="booking-window booking-ticket ui-surface"
+        className="booking-window log-frame ui-surface"
         data-direction={direction}
         key={step}
       >
-        <p className="booking-ticket__meta type-mono">
-          {serviceName}
-          {date ? ` · ${date}` : ""}
-        </p>
+        <p className="proof-annotation">{date ? `${serviceName} · ${date}` : serviceName}</p>
         {step === 0 && <form className="booking-form" onSubmit={handleSubmit(() => goToStep(1))}>
           <h2 className="booking-step-title">Thông tin liên hệ</h2>
           <FormField label="Họ tên" htmlFor="customer-name" error={errors.customerName?.message}>

@@ -2,7 +2,7 @@
 
 **Context:** `plan.md`, spec §5.1–5.3. Consumes Phase 1 primitives and Phase 2 imagery.
 **Priority:** High — most-seen customer pages.
-**Status:** Not started
+**Status:** Complete (commits 30bd7a4..8fb444b/8fb84d1/ee4df9d+c05cda2 per `.superpowers/sdd/progress.md`, tasks P3.1–P3.3 reviewed clean/approved). Visual QA and Lighthouse phase-gate checks below were deferred to Phase 7 and remain open.
 
 **Shared rules for every task in this phase:**
 - Read the current page/component before editing; preserve data fetching, route params, and all server logic — presentation changes only.
@@ -22,7 +22,7 @@
 - Consumes: `SectionMarker`, `ScrollReveal`, `ParallaxFrame`, `Marquee`, `RoomVisual` (hero variant).
 - Produces: `RoomCard` accepts a new required `index: number` prop (1-based) and renders `SectionMarker(index, room name context)`.
 
-- [ ] **Step 1 (test first):** Update `room-card.test.tsx` — add:
+- [x] **Step 1 (test first):** Update `room-card.test.tsx` — add:
 
 ```tsx
 it("renders its magazine index marker", () => {
@@ -33,15 +33,15 @@ it("renders its magazine index marker", () => {
 
 Run: FAIL (prop not accepted).
 
-- [ ] **Step 2:** Restyle `RoomCard` as an alternating editorial row:
+- [x] **Step 2:** Restyle `RoomCard` as an alternating editorial row:
   - Root: `<article className="studio-index-row">` with `data-align={index % 2 === 0 ? "right" : "left"}`.
   - Visual column: `ParallaxFrame` wrapping `RoomVisual` (hero, `priority` for index 1).
   - Content column: `SectionMarker(index, "Phòng")`, room name in `<h2 className="display-lg">`, description, service count in mono, action link via `actionClassName("secondary")` — keep the existing accessible link name unless updating e2e in the same step.
   - Wrap content column in `ScrollReveal`.
-- [ ] **Step 3:** CSS in `editorial.css`: `.studio-index-row` = 12-col grid, visual spans 7, content 5; `[data-align="right"]` flips column order via `direction`-safe `order`; mobile (<768px) stacks visual first; row gap ≥ `6rem`.
-- [ ] **Step 4:** In `studios/page.tsx`: intro block gets `display-xl` headline + `ScrollReveal`; insert `<Marquee items={["Photo Studio", "Podcast Booth", "Music Studio", "Đặt lịch", "MowStudio"]} />` between intro and rows; pass `index={i + 1}` to each `RoomCard`; add `page-grain` class to the page root section.
-- [ ] **Step 5:** Run `pnpm vitest run src/features/studio-room` — PASS. Run `pnpm test:e2e -- public-catalog` (needs seeded DB) or defer to phase gate with a note.
-- [ ] **Step 6: Commit** — `feat: restyle studios page as editorial magazine index`
+- [x] **Step 3:** CSS in `editorial.css`: `.studio-index-row` = 12-col grid, visual spans 7, content 5; `[data-align="right"]` flips column order via `direction`-safe `order`; mobile (<768px) stacks visual first; row gap ≥ `6rem`.
+- [x] **Step 4:** In `studios/page.tsx`: intro block gets `display-xl` headline + `ScrollReveal`; insert `<Marquee items={["Photo Studio", "Podcast Booth", "Music Studio", "Đặt lịch", "MowStudio"]} />` between intro and rows; pass `index={i + 1}` to each `RoomCard`; add `page-grain` class to the page root section.
+- [x] **Step 5:** Run `pnpm vitest run src/features/studio-room` — PASS. Run `pnpm test:e2e -- public-catalog` (needs seeded DB) or defer to phase gate with a note.
+- [x] **Step 6: Commit** — `feat: restyle studios page as editorial magazine index`
 
 ## Task 2: `/studios/[slug]` — cover story
 
@@ -49,12 +49,12 @@ Run: FAIL (prop not accepted).
 - Modify: `src/app/studios/[slug]/page.tsx`
 - Test: `tests/e2e/public-catalog.spec.ts` (only if copy/names change)
 
-- [ ] **Step 1:** Opening: full-bleed `ParallaxFrame` + `RoomVisual` hero (60–70vh via `.room-story-hero { min-block-size: clamp(24rem, 65vh, 44rem); }`), room name as `<h1 className="display-xl room-story-title">` overlapping the image bottom edge (negative margin, `position: relative`), short description beneath.
-- [ ] **Step 2:** Facts rail: existing available data only (service count, room material label) in mono, `.room-story-facts` horizontal rail with hairline dividers.
-- [ ] **Step 3:** Services list: editorial feature rows — each service row pairs `RoomVisual` `variant="detail-1"`/`"detail-2"` (alternate) with name, duration/price in mono, and the existing booking link. Wrap rows in `ScrollReveal` with staggered `delayMs={i * 80}` (cap 240).
-- [ ] **Step 4:** Closing CTA block: `SectionMarker(services.length + 1, "Đặt lịch")` + primary action (existing label).
-- [ ] **Step 5:** Verify heading hierarchy (`h1` → `h2` per service) unchanged for e2e; run `pnpm vitest run` affected suites + typecheck.
-- [ ] **Step 6: Commit** — `feat: restyle room detail as editorial cover story`
+- [x] **Step 1:** Opening: full-bleed `ParallaxFrame` + `RoomVisual` hero (60–70vh via `.room-story-hero { min-block-size: clamp(24rem, 65vh, 44rem); }`), room name as `<h1 className="display-xl room-story-title">` overlapping the image bottom edge (negative margin, `position: relative`), short description beneath.
+- [x] **Step 2:** Facts rail: existing available data only (service count, room material label) in mono, `.room-story-facts` horizontal rail with hairline dividers.
+- [x] **Step 3:** Services list: editorial feature rows — each service row pairs `RoomVisual` `variant="detail-1"`/`"detail-2"` (alternate) with name, duration/price in mono, and the existing booking link. Wrap rows in `ScrollReveal` with staggered `delayMs={i * 80}` (cap 240).
+- [x] **Step 4:** Closing CTA block: `SectionMarker(services.length + 1, "Đặt lịch")` + primary action (existing label).
+- [x] **Step 5:** Verify heading hierarchy (`h1` → `h2` per service) unchanged for e2e; run `pnpm vitest run` affected suites + typecheck.
+- [x] **Step 6: Commit** — `feat: restyle room detail as editorial cover story`
 
 ## Task 3: `/services/[slug]` — spec sheet
 
@@ -63,19 +63,19 @@ Run: FAIL (prop not accepted).
 - Modify: `src/features/service/presentation/service-card.tsx` (only if shared markup lives here)
 - Test: `src/features/service/presentation/service-card.test.tsx`, `tests/e2e/public-catalog.spec.ts`
 
-- [ ] **Step 1:** Desktop 7/5 grid `.service-sheet`: left column = `SectionMarker(1, "Dịch vụ")`, `h1.display-lg`, description, room context link, booking-type explanation with section markers 02/03.
-- [ ] **Step 2:** Right column = sticky `.service-sheet-rate-card` (existing price panel restyled): `position: sticky; top: 6rem;` — mono price/duration/buffer, 30% deposit line, single primary action (existing accessible name). Raised surface + 1px border, radius `var(--radius-md)`.
-- [ ] **Step 3:** Mobile: rate card renders directly after the `h1` (source order already mobile-first — verify; adjust with CSS `order` inside the grid only on desktop).
-- [ ] **Step 4:** Exactly one primary action visible per viewport; no content obscured by stickiness at 375px.
-- [ ] **Step 5:** Run unit suite + typecheck — PASS.
-- [ ] **Step 6: Commit** — `feat: restyle service detail as editorial spec sheet`
+- [x] **Step 1:** Desktop 7/5 grid `.service-sheet`: left column = `SectionMarker(1, "Dịch vụ")`, `h1.display-lg`, description, room context link, booking-type explanation with section markers 02/03.
+- [x] **Step 2:** Right column = sticky `.service-sheet-rate-card` (existing price panel restyled): `position: sticky; top: 6rem;` — mono price/duration/buffer, 30% deposit line, single primary action (existing accessible name). Raised surface + 1px border, radius `var(--radius-md)`.
+- [x] **Step 3:** Mobile: rate card renders directly after the `h1` (source order already mobile-first — verify; adjust with CSS `order` inside the grid only on desktop).
+- [x] **Step 4:** Exactly one primary action visible per viewport; no content obscured by stickiness at 375px.
+- [x] **Step 5:** Run unit suite + typecheck — PASS.
+- [x] **Step 6: Commit** — `feat: restyle service detail as editorial spec sheet`
 
 ## Task 4: Phase gate
 
-- [ ] `pnpm ci:verify` — PASS.
-- [ ] `pnpm test:e2e -- public-catalog home-hero` against seeded PostgreSQL — PASS.
-- [ ] Visual QA at 1440px and 375px: alternating rows collapse correctly, marquee loops seamlessly, parallax subtle (≤16px), reduced-motion shows everything static and visible, no horizontal overflow.
-- [ ] Lighthouse spot check on `/studios`: CLS < 0.02.
+- [x] `pnpm ci:verify` — PASS.
+- [x] `pnpm test:e2e -- public-catalog home-hero` against seeded PostgreSQL — PASS.
+- [ ] Visual QA at 1440px and 375px: alternating rows collapse correctly, marquee loops seamlessly, parallax subtle (≤16px), reduced-motion shows everything static and visible, no horizontal overflow. (Ledger: "detailed visual sweep deferred to P7" — still open, see phase-07 Task 2.)
+- [ ] Lighthouse spot check on `/studios`: CLS < 0.02. (Not run — folded into phase-07 Task 4, still open.)
 
 ## Success Criteria
 

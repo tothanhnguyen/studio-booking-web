@@ -4,7 +4,10 @@ test.describe.serial("guest booking journey", () => {
   let privatePaymentPath = "";
 
   test("guest completes five steps and receives a private hold", async ({ page }, testInfo) => {
-    const date = testInfo.project.name === "mobile-chrome" ? "2027-04-06" : "2027-04-05";
+    // Fixed dates in this suite accumulate bookings run over run against the
+    // shared, non-reset seeded database — 2027-04-05/06 filled to the room's
+    // daily capacity from repeated prior runs, so this uses a fresh date pair.
+    const date = testInfo.project.name === "mobile-chrome" ? "2027-12-05" : "2027-12-04";
     await page.goto("/services/photo-room-rental");
     await page.getByRole("link", { name: "Đặt lịch dịch vụ này" }).click();
     await expect(page.getByRole("heading", { name: "Thông tin liên hệ" })).toBeVisible();

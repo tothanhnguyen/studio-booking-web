@@ -62,7 +62,7 @@ const roomFixture = {
 } satisfies PublicRoom;
 
 describe("RoomCard", () => {
-  it("renders a room as an accessible atlas row", () => {
+  it("renders a room as an accessible proof-sheet frame", () => {
     render(<RoomCard index={1} room={roomFixture} />);
 
     expect(screen.getByRole("article")).toHaveAttribute(
@@ -78,8 +78,14 @@ describe("RoomCard", () => {
     ).toHaveAttribute("href", "/studios/photo-studio");
   });
 
-  it("renders its magazine index marker", () => {
+  it("renders its frame number as a ghost index and mono annotation", () => {
     render(<RoomCard index={2} room={roomFixture} />);
-    expect(screen.getByText("02")).toBeInTheDocument();
+    expect(screen.getAllByText("02").length).toBeGreaterThan(0);
+    expect(screen.getByText(/KHUNG 02/)).toBeInTheDocument();
+  });
+
+  it("renders an led status annotation for the room", () => {
+    render(<RoomCard index={1} room={roomFixture} />);
+    expect(screen.getByText("SẴN SÀNG")).toBeInTheDocument();
   });
 });

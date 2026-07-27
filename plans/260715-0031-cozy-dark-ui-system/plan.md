@@ -1,5 +1,7 @@
 # MowStudio Cozy Dark UI System Implementation Plan
 
+> **Superseded 2026-07-26** by `plans/260726-1736-editorial-studio-magazine-ui/` (phases 3–6 scope absorbed). Do not execute this plan further.
+
 > **Direction changed 2026-07-19:** The user-approved warm-light theme supersedes this document's dark-only palette constraints for all non-home routes. Preserve existing layouts, component architecture, accessibility requirements, business behavior, and media strategy; source colors from `src/styles/tokens.css` (Canvas `#E7E1D8`, Surface `#F7F5EF`, Raised `#FFFDF8`, Text `#1A1B18`, Action `#254238`). Legacy Void/Ink/Espresso names are compatibility aliases, not dark-color requirements. Images are intentionally unchanged in this pass.
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

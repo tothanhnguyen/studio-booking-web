@@ -21,23 +21,50 @@ function resolveRoomMaterial(roomName: string): RoomMaterial {
   return "podcast";
 }
 
+const amountFormatter = new Intl.NumberFormat("vi-VN");
+
+/** Console operations table: dense mono date/time/code/amount columns, exposed
+ * column rules and an LED status dot per row (see BookingStatusBadge). */
 export function BookingList({ result, detailBasePath }: Readonly<{ result: BookingPage; detailBasePath: string }>) {
-  if (result.items.length === 0) return <p className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-[var(--color-text-muted)]">Chưa có booking phù hợp.</p>;
-  return <ul className="space-y-4">
-    {result.items.map((booking) => <li key={booking.id} className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <Link className="text-lg font-semibold hover:text-[var(--color-action)]" href={`${detailBasePath}/${booking.id}`}>{booking.serviceName}</Link>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">{booking.roomName} · <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time></p>
-          <p className="mt-1 text-sm text-[var(--color-text-muted)]">{booking.customerName} · {booking.customerEmail}</p>
+  if (result.items.length === 0) return <p className="console-empty-state">Chưa có booking phù hợp.</p>;
+  return <div className="console-table">
+    <div aria-hidden="true" className="console-table-head console-table-head--booking">
+      <span>Ngày · Giờ</span>
+      <span>Mã</span>
+      <span>Khách hàng</span>
+      <span>Dịch vụ · Phòng</span>
+      <span className="console-table-head__cell--end">Giá trị</span>
+      <span className="console-table-head__cell--end">Trạng thái</span>
+    </div>
+    <ul className="console-row-list">
+      {result.items.map((booking) => <li className="console-row console-row--booking" key={booking.id}>
+        <div className="type-mono console-row-secondary">
+          <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time>
         </div>
-        <BookingStatusBadge status={booking.bookingStatus} />
-      </div>
-    </li>)}
-  </ul>;
+        <div className="type-mono console-row-secondary">#{booking.id.slice(0, 8)}</div>
+        <div className="console-row-cell">
+          <Link className="console-row-primary" href={`${detailBasePath}/${booking.id}`}>{booking.customerName}</Link>
+          <p className="console-row-secondary">{booking.customerEmail}</p>
+        </div>
+        <div className="console-row-cell">
+          <p className="console-row-secondary">{booking.serviceName}</p>
+          <p className="console-row-secondary">{booking.roomName}</p>
+        </div>
+        <div className="console-row-cell console-row-cell--end">
+          <p className="console-row-secondary">Cọc 30%</p>
+          <p className="type-mono">{amountFormatter.format(booking.depositAmount)} {booking.currency}</p>
+        </div>
+        <div className="console-row-cell console-row-cell--end">
+          <BookingStatusBadge status={booking.bookingStatus} />
+        </div>
+      </li>)}
+    </ul>
+  </div>;
 }
 
-/** Customer-facing history rail for /account/bookings — a vertical ticket stack. */
+/** Customer-facing history rail for /account/bookings — a session-log of numbered
+ * `.log-row` entries: mono date/time + code as the index, service+room as the body,
+ * a room-accent bar on the leading edge, and the shared LED status badge. */
 export function CustomerBookingRail({ result, detailBasePath }: Readonly<{ result: BookingPage; detailBasePath: string }>) {
   if (result.items.length === 0) {
     return (
@@ -54,20 +81,20 @@ export function CustomerBookingRail({ result, detailBasePath }: Readonly<{ resul
   }
 
   return (
-    <ul className="account-ticket-rail">
+    <ul className="account-log-rail">
       {result.items.map((booking, index) => (
         <li key={booking.id}>
           <ScrollReveal delayMs={Math.min(index * STAGGER_STEP_MS, STAGGER_CAP_MS)}>
-            <article className="account-ticket" data-room-material={resolveRoomMaterial(booking.roomName)}>
-              <div className="account-ticket-meta type-mono">
+            <article className="account-log-row log-row" data-room-material={resolveRoomMaterial(booking.roomName)}>
+              <p className="account-log-row__meta type-mono">
                 <time dateTime={booking.startTime}>{formatStudioDateTime(booking.startTime)}</time>
-                <span className="account-ticket-code">#{booking.id.slice(0, 8)}</span>
-              </div>
-              <div className="account-ticket-body">
-                <Link className="account-ticket-service" href={`${detailBasePath}/${booking.id}`}>
+                <span className="account-log-row__code">#{booking.id.slice(0, 8)}</span>
+              </p>
+              <div className="account-log-row__body">
+                <Link className="log-row__title" href={`${detailBasePath}/${booking.id}`}>
                   {booking.serviceName}
                 </Link>
-                <p className="account-ticket-room">{booking.roomName}</p>
+                <p className="log-row__value">{booking.roomName}</p>
               </div>
               <BookingStatusBadge status={booking.bookingStatus} />
             </article>

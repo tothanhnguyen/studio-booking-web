@@ -1,7 +1,10 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
+import { Marquee } from "@/components/ui/marquee";
 import { SectionMarker } from "@/components/ui/section-marker";
+
+const BRAND_MARQUEE_ITEMS = ["Photo Studio", "Podcast Booth", "Music Studio", "MowStudio"] as const;
 
 export type AuthShellProps = Readonly<{
   eyebrow: string;
@@ -39,6 +42,7 @@ export function AuthShell({ children, description, eyebrow, footer, title }: Aut
         <div className="auth-split-brand-overlay">
           <p className="display-md auth-split-brand-statement">{BRAND_STATEMENT}</p>
           <SectionMarker index={1} label="MowStudio" />
+          <Marquee items={BRAND_MARQUEE_ITEMS} />
         </div>
       </div>
     </section>

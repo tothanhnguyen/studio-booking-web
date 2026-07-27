@@ -1,3 +1,5 @@
+import { LedStatus, type LedStatusProps } from "@/components/ui/led-status";
+
 export function getPaymentStatusDescription(
   bookingStatus: string,
   paymentStatus: string,
@@ -9,11 +11,27 @@ export function getPaymentStatusDescription(
       : "Đang chờ thanh toán tiền cọc.";
 }
 
+const bookingStatusLabel: Record<string, string> = {
+  PENDING_PAYMENT: "Chờ thanh toán",
+  PENDING: "Chờ xác nhận",
+  CONFIRMED: "Đã xác nhận",
+  CANCELLED: "Đã hủy",
+  EXPIRED: "Đã hết hạn",
+  COMPLETED: "Đã hoàn thành",
+};
+
 const paymentStatusBadgeLabel: Record<string, string> = {
   PENDING: "Đang chờ",
   PAID: "Đã thanh toán",
   FAILED: "Thất bại",
   EXPIRED: "Hết hạn",
+};
+
+const paymentStatusTone: Record<string, LedStatusProps["tone"]> = {
+  PAID: "success",
+  PENDING: "warning",
+  FAILED: "danger",
+  EXPIRED: "neutral",
 };
 
 export function PaymentStatus({
@@ -22,6 +40,7 @@ export function PaymentStatus({
 }: Readonly<{ bookingStatus: string; paymentStatus: string }>) {
   const description = getPaymentStatusDescription(bookingStatus, paymentStatus);
   const badgeLabel = paymentStatusBadgeLabel[paymentStatus] ?? paymentStatus;
+  const badgeTone = paymentStatusTone[paymentStatus] ?? "neutral";
 
   return (
     <section
@@ -30,18 +49,14 @@ export function PaymentStatus({
       aria-labelledby="payment-status-heading"
     >
       <p className="page-eyebrow">Theo dõi giao dịch</p>
-      <div className="payment-status__head">
+      <div className="payment-status__row">
         <h2 id="payment-status-heading">Trạng thái hiện tại</h2>
-        <span className="payment-status__badge">{badgeLabel}</span>
+        <LedStatus label={badgeLabel} tone={badgeTone} />
       </div>
       <dl>
         <div>
           <dt>Trạng thái booking:</dt>
-          <dd className="type-mono">{bookingStatus}</dd>
-        </div>
-        <div>
-          <dt>Trạng thái thanh toán:</dt>
-          <dd className="type-mono">{paymentStatus}</dd>
+          <dd className="type-mono">{bookingStatusLabel[bookingStatus] ?? bookingStatus}</dd>
         </div>
       </dl>
       <p className="payment-status__description">{description}</p>

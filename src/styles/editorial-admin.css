@@ -1,0 +1,5 @@
+/* Admin refinement layer: retired. Every `.admin-*` class previously declared
+   here (shell, nav, row lists, agenda, forms, text actions) has zero
+   consumers — the admin console was rebuilt on the `.console-*` prefix in
+   proof-admin.css (see AdminShell in admin-shell.tsx and the /admin pages).
+   File kept empty rather than removing the globals.css import. */

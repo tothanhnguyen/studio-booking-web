@@ -1,9 +1,63 @@
 import { setRoomActiveAction } from "@/app/admin/rooms/actions";
+import { actionClassName } from "@/components/ui/action";
+import { PageHeading } from "@/components/ui/page-heading";
+import { SectionMarker } from "@/components/ui/section-marker";
 import { RoomForm } from "@/features/studio-room/presentation/room-form";
 import { PrismaRoomRepository } from "@/features/studio-room/infrastructure/prisma-room-repository";
 import { prisma } from "@/lib/db/prisma";
 
 export default async function AdminRoomsPage() {
   const rooms = await new PrismaRoomRepository(prisma).listAll();
-  return <section><h1 className="text-3xl font-semibold">Phòng studio</h1><h2 className="mt-7 text-xl font-semibold">Thêm phòng</h2><div className="mt-3"><RoomForm /></div><h2 className="mt-10 text-xl font-semibold">Danh sách phòng</h2><div className="mt-4 grid gap-5">{rooms.map((room) => <div key={room.id}><RoomForm initialValue={{ ...room, timezone: "Asia/Ho_Chi_Minh" }} /><form action={setRoomActiveAction.bind(null, room.id, !room.isActive)} className="mt-2"><button className="text-sm font-semibold text-[var(--color-accent)] hover:text-[var(--color-action)]">{room.isActive ? "Tạm ẩn phòng" : "Mở lại phòng"}</button></form></div>)}</div></section>;
+
+  return (
+    <div className="console-view">
+      <PageHeading description="Tạo phòng mới hoặc cập nhật phòng hiện có." eyebrow="Vận hành" title="Phòng studio" />
+
+      <section aria-labelledby="admin-rooms-new-heading" className="console-section">
+        <SectionMarker index={1} label="Thêm phòng" />
+        <h2 className="sr-only" id="admin-rooms-new-heading">
+          Thêm phòng
+        </h2>
+        <div className="ui-surface">
+          <RoomForm />
+        </div>
+      </section>
+
+      <section aria-labelledby="admin-rooms-list-heading" className="console-section">
+        <SectionMarker index={2} label="Danh sách phòng" />
+        <h2 className="sr-only" id="admin-rooms-list-heading">
+          Danh sách phòng
+        </h2>
+
+        {rooms.length === 0 ? (
+          <p className="console-empty-state">Chưa có phòng nào.</p>
+        ) : (
+          <ul className="console-row-list">
+            {rooms.map((room) => (
+              <li className="console-row" key={room.id}>
+                <details>
+                  <summary className="console-catalog-summary">
+                    <span className="console-row-primary">{room.name}</span>
+                    <span className="type-mono console-row-secondary">{room.isActive ? "Đang hoạt động" : "Đang ẩn"}</span>
+                  </summary>
+                  <div className="console-catalog-edit">
+                    <div className="console-actions-group">
+                      <RoomForm initialValue={{ ...room, timezone: "Asia/Ho_Chi_Minh" }} />
+                    </div>
+                    <div className="console-actions-group">
+                      <form action={setRoomActiveAction.bind(null, room.id, !room.isActive)}>
+                        <button className={actionClassName("secondary")} type="submit">
+                          {room.isActive ? "Tạm ẩn phòng" : "Mở lại phòng"}
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </details>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
 }

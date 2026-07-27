@@ -32,7 +32,7 @@ export default async function PaymentPage({ params }: Readonly<{ params: Promise
           </div>
         ) : null}
       </header>
-      <div className="payment-receipt">
+      <div className="booking-receipt">
         <VietQrPayment
           amount={booking.instructions.amount}
           remainingAmount={booking.remainingAmount}

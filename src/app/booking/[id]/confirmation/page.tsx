@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { actionClassName } from "@/components/ui/action";
+import { CropFrame } from "@/components/ui/crop-frame";
+import { LedStatus } from "@/components/ui/led-status";
 import { guestCookieName } from "@/features/booking/application/guest-cookie";
 import { BookingSummary } from "@/features/booking/presentation/booking-summary";
 import {
@@ -36,28 +38,26 @@ export default async function ConfirmationPage({ params }: Readonly<{ params: Pr
       <header className="confirmation-page__header">
         <p className="page-eyebrow">Trạng thái booking</p>
         <h1 className="display-md">{statusDescription}</h1>
-        <p className="confirmation-page__code">
+        <p className="confirmation-code">
           Mã booking <strong className="type-mono">{booking.id}</strong>
         </p>
       </header>
-      <div className="confirmation-receipt booking-ticket ui-surface">
-        <p className="booking-ticket__meta type-mono">Biên nhận đặt lịch</p>
+      <CropFrame annotation="Biên nhận đặt lịch" className="developed-frame ui-surface">
         <BookingSummary booking={booking} />
-        <aside aria-label="Bước tiếp theo">
+        <aside aria-label="Bước tiếp theo" className="confirmation-next">
           <PaymentStatus
             bookingStatus={booking.bookingStatus}
             paymentStatus={booking.paymentStatus}
           />
-          <section className="confirmation-remaining ui-surface">
-            <p className="page-eyebrow">Số tiền còn lại</p>
-            <p className="type-mono confirmation-remaining__amount">
-              {money.format(booking.remainingAmount)}
+          <div className="log-row confirmation-remaining" data-state="done">
+            <p className="log-row__index">
+              <LedStatus label="Còn lại" tone="neutral" />
             </p>
-            <p>Số dư hiện tại của lịch đặt sau khoản tiền cọc.</p>
-          </section>
+            <p className="log-row__title type-mono">{money.format(booking.remainingAmount)}</p>
+          </div>
         </aside>
-      </div>
-      <Link className={actionClassName("primary")} href="/studios">
+      </CropFrame>
+      <Link className={`${actionClassName("primary")} confirmation-cta`} href="/studios">
         Về trang studio
       </Link>
     </section>

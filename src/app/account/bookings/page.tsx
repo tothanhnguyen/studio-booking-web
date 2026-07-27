@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { FolioLabel } from "@/components/ui/folio-label";
 import { PageHeading } from "@/components/ui/page-heading";
 import { ClaimBookingsBanner } from "@/features/auth/presentation/claim-bookings-banner";
 import { getCurrentActor } from "@/features/auth/application/current-actor";
@@ -18,6 +19,7 @@ export default async function AccountBookingsPage({ searchParams }: Readonly<{ s
 
   return (
     <section aria-labelledby="bookings-heading" className="account-bookings page-grain">
+      <FolioLabel text="MOW · NHẬT KÝ" />
       <div className="account-page-heading">
         <PageHeading
           description="Theo dõi các lịch đã đặt bằng tài khoản này."
