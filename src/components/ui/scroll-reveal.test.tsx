@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ScrollReveal } from "./scroll-reveal";
@@ -30,10 +30,24 @@ function mockReducedMotion(matches: boolean) {
 describe("ScrollReveal", () => {
   beforeEach(() => {
     vi.stubGlobal("IntersectionObserver", MockObserver);
+    // Simulate the element starting below the fold (real ScrollReveal usage) so the
+    // mount-time "already visible" shortcut doesn't short-circuit the observer path.
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+      bottom: 2100,
+      height: 100,
+      left: 0,
+      right: 0,
+      toJSON: () => {},
+      top: 2000,
+      width: 0,
+      x: 0,
+      y: 2000,
+    } as DOMRect);
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
   it("always renders its children", () => {
@@ -56,5 +70,20 @@ describe("ScrollReveal", () => {
     const { container } = render(<ScrollReveal>Nội dung</ScrollReveal>);
     const node = container.querySelector(".scroll-reveal");
     await waitFor(() => expect(node).toHaveAttribute("data-state", "revealed"));
+  });
+
+  it("force-reveals via the failsafe timer if the observer never fires", async () => {
+    vi.useFakeTimers();
+    mockReducedMotion(false);
+    const { container } = render(<ScrollReveal>Nội dung</ScrollReveal>);
+    const node = container.querySelector(".scroll-reveal");
+    expect(node).toHaveAttribute("data-state", "pending");
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1600);
+    });
+    expect(node).toHaveAttribute("data-state", "revealed");
+
+    vi.useRealTimers();
   });
 });
