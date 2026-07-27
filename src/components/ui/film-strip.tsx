@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type FilmStripItem = Readonly<{
   src: string;
   alt: string;
@@ -24,7 +26,15 @@ export function FilmStrip({ className, items }: FilmStripProps) {
       {sprockets}
       <ul className="film-strip__list">
         {items.map((item) => {
-          const media = <img alt={item.alt} className="film-strip__media" src={item.src} />;
+          const media = (
+            <Image
+              alt={item.alt}
+              className="film-strip__media"
+              height={100}
+              src={item.src}
+              width={150}
+            />
+          );
           return (
             <li className="film-strip__cell" key={item.src}>
               {item.href ? <a href={item.href}>{media}</a> : media}
