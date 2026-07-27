@@ -33,6 +33,11 @@ export default async function StudiosPage() {
 
   return (
     <section aria-labelledby="studios-heading" className="proof-studios-page page-grain">
+      <div aria-hidden="true" className="proof-grid">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <span className="proof-grid__col" key={index} />
+        ))}
+      </div>
       <FolioLabel text="MOW · PROOF 01/03 — INDEX" />
       <ScrollReveal>
         <header className="proof-studios-header">

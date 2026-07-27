@@ -44,6 +44,11 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
   return (
     <section aria-labelledby="room-heading" className="proof-room-page page-grain">
+      <div aria-hidden="true" className="proof-grid">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <span className="proof-grid__col" key={index} />
+        ))}
+      </div>
       <FolioLabel text={`MOW · PROOF 02/03 — ${materialLabel.toUpperCase()}`} />
 
       <div className="proof-room-hero">
