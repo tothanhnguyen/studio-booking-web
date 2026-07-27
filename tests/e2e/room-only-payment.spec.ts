@@ -5,9 +5,10 @@ import { signedWebhookHeaders } from "../fixtures/sepay-signature";
 test("room-only booking is auto-confirmed after successful payment webhook", async ({ page }, testInfo) => {
   // Fixed dates in this suite accumulate CONFIRMED bookings run over run (this
   // path auto-confirms via webhook and never cancels) against the shared,
-  // non-reset seeded database — 2027-04-07/08 filled to the room's daily
-  // capacity from repeated prior runs, so this uses a fresh date pair.
-  const date = testInfo.project.name === "mobile-chrome" ? "2027-09-02" : "2027-09-01";
+  // non-reset seeded database — 2027-04-07/08, 2027-09-01/02 and 2027-11-04/05
+  // filled to the room's daily capacity from repeated prior runs, so this uses
+  // a fresh date pair.
+  const date = testInfo.project.name === "mobile-chrome" ? "2029-02-05" : "2029-02-04";
 
   await page.goto("/services/photo-room-rental");
   await page.getByRole("link", { name: "Đặt lịch dịch vụ này" }).click();

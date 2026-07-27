@@ -9,9 +9,10 @@ test.describe("assisted booking lifecycle", () => {
   }, testInfo) => {
     // Fixed dates in this suite accumulate CONFIRMED bookings run over run (this
     // path never cancels, unlike the reject test below) against the shared,
-    // non-reset seeded database — 2027-05-05/06 filled to the room's daily
-    // capacity from repeated prior runs, so this uses a fresh date pair.
-    const date = testInfo.project.name === "mobile-chrome" ? "2027-08-05" : "2027-08-04";
+    // non-reset seeded database — 2027-05-05/06, 2027-08-04/05 and 2027-10-04/05
+    // filled to the room's daily capacity from repeated prior runs, so this uses
+    // a fresh date pair.
+    const date = testInfo.project.name === "mobile-chrome" ? "2028-03-05" : "2028-03-04";
 
     // Step 1: Guest creates an ASSISTED booking
     await page.goto("/services/assisted-photo-session");
