@@ -370,7 +370,7 @@
   letter-spacing: 0.02em;
 }
 
-/* Room accent bar mirrors .account-ticket[data-room-material]::before. */
+/* Room accent bar mirrors .account-log-row[data-room-material]::before. */
 .console-agenda-entry {
   position: relative;
   padding-inline-start: 1.75rem;
@@ -386,8 +386,8 @@
   background: var(--color-text-subtle);
 }
 
-.console-agenda-entry[data-room-material="photo"]::before { background: var(--color-brass); }
-.console-agenda-entry[data-room-material="music"]::before { background: var(--color-sage); }
+.console-agenda-entry[data-room-material="photo"]::before { background: var(--color-accent); }
+.console-agenda-entry[data-room-material="music"]::before { background: var(--color-success); }
 
 .console-agenda-time {
   color: var(--color-text-muted);

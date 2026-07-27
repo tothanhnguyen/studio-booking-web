@@ -26,7 +26,7 @@ function resolveRoomMaterial(roomName: string): RoomMaterial {
 
 /** Console agenda grouped by day — day headers in mono with a hairline rule,
  * entries as compact rows reusing .console-row-list/.console-row with a 3px
- * room-material accent bar (mirrors .account-ticket's convention). */
+ * room-material accent bar (mirrors .account-log-row's convention). */
 export function BookingCalendar({ bookings }: Readonly<{ bookings: DashboardBooking[] }>) {
   const grouped = Map.groupBy(bookings, (booking) => formatInTimeZone(new Date(booking.startTime), STUDIO_TIME_ZONE, "yyyy-MM-dd"));
   if (bookings.length === 0) {
