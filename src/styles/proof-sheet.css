@@ -190,6 +190,15 @@
   to { opacity: 0.5; }
 }
 
+/* Keep the record dot when a LedStatus rides inside a primary CTA, but let
+   the label keep the button's own typography instead of the mono device
+   type scale (see review IMP-2). */
+.ui-action .led-status {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+}
+
 /* Session-log rows: numbered rail entries for booking + account history. */
 .log-rail {
   display: flex;
@@ -360,8 +369,9 @@
   align-self: flex-start;
   align-items: center;
   gap: 0.5rem;
+  min-block-size: 2.75rem;
   border-block-end: 1px solid var(--color-action);
-  padding-block-end: 0.1875rem;
+  padding-block: 0.75rem 0.5rem;
   color: var(--color-action);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
@@ -574,6 +584,9 @@
 }
 
 .proof-service-room-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 2.75rem;
   justify-self: start;
   color: var(--color-accent);
   font-family: var(--font-mono), monospace;
