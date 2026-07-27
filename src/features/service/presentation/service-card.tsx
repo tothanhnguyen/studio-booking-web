@@ -44,7 +44,7 @@ export function ServiceCard({ index, service, visual }: ServiceCardProps) {
       {visual ? (
         <div className="service-row__thumb">
           <RoomVisual
-            alt={`Phòng`}
+            alt=""
             className="service-row__thumb-image"
             slug={visual.slug}
             variant={visual.variant}

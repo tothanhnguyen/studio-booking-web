@@ -47,9 +47,6 @@ describe("ServiceCard", () => {
       />,
     );
     expect(screen.getByTestId("room-visual")).toBeInTheDocument();
-    expect(
-      screen.getByAltText("Phòng"),
-    ).toBeInTheDocument();
   });
 
   it("does not render a thumbnail when visual prop is absent", () => {
