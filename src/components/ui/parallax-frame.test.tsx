@@ -30,6 +30,8 @@ describe("ParallaxFrame", () => {
     mockMatchMedia({});
     render(
       <ParallaxFrame>
+        {/* The fixture intentionally uses a raw image element to test child rendering. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img alt="Phòng chụp" src="/media/rooms/photo-studio.webp" />
       </ParallaxFrame>,
     );

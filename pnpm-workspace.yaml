@@ -6,4 +6,8 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
+  - brace-expansion@5.0.9
   - tsx@4.22.5
+overrides:
+  "brace-expansion@>=5.0.0 <5.0.9": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.9.tgz"
+  "fast-uri@>=3.0.0 <3.1.5": 3.1.5

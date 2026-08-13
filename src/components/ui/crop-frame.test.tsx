@@ -7,6 +7,8 @@ describe("CropFrame", () => {
   it("renders children inside the frame", () => {
     render(
       <CropFrame>
+        {/* The fixture intentionally uses a raw image element to test child rendering. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img alt="Phòng thu âm" src="/room.jpg" />
       </CropFrame>,
     );

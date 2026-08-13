@@ -1,0 +1,19 @@
+.env
+.env.*
+.git
+.next
+node_modules
+.playwright-mcp
+docs
+plans
+tests
+src/**/*.test.ts
+src/**/*.test.tsx
+playwright-report
+test-results
+coverage
+src/generated/prisma
+tsconfig.tsbuildinfo
+docker-compose.test.yml
+CLAUDE-CODE-CLI.command
+sơ đồ cho tôi

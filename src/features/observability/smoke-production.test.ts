@@ -1,7 +1,5 @@
-import { createServer } from "node:http";
-import type { AddressInfo } from "node:net";
 import { pathToFileURL } from "node:url";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 type SmokeCheck = Readonly<{ path: string; expect: number; json?: (body: Record<string, unknown>) => boolean }>;
 type SmokeResult = Readonly<{ path: string; ok: boolean; detail?: string }>;
@@ -16,40 +14,29 @@ async function loadSmokeModule(): Promise<SmokeModule> {
 }
 
 describe("production smoke checks", () => {
-  const servers: Array<ReturnType<typeof createServer>> = [];
-
-  afterEach(async () => {
-    await Promise.all(
-      servers.map(
-        (server) =>
-          new Promise<void>((resolve, reject) => {
-            server.close((error) => (error ? reject(error) : resolve()));
-          }),
-      ),
-    );
-    servers.length = 0;
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  async function serve(responses: Record<string, unknown>) {
-    const server = createServer((request, response) => {
-      const body = responses[request.url ?? "/"];
+  function serve(responses: Record<string, unknown>) {
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      const requestUrl = input instanceof Request ? input.url : input.toString();
+      const body = responses[new URL(requestUrl).pathname];
       if (!body) {
-        response.writeHead(404);
-        response.end("missing");
-        return;
+        return new Response("missing", { status: 404 });
       }
-      response.writeHead(200, { "content-type": "application/json" });
-      response.end(typeof body === "string" ? body : JSON.stringify(body));
+      return new Response(typeof body === "string" ? body : JSON.stringify(body), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
     });
-    servers.push(server);
-    await new Promise<void>((resolve) => server.listen(0, resolve));
-    const address = server.address() as AddressInfo;
-    return `http://127.0.0.1:${address.port}`;
+    vi.stubGlobal("fetch", fetchMock);
+    return "https://mowstudio.test";
   }
 
   it("fails when health release SHA is unknown", async () => {
     const { runSmokeChecks } = await loadSmokeModule();
-    const baseUrl = await serve({
+    const baseUrl = serve({
       "/": "ok",
       "/api/health": { status: "ok", releaseSha: "unknown" },
       "/api/ready": { status: "ready" },

@@ -9,6 +9,7 @@ import {
   rejectAssistedBooking,
 } from "@/features/booking/application/confirm-assisted-booking";
 import { updateRefundStatus } from "@/features/payment/application/update-refund-status";
+import { simulateDemoPayment } from "@/features/payment/application/simulate-demo-payment";
 import type { RefundStatus } from "@/generated/prisma/client";
 
 const refundStatuses = new Set<RefundStatus>([
@@ -46,5 +47,12 @@ export async function updateRefundStatusAction(
   }
   await updateRefundStatus(await getCurrentActor(), bookingId, status as RefundStatus, note);
   revalidatePath(`/admin/bookings/${bookingId}`);
+  revalidatePath("/admin/payments");
+}
+
+export async function simulateDemoPaymentAction(bookingId: string) {
+  await simulateDemoPayment(await getCurrentActor(), bookingId);
+  revalidatePath(`/admin/bookings/${bookingId}`);
+  revalidatePath("/admin/bookings");
   revalidatePath("/admin/payments");
 }
