@@ -1,9 +1,9 @@
 import "dotenv/config";
 
-import { PrismaPg } from "@prisma/adapter-pg";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 import { PrismaClient } from "../src/generated/prisma/client";
+import { createPrismaPgAdapter } from "../src/lib/db/prisma-adapter";
 import { parseServerEnv } from "../src/lib/env/server-schema";
 
 const DEFAULT_ADMIN_EMAIL = "admin@mowstudio.local";
@@ -76,7 +76,7 @@ async function main(): Promise<void> {
 
   // Mirror into the local Prisma User table with ADMIN role (idempotent upsert).
   const client = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: environment.DATABASE_URL }),
+    adapter: createPrismaPgAdapter(environment.DATABASE_URL),
   });
 
   try {

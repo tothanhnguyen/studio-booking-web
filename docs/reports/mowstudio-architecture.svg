@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+  <title id="title">MowStudio architecture overview</title>
+  <desc id="desc">Browser to Vercel and Next.js modular monolith, connected to PostgreSQL, Supabase Auth, SePay, Resend and Sentry.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#18233b"/>
+    </linearGradient>
+    <linearGradient id="app" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c3351"/>
+      <stop offset="100%" stop-color="#274d68"/>
+    </linearGradient>
+    <linearGradient id="db" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#184f54"/>
+      <stop offset="100%" stop-color="#1d766d"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity=".35"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#a8c7df"/>
+    </marker>
+    <style>
+      .title { font: 800 38px system-ui, -apple-system, sans-serif; fill: #f2f6fb; }
+      .subtitle { font: 400 18px system-ui, -apple-system, sans-serif; fill: #a9bfd3; }
+      .section { font: 700 17px system-ui, -apple-system, sans-serif; fill: #89d7d0; letter-spacing: 1.2px; }
+      .label { font: 700 21px system-ui, -apple-system, sans-serif; fill: #f2f6fb; }
+      .body { font: 400 16px system-ui, -apple-system, sans-serif; fill: #c1d2e1; }
+      .small { font: 400 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #a8c7df; }
+      .pill { font: 700 14px system-ui, -apple-system, sans-serif; fill: #d8fff9; }
+      .box { stroke: #54728d; stroke-width: 2; }
+      .line { stroke: #a8c7df; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 9 8; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1080" fill="url(#bg)"/>
+  <path d="M0 210 C360 120 560 300 900 180 S1320 80 1600 190 V0 H0 Z" fill="#234c67" opacity=".22"/>
+  <path d="M0 930 C380 820 720 1040 1060 900 S1370 840 1600 930 V1080 H0 Z" fill="#14736c" opacity=".12"/>
+
+  <text x="80" y="82" class="title">MowStudio — Kiến trúc tổng thể</text>
+  <text x="80" y="119" class="subtitle">Next.js 16 modular monolith · Vercel ingress · PostgreSQL transaction · provider adapters</text>
+
+  <text x="80" y="188" class="section">CLIENT / INGRESS</text>
+  <rect x="80" y="215" width="270" height="170" rx="18" fill="#26334c" class="box" filter="url(#shadow)"/>
+  <text x="110" y="255" class="label">Browser</text>
+  <text x="110" y="290" class="body">React 19 UI</text>
+  <text x="110" y="317" class="body">Server-rendered pages</text>
+  <text x="110" y="344" class="body">Client wizard / forms</text>
+  <text x="110" y="371" class="small">/studios · /booking · /admin</text>
+
+  <rect x="420" y="215" width="330" height="170" rx="18" fill="#394368" class="box" filter="url(#shadow)"/>
+  <text x="450" y="255" class="label">Vercel + Next.js ingress</text>
+  <text x="450" y="290" class="body">Vercel region: sin1</text>
+  <text x="450" y="317" class="body">src/proxy.ts</text>
+  <text x="450" y="344" class="body">Supabase session refresh</text>
+  <text x="450" y="371" class="small">No separate API Gateway</text>
+
+  <path d="M350 300 H420" class="line"/>
+
+  <text x="80" y="465" class="section">NEXT.JS MODULAR MONOLITH</text>
+  <rect x="80" y="495" width="990" height="430" rx="22" fill="url(#app)" class="box" filter="url(#shadow)"/>
+  <text x="115" y="540" class="label">Transport adapters</text>
+  <rect x="115" y="565" width="260" height="78" rx="12" fill="#172a43" class="box"/>
+  <text x="140" y="598" class="body">App Router pages</text>
+  <text x="140" y="623" class="small">Server Components</text>
+  <rect x="395" y="565" width="260" height="78" rx="12" fill="#172a43" class="box"/>
+  <text x="420" y="598" class="body">Route Handlers</text>
+  <text x="420" y="623" class="small">availability / webhook / probes</text>
+  <rect x="675" y="565" width="260" height="78" rx="12" fill="#172a43" class="box"/>
+  <text x="700" y="598" class="body">Server Actions</text>
+  <text x="700" y="623" class="small">booking / admin mutations</text>
+
+  <text x="115" y="695" class="label">Feature modules</text>
+  <rect x="115" y="720" width="142" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="136" y="754" class="pill">auth</text>
+  <text x="136" y="780" class="small">roles</text>
+  <text x="136" y="802" class="small">guest claim</text>
+  <text x="136" y="824" class="small">Supabase</text>
+  <rect x="275" y="720" width="142" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="296" y="754" class="pill">catalog</text>
+  <text x="296" y="780" class="small">rooms</text>
+  <text x="296" y="802" class="small">services</text>
+  <text x="296" y="824" class="small">pricing</text>
+  <rect x="435" y="720" width="142" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="456" y="754" class="pill">availability</text>
+  <text x="456" y="780" class="small">slots</text>
+  <text x="456" y="802" class="small">schedule</text>
+  <text x="456" y="824" class="small">blocks</text>
+  <rect x="595" y="720" width="142" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="616" y="754" class="pill">booking</text>
+  <text x="616" y="780" class="small">hold 10m</text>
+  <text x="616" y="802" class="small">lock</text>
+  <text x="616" y="824" class="small">lifecycle</text>
+  <rect x="755" y="720" width="142" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="776" y="754" class="pill">payment</text>
+  <text x="776" y="780" class="small">SePay</text>
+  <text x="776" y="802" class="small">VietQR</text>
+  <text x="776" y="824" class="small">refund</text>
+  <rect x="915" y="720" width="120" height="125" rx="12" fill="#285d72" class="box"/>
+  <text x="934" y="754" class="pill">ops</text>
+  <text x="934" y="780" class="small">email</text>
+  <text x="934" y="802" class="small">logs</text>
+  <text x="934" y="824" class="small">Sentry</text>
+
+  <path d="M585 385 V495" class="line"/>
+
+  <text x="1150" y="188" class="section">DATA / IDENTITY</text>
+  <rect x="1150" y="215" width="360" height="170" rx="18" fill="url(#db)" class="box" filter="url(#shadow)"/>
+  <text x="1180" y="255" class="label">Supabase Auth</text>
+  <text x="1180" y="290" class="body">Email/password</text>
+  <text x="1180" y="317" class="body">Google OAuth</text>
+  <text x="1180" y="344" class="body">Verified session cookie</text>
+  <text x="1180" y="371" class="small">Local User mirror + role</text>
+  <path d="M750 300 H1150" class="line"/>
+
+  <rect x="1150" y="495" width="360" height="210" rx="18" fill="url(#db)" class="box" filter="url(#shadow)"/>
+  <text x="1180" y="540" class="label">PostgreSQL / Supabase DB</text>
+  <text x="1180" y="575" class="body">Prisma 7 + adapter-pg</text>
+  <text x="1180" y="602" class="body">11 models / migrations</text>
+  <text x="1180" y="629" class="body">Transactions + row locks</text>
+  <text x="1180" y="656" class="body">Advisory lock room/date</text>
+  <text x="1180" y="683" class="small">DATABASE_URL pooled · DIRECT_URL migration</text>
+  <path d="M1070 710 H1150" class="line"/>
+
+  <text x="80" y="1000" class="section">EXTERNAL PROVIDERS</text>
+  <rect x="80" y="1015" width="250" height="54" rx="13" fill="#3a3a55" class="box"/>
+  <text x="110" y="1049" class="body">SePay webhook + VietQR</text>
+  <rect x="370" y="1015" width="220" height="54" rx="13" fill="#3a3a55" class="box"/>
+  <text x="410" y="1049" class="body">Resend email</text>
+  <rect x="630" y="1015" width="220" height="54" rx="13" fill="#3a3a55" class="box"/>
+  <text x="675" y="1049" class="body">Sentry telemetry</text>
+  <path d="M755 925 V1015" class="line dashed"/>
+  <path d="M850 925 L490 1015" class="line dashed"/>
+  <path d="M930 925 L740 1015" class="line dashed"/>
+
+  <rect x="900" y="1015" width="610" height="54" rx="13" fill="#203b56" class="box"/>
+  <text x="930" y="1049" class="body">CI/CD: GitHub Actions → Vercel Preview/Production</text>
+  <path d="M1000 925 L1100 1015" class="line dashed"/>
+</svg>

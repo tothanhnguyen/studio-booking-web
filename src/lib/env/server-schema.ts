@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 const serverEnvSchema = z.object({
+  PAYMENT_MODE: z.enum(["demo", "sepay"]).default("sepay"),
   DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
   DIRECT_URL: z.url({ protocol: /^postgres(ql)?$/ }),
   NEXT_PUBLIC_SUPABASE_URL: z.url({ protocol: /^https?$/ }),
@@ -19,14 +20,23 @@ const serverEnvSchema = z.object({
   SENTRY_ENVIRONMENT: z.string().trim().optional(),
 });
 
-export function parseServerEnv(environment: NodeJS.ProcessEnv) {
+function resolveAppUrl(environment: Record<string, string | undefined>): string | undefined {
+  const explicitUrl = environment.APP_URL?.trim();
+  if (explicitUrl) return explicitUrl;
+
+  const vercelHost = environment.VERCEL_URL?.trim();
+  return vercelHost ? `https://${vercelHost}` : undefined;
+}
+
+export function parseServerEnv(environment: Record<string, string | undefined>) {
   const parsed = serverEnvSchema.parse({
+    PAYMENT_MODE: environment.PAYMENT_MODE,
     DATABASE_URL: environment.DATABASE_URL,
     DIRECT_URL: environment.DIRECT_URL,
     NEXT_PUBLIC_SUPABASE_URL: environment.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: environment.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     SUPABASE_SERVICE_ROLE_KEY: environment.SUPABASE_SERVICE_ROLE_KEY,
-    APP_URL: environment.APP_URL,
+    APP_URL: resolveAppUrl(environment),
     SEPAY_BANK_BIN: environment.SEPAY_BANK_BIN,
     SEPAY_BANK_ACCOUNT: environment.SEPAY_BANK_ACCOUNT,
     SEPAY_ACCOUNT_NAME: environment.SEPAY_ACCOUNT_NAME,
@@ -40,7 +50,7 @@ export function parseServerEnv(environment: NodeJS.ProcessEnv) {
   });
 
   const isProductionTarget = environment["VERCEL_ENV"] === "production";
-  if (isProductionTarget && !parsed.SEPAY_WEBHOOK_SECRET?.trim()) {
+  if (isProductionTarget && parsed.PAYMENT_MODE === "sepay" && !parsed.SEPAY_WEBHOOK_SECRET?.trim()) {
     throw new Error("SEPAY_WEBHOOK_SECRET is required in production.");
   }
 

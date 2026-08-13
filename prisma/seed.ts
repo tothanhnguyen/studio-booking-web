@@ -1,8 +1,7 @@
 import "dotenv/config";
 
-import { PrismaPg } from "@prisma/adapter-pg";
-
 import { PrismaClient, type BookingType } from "../src/generated/prisma/client";
+import { createPrismaPgAdapter } from "../src/lib/db/prisma-adapter";
 import { parseServerEnv } from "../src/lib/env/server-schema";
 
 const rooms = [
@@ -145,7 +144,7 @@ export async function seedCatalog(client: PrismaClient): Promise<void> {
 async function main() {
   const environment = parseServerEnv(process.env);
   const client = new PrismaClient({
-    adapter: new PrismaPg({ connectionString: environment.DATABASE_URL }),
+    adapter: createPrismaPgAdapter(environment.DATABASE_URL),
   });
 
   try {

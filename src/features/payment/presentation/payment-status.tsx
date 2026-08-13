@@ -37,7 +37,8 @@ const paymentStatusTone: Record<string, LedStatusProps["tone"]> = {
 export function PaymentStatus({
   bookingStatus,
   paymentStatus,
-}: Readonly<{ bookingStatus: string; paymentStatus: string }>) {
+  demoMode = false,
+}: Readonly<{ bookingStatus: string; paymentStatus: string; demoMode?: boolean }>) {
   const description = getPaymentStatusDescription(bookingStatus, paymentStatus);
   const badgeLabel = paymentStatusBadgeLabel[paymentStatus] ?? paymentStatus;
   const badgeTone = paymentStatusTone[paymentStatus] ?? "neutral";
@@ -48,7 +49,7 @@ export function PaymentStatus({
       data-payment-state={paymentStatus.toLowerCase()}
       aria-labelledby="payment-status-heading"
     >
-      <p className="page-eyebrow">Theo dõi giao dịch</p>
+      <p className="page-eyebrow">Theo dõi giao dịch{demoMode ? " · Demo" : ""}</p>
       <div className="payment-status__row">
         <h2 id="payment-status-heading">Trạng thái hiện tại</h2>
         <LedStatus label={badgeLabel} tone={badgeTone} />

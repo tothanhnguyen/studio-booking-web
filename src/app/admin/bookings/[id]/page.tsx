@@ -4,6 +4,7 @@ import {
   cancelBookingByAdminAction,
   confirmAssistedBookingAction,
   rejectAssistedBookingAction,
+  simulateDemoPaymentAction,
   updateRefundStatusAction,
 } from "@/app/admin/bookings/[id]/actions";
 import { actionClassName } from "@/components/ui/action";
@@ -12,6 +13,7 @@ import { SectionMarker } from "@/components/ui/section-marker";
 import { getAdminPageActor } from "@/features/auth/application/admin-page-actor";
 import { getAdminBooking } from "@/features/dashboard/application/admin-booking-queries";
 import { BookingDetail } from "@/features/dashboard/presentation/booking-detail";
+import { serverEnv } from "@/lib/env/server";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +37,24 @@ export default async function AdminBookingDetailPage({ params }: Readonly<{ para
         <SectionMarker index={2} label="Thao tác vòng đời" />
         <div className="ui-surface grid gap-4">
           <h2 className="font-semibold" id="admin-booking-lifecycle-heading">Lifecycle actions</h2>
+
+          {serverEnv.PAYMENT_MODE === "demo" && booking.paymentStatus === "PENDING" && (
+            <div className="console-actions-group">
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Chế độ demo: admin có thể xác nhận đã nhận tiền cọc mà không cần SePay webhook thật.
+              </p>
+              <form
+                action={async () => {
+                  "use server";
+                  await simulateDemoPaymentAction(booking.id);
+                }}
+              >
+                <button className={actionClassName("primary")} type="submit">
+                  Mô phỏng thanh toán tiền cọc
+                </button>
+              </form>
+            </div>
+          )}
 
           {booking.bookingType === "ASSISTED" && booking.bookingStatus === "PENDING" && (
             <div className="console-actions-group">

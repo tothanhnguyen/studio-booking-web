@@ -9,6 +9,7 @@ import { HoldCountdown } from "@/features/booking/presentation/hold-countdown";
 import { getPaymentView } from "@/features/payment/application/get-payment-view";
 import { PaymentStatus } from "@/features/payment/presentation/payment-status";
 import { VietQrPayment } from "@/features/payment/presentation/vietqr-payment";
+import { serverEnv } from "@/lib/env/server";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,11 @@ export default async function PaymentPage({ params }: Readonly<{ params: Promise
       <header className="payment-page__header">
         <p className="page-eyebrow">Bước thanh toán</p>
         <h1>Thanh toán tiền cọc</h1>
-        <p>Quét mã hoặc dùng đúng thông tin chuyển khoản để giữ lịch đặt.</p>
+        <p>
+          {serverEnv.PAYMENT_MODE === "demo"
+            ? "Đây là môi trường demo; admin sẽ xác nhận thanh toán trong trang quản trị."
+            : "Quét mã hoặc dùng đúng thông tin chuyển khoản để giữ lịch đặt."}
+        </p>
         {booking.holdExpiresAt ? (
           <div className="payment-page__countdown">
             <HoldCountdown expiresAt={booking.holdExpiresAt} />
@@ -41,10 +46,12 @@ export default async function PaymentPage({ params }: Readonly<{ params: Promise
           bankBin={booking.instructions.bankBin}
           transferContent={booking.instructions.transferContent}
           qrImageUrl={booking.instructions.qrImageUrl}
+          demoMode={serverEnv.PAYMENT_MODE === "demo"}
         />
         <PaymentStatus
           bookingStatus={booking.bookingStatus}
           paymentStatus={booking.paymentStatus}
+          demoMode={serverEnv.PAYMENT_MODE === "demo"}
         />
         <BookingSummary booking={booking} />
         <Link

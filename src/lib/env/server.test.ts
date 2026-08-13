@@ -43,6 +43,18 @@ describe("server environment", () => {
     expect(serverEnv.APP_URL).toBe("http://localhost:3000");
   });
 
+  it("derives APP_URL from VERCEL_URL when no explicit origin is set", async () => {
+    for (const [key, value] of Object.entries(validEnvironment)) {
+      if (key !== "APP_URL") vi.stubEnv(key, value);
+    }
+    vi.stubEnv("APP_URL", "");
+    vi.stubEnv("VERCEL_URL", "mowstudio-preview.vercel.app");
+
+    const { serverEnv } = await import("./server");
+
+    expect(serverEnv.APP_URL).toBe("https://mowstudio-preview.vercel.app");
+  });
+
   it("requires a SePay webhook secret in production", async () => {
     for (const [key, value] of Object.entries(validEnvironment)) {
       vi.stubEnv(key, value);
