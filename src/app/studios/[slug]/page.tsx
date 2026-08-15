@@ -43,7 +43,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
   return (
     <section aria-labelledby="room-heading" className="proof-room-page page-grain">
-      <FolioLabel text={`MOW · PROOF 02/03 — ${materialLabel.toUpperCase()}`} />
+      <FolioLabel text="MOW · PROOF 02/03" />
 
       <div className="proof-room-hero">
         <CropFrame className="proof-room-hero__frame">
@@ -65,7 +65,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
           </div>
         </CropFrame>
         <p className="proof-annotation">
-          <span>SHOT ON MOW LAB</span>
+          <span>MOW STUDIO</span>
           <LedStatus label="SẴN SÀNG NHẬN LỊCH" tone="success" />
         </p>
       </div>
@@ -74,13 +74,8 @@ export default async function RoomPage({ params }: RoomPageProps) {
         <aside aria-label="Thông tin phòng" className="proof-room-spec">
           <p className="proof-annotation">
             <span>THÔNG SỐ</span>
-            <span>SPEC</span>
           </p>
           <dl className="proof-room-spec__list">
-            <div className="proof-room-spec__row">
-              <dt>Không gian</dt>
-              <dd>{materialLabel}</dd>
-            </div>
             <div className="proof-room-spec__row">
               <dt>Múi giờ</dt>
               <dd className="type-mono">{room.timezone}</dd>
@@ -105,7 +100,7 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
         <section aria-labelledby="room-services-heading" className="proof-room-services">
           <p className="proof-annotation">
-            <span>DỊCH VỤ ĐI KÈM — SESSION LOG</span>
+            <span>DỊCH VỤ ĐI KÈM</span>
             <span>{String(room.services.length).padStart(2, "0")} MỤC</span>
           </p>
           <h2 className="display-md" id="room-services-heading">

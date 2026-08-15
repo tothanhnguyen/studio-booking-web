@@ -15,38 +15,26 @@ type RoomCardProps = Readonly<{
 type RoomFrameMeta = Readonly<{
   material: string;
   spec: string;
-  ledTone: "success" | "warning";
-  ledLabel: string;
 }>;
 
-// Note: `record` (rec-red) is reserved for the booking CTA dot only — status
-// LEDs on the contact-sheet frames use success/warning tones instead.
 const roomFrameMeta: Record<string, RoomFrameMeta> = {
   "photo-studio": {
     material: "Phòng chụp ảnh",
     spec: "Cyclorama trắng · 3 hệ đèn",
-    ledTone: "success",
-    ledLabel: "SẴN SÀNG",
   },
   "voice-podcast-booth": {
     material: "Phòng thu podcast",
     spec: "Cách âm hoàn toàn · 4 mic thu",
-    ledTone: "warning",
-    ledLabel: "ĐANG GHI",
   },
   "music-studio": {
     material: "Phòng thu âm nhạc",
     spec: "Bàn mix SSL · Cách âm -20dB",
-    ledTone: "success",
-    ledLabel: "SẴN SÀNG",
   },
 };
 
 const fallbackFrameMeta: RoomFrameMeta = {
   material: "Không gian studio",
   spec: "Studio đa năng",
-  ledTone: "success",
-  ledLabel: "SẴN SÀNG",
 };
 
 const STAGGER_STEP_MS = 80;
@@ -77,7 +65,9 @@ export function RoomCard({ room, index }: RoomCardProps) {
         </div>
         <p className="proof-annotation">
           <span>{meta.material}</span>
-          <LedStatus label={meta.ledLabel} tone={meta.ledTone} />
+          {/* Static label until real availability data is wired in — never
+              imply a live "recording" state we can't back with data. */}
+          <LedStatus label="SẴN SÀNG" tone="success" />
         </p>
         <h2 className="proof-room-frame__title">{room.name}</h2>
         <p className="proof-room-frame__meta">{room.services.length} dịch vụ</p>
