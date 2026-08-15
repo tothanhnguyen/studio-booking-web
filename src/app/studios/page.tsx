@@ -33,7 +33,7 @@ export default async function StudiosPage() {
 
   return (
     <section aria-labelledby="studios-heading" className="proof-studios-page page-grain">
-      <FolioLabel text="MOW · PROOF 01/03 — INDEX" />
+      <FolioLabel text="MOW · PROOF 01/03" />
       <ScrollReveal>
         <header className="proof-studios-header">
           <p className="page-eyebrow">Không gian</p>
@@ -60,8 +60,8 @@ export default async function StudiosPage() {
       {rooms.length > 0 ? (
         <section aria-label="Chi tiết bổ sung" className="proof-filmstrip-section">
           <p className="proof-annotation">
-            <span>CONTACT DETAIL — {filmStripItems.length} KHUNG BỔ SUNG</span>
-            <span>ROLL 07</span>
+            <span>GÓC CẬN CẢNH</span>
+            <span>{String(filmStripItems.length).padStart(2, "0")} KHUNG</span>
           </p>
           <FilmStrip items={filmStripItems} />
         </section>
