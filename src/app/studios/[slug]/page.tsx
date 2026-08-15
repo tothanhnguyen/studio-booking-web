@@ -6,7 +6,6 @@ import { actionClassName } from "@/components/ui/action";
 import { CropFrame } from "@/components/ui/crop-frame";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FolioLabel } from "@/components/ui/folio-label";
-import { GhostIndex } from "@/components/ui/ghost-index";
 import { LedStatus } from "@/components/ui/led-status";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { listPublicRooms } from "@/features/studio-room/application/list-public-rooms";
@@ -44,35 +43,27 @@ export default async function RoomPage({ params }: RoomPageProps) {
 
   return (
     <section aria-labelledby="room-heading" className="proof-room-page page-grain">
-      <div aria-hidden="true" className="proof-grid">
-        {Array.from({ length: 12 }).map((_, index) => (
-          <span className="proof-grid__col" key={index} />
-        ))}
-      </div>
       <FolioLabel text={`MOW · PROOF 02/03 — ${materialLabel.toUpperCase()}`} />
 
       <div className="proof-room-hero">
-        <div className="proof-room-hero__frame-wrap">
-          <GhostIndex index={roomIndex} />
-          <CropFrame className="proof-room-hero__frame">
-            <RoomVisual
-              alt={`${room.name} tại MowStudio`}
-              className="proof-room-hero__visual"
-              priority
-              slug={room.slug}
-              variant="hero"
-            />
-            <span aria-hidden="true" className="proof-room-hero__scrim" />
-            <div className="proof-room-hero__overlay">
-              <p className="proof-room-hero__eyebrow type-mono">
-                KHUNG {String(roomIndex).padStart(2, "0")} — {materialLabel.toUpperCase()}
-              </p>
-              <h1 className="display-lg" id="room-heading">
-                {room.name}
-              </h1>
-            </div>
-          </CropFrame>
-        </div>
+        <CropFrame className="proof-room-hero__frame">
+          <RoomVisual
+            alt={`${room.name} tại MowStudio`}
+            className="proof-room-hero__visual"
+            priority
+            slug={room.slug}
+            variant="hero"
+          />
+          <span aria-hidden="true" className="proof-room-hero__scrim" />
+          <div className="proof-room-hero__overlay">
+            <p className="proof-room-hero__eyebrow type-mono">
+              KHUNG {String(roomIndex).padStart(2, "0")} — {materialLabel.toUpperCase()}
+            </p>
+            <h1 className="display-lg" id="room-heading">
+              {room.name}
+            </h1>
+          </div>
+        </CropFrame>
         <p className="proof-annotation">
           <span>SHOT ON MOW LAB</span>
           <LedStatus label="SẴN SÀNG NHẬN LỊCH" tone="success" />

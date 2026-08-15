@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { CropFrame } from "@/components/ui/crop-frame";
-import { GhostIndex } from "@/components/ui/ghost-index";
 import { LedStatus } from "@/components/ui/led-status";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import type { PublicRoom } from "@/features/studio-room/application/list-public-rooms";
@@ -67,7 +66,6 @@ export function RoomCard({ room, index }: RoomCardProps) {
           <span>{meta.spec}</span>
         </p>
         <div className="proof-room-frame__media">
-          <GhostIndex index={index} />
           <CropFrame>
             <RoomVisual
               alt={`${room.name} tại MowStudio`}

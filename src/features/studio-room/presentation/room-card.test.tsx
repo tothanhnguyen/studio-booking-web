@@ -78,9 +78,8 @@ describe("RoomCard", () => {
     ).toHaveAttribute("href", "/studios/photo-studio");
   });
 
-  it("renders its frame number as a ghost index and mono annotation", () => {
+  it("renders its frame number in the mono annotation", () => {
     render(<RoomCard index={2} room={roomFixture} />);
-    expect(screen.getAllByText("02").length).toBeGreaterThan(0);
     expect(screen.getByText(/KHUNG 02/)).toBeInTheDocument();
   });
 
