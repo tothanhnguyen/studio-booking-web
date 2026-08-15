@@ -367,7 +367,7 @@
   margin: 0;
   color: var(--color-smoke);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }

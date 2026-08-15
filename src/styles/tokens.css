@@ -36,9 +36,9 @@
   --motion-base: 220ms;
   --content-public: 92rem;
   --content-transaction: 72rem;
-  --text-display-xl: clamp(3.25rem, 9vw, 8.5rem);
-  --text-display-lg: clamp(2.5rem, 6vw, 5rem);
-  --text-display-md: clamp(2rem, 4vw, 3.25rem);
+  --text-display-xl: clamp(2.75rem, 6vw, 5.5rem);
+  --text-display-lg: clamp(2.25rem, 4.5vw, 3.5rem);
+  --text-display-md: clamp(1.625rem, 3vw, 2.25rem);
   --motion-marquee: 28s;
   --grain-opacity: 0.035;
 }

@@ -1,28 +1,5 @@
 /* Proof Sheet device layer: darkroom contact-sheet devices shared across public, booking, and account pages. */
 
-/* Column grid hairlines: decorative 1px overlay, desktop only. */
-.proof-grid {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  display: none;
-  pointer-events: none;
-}
-
-@media (min-width: 1024px) {
-  .proof-grid {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-  }
-}
-
-.proof-grid__col {
-  block-size: 100%;
-  border-inline-end: 1px solid var(--color-border);
-}
-
-.proof-grid__col:last-child { border-inline-end: none; }
-
 /* Crop marks: L-shaped corners hugging an image frame. */
 .crop-frame { position: relative; }
 
@@ -80,7 +57,7 @@
   margin: 0 0 0.625rem;
   color: var(--color-text-muted);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -95,23 +72,10 @@
   margin: 0;
   color: var(--color-text-muted);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-/* Ghost index: oversized low-opacity mono numeral behind content. */
-.ghost-index {
-  position: absolute;
-  z-index: 0;
-  color: var(--color-border);
-  font-family: var(--font-mono), monospace;
-  font-size: clamp(4rem, 10vw, 7.5rem);
-  font-weight: 600;
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
 }
 
 /* Film strip: thumbnail rail with sprocket-hole dots. */
@@ -160,7 +124,7 @@
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -218,7 +182,7 @@
   margin: 0 0 0.375rem;
   color: var(--color-text-muted);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
 }
 
@@ -327,17 +291,7 @@
   flex-direction: column;
 }
 
-.proof-room-frame__media {
-  position: relative;
-  z-index: 2;
-  margin-block: 0.625rem;
-}
-
-.proof-room-frame__media .ghost-index {
-  inset-block-start: -2.5rem;
-  inset-inline-start: -0.375rem;
-  font-size: clamp(3.5rem, 7vw, 5rem);
-}
+.proof-room-frame__media { margin-block: 0.625rem; }
 
 .proof-room-frame__title {
   margin: 0.875rem 0 0.25rem;
@@ -401,14 +355,6 @@
 }
 
 .proof-room-hero { display: grid; gap: 0.625rem; }
-
-.proof-room-hero__frame-wrap { position: relative; }
-
-.proof-room-hero__frame-wrap .ghost-index {
-  inset-block-start: -3rem;
-  inset-inline-start: 0.5rem;
-  font-size: clamp(6rem, 14vw, 10rem);
-}
 
 .proof-room-hero__visual {
   aspect-ratio: auto;
