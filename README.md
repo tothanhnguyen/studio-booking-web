@@ -1,85 +1,36 @@
-# MowStudio
+# Hệ Thống Đặt Phòng Mow Studio (Mow Studio Booking Web)
 
-MowStudio là web booking creative studio bằng tiếng Việt. MVP phục vụ ba không gian: Photo Studio, Voice/Podcast Booth và Music Studio.
+Chào mừng bạn đến với hệ thống đặt phòng chụp ảnh của **Mow Studio**! Đây là một nền tảng web hiện đại được thiết kế nhằm mang lại trải nghiệm mượt mà và tiện lợi nhất cho khách hàng có nhu cầu thuê phòng, đồng thời cung cấp các công cụ quản lý mạnh mẽ cho đội ngũ vận hành.
 
-Project được xây dựng dưới dạng Next.js modular monolith với service/repository boundary, PostgreSQL transaction, Supabase Auth và SePay/VietQR.
+---
 
-## Yêu cầu
+## Tính Năng Nổi Bật
 
-- Node.js 24 LTS
-- pnpm 11.9.0 thông qua Corepack
-- Docker Desktop và Docker Compose
+Dự án được chia thành các nhóm tính năng chuyên biệt, tối ưu hóa cho cả trải nghiệm của người dùng (Customer) và quản trị viên (Admin).
 
-## Khởi động local
+### Trải Nghiệm Khách Hàng (Customer)
+*   **Giao Diện Hiện Đại, Trực Quan:** Trang chủ nổi bật với các hình ảnh và nội dung chất lượng cao (Home Hero & Scroll Media), giúp khách hàng dễ dàng hình dung không gian studio.
+*   **Quy Trình Đặt Phòng Tối Ưu (Booking Flow):** Trải nghiệm các bước đặt phòng (wizard) liền mạch, từ việc chọn phòng, xem chi tiết dịch vụ cho đến bước thanh toán và xác nhận cuối cùng.
+*   **Hỗ Trợ Khách Vãng Lai (Guest Bookings):** Cho phép đặt phòng nhanh chóng không cần đăng ký tài khoản. Khách hàng cũng có thể nhận lại (claim) lịch sử đặt phòng nếu tạo tài khoản sau đó.
+*   **Quản Lý Tài Khoản (Customer Account):** Người dùng có thể xem lại danh sách các lịch đặt phòng và quản lý thông tin tài khoản cá nhân.
+*   **Thanh Toán Tự Động (Payments & Refunds):** Tích hợp cổng thanh toán **SePay** giúp xác nhận giao dịch nhanh chóng và hỗ trợ quy trình hoàn tiền (refund).
+*   **Hệ Thống Thông Báo (Notifications):** Gửi email thông báo tự động để cập nhật trạng thái đặt phòng cho khách hàng.
 
-```bash
-cp .env.example .env
-corepack pnpm install --frozen-lockfile
-docker compose -f docker-compose.test.yml up -d --wait
-corepack pnpm prisma generate
-corepack pnpm prisma migrate deploy
-corepack pnpm prisma db seed
-corepack pnpm dev
-```
+### Quản Trị & Vận Hành (Admin)
+*   **Quản Lý Lịch Trình (Schedule & Availability):** Giám sát lịch trống, chặn lịch (blocked slots) và theo dõi toàn bộ các ca đặt phòng thông qua giao diện lịch trực quan.
+*   **Quản Lý Cơ Sở Vật Chất (Rooms & Services):** Thêm, sửa thông tin về các phòng chụp, hình ảnh minh họa, cũng như tùy chỉnh cấu hình dịch vụ và bảng giá.
+*   **Quản Lý Giao Dịch & Đặt Phòng:** Bảng điều khiển (Dashboard) giúp admin theo dõi tổng quan các lịch đặt, quản lý giao dịch thanh toán và các hoạt động vận hành khác.
+*   **Phân Quyền & Bảo Mật (Authentication & Roles):** Hệ thống phân quyền chặt chẽ, đảm bảo an toàn dữ liệu và quyền truy cập của đội ngũ quản trị.
+*   **Giám Sát Hệ Thống (Observability):** Ghi nhận và theo dõi lỗi (errors) để đảm bảo nền tảng hoạt động ổn định và xuyên suốt.
 
-Mở [http://localhost:3000](http://localhost:3000).
+---
 
-## Quality gate
+## Công Nghệ Sử Dụng
 
-Lint + typecheck + unit test (không cần DB):
+Dự án được xây dựng dựa trên các nền tảng và công cụ hiện đại, mang lại hiệu suất cao:
 
-```bash
-corepack pnpm ci:verify
-```
-
-Integration, E2E và production build cần PostgreSQL test. Export env test DB trước:
-
-```bash
-docker compose -f docker-compose.test.yml up -d --wait
-export DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54329/mowstudio_test
-export DIRECT_URL=$DATABASE_URL
-corepack pnpm prisma migrate deploy
-corepack pnpm prisma db seed
-
-corepack pnpm test:integration
-corepack pnpm build
-```
-
-E2E critical: chạy server và test trong **cùng một shell** (server nền cùng process),
-nếu không server production có thể bị OOM-kill khi Playwright tự spawn:
-
-```bash
-export ALLOW_TEST_ACTOR=true PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000
-PORT=3000 corepack pnpm start &        # đợi "Ready", kiểm tra /api/health
-corepack pnpm test:e2e:critical
-```
-
-CI chạy các job `quality`, `integration`, `e2e-critical` rồi `build`.
-
-## Production release
-
-```bash
-# 1. Validate môi trường production
-corepack pnpm check:env
-
-# 2. Migrate (tách biệt khỏi app boot, dùng DIRECT_URL non-pooled)
-MIGRATION_CONFIRM=production DIRECT_URL=<direct-url> corepack pnpm migrate:production
-
-# 3. Sau deploy: smoke test deployment
-corepack pnpm smoke:production https://<deployment-url>
-```
-
-- `/api/health` — liveness + release SHA, không phụ thuộc DB.
-- `/api/ready` — `SELECT 1` có timeout, trả `503` khi DB outage.
-
-Runbook và quy trình sự cố:
-
-- [`docs/operations/vercel-runbook.md`](docs/operations/vercel-runbook.md)
-- [`docs/operations/incident-checklist.md`](docs/operations/incident-checklist.md)
-
-Chi tiết environment và testing nằm tại:
-
-- [`docs/development/environment.md`](docs/development/environment.md)
-- [`docs/development/testing.md`](docs/development/testing.md)
-
-Design và implementation plan nằm trong [`docs/superpowers`](docs/superpowers).
+*   **Frontend & Framework:** Sử dụng **Next.js** làm framework cốt lõi cùng với ngôn ngữ **TypeScript** giúp tối ưu hiệu năng và quản lý mã nguồn chặt chẽ.
+*   **Cơ Sở Dữ Liệu:** Ứng dụng **Prisma** (ORM) để tương tác, thiết kế cấu trúc dữ liệu và quản lý cơ sở dữ liệu một cách an toàn.
+*   **Tích Hợp API:** Xử lý thanh toán tự động qua hệ thống **SePay**.
+*   **Kiểm Thử (Testing):** Sử dụng **Playwright** để kiểm thử tự động toàn diện (E2E), đảm bảo giao diện và luồng tính năng hoạt động chính xác.
+*   **Môi Trường & Công Cụ Khác:** Hỗ trợ cấu hình môi trường test thông qua **Docker** và sử dụng **ESLint** để chuẩn hóa chất lượng mã nguồn.
